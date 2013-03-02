@@ -2,9 +2,8 @@ package org.icechamps.lava.collection;
 
 import com.google.common.base.Preconditions;
 import org.icechamps.lava.LavaBase;
-import org.icechamps.lava.callback.MatchOneCallback;
-import org.icechamps.lava.callback.SelectOneCallback;
-import org.icechamps.lava.interfaces.ILavaCollection;
+import org.icechamps.lava.callback.Func;
+import org.icechamps.lava.interfaces.LavaCollection;
 
 import java.util.*;
 
@@ -14,7 +13,7 @@ import java.util.*;
  * Time: 5:02 PM
  * <p/>
  * <p>
- * A collection of objects of type {@code T} that implements the {@link ILavaCollection} interface.
+ * A collection of objects of type {@code T} that implements the {@link org.icechamps.lava.interfaces.LavaCollection} interface.
  * This allows for method chaining.
  * </p>
  * <p>
@@ -22,32 +21,39 @@ import java.util.*;
  * an instance of a different type into the constructor, one can change the backing object.
  * </p>
  */
-public class LavaList<T> extends LavaBase implements List<T>, ILavaCollection<T, LavaList> {
+public class LavaList<T> extends LavaBase implements List<T>, LavaCollection<T> {
     private List<T> sourceList;
 
     public LavaList() {
         sourceList = new ArrayList<T>();
     }
 
-    public LavaList(List<T> list) {
-        Preconditions.checkArgument(list != null);
+    public LavaList(Collection<T> collection) {
+        Preconditions.checkArgument(collection != null);
 
-        sourceList = list;
+        if (collection instanceof List)
+            sourceList = (List<T>) collection;
+        else {
+            sourceList = new ArrayList<T>(collection.size());
+            for (T t : collection) {
+                sourceList.add(t);
+            }
+        }
     }
 
     @Override
-    public LavaList<T> distinct() {
+    public LavaCollection<T> distinct() {
         return distinct(this);
     }
 
     @Override
-    public <E> LavaList<E> select(SelectOneCallback<T, E> callback) {
-        return select(this, callback);
+    public <E> LavaCollection<E> select(Func<T, E> func) {
+        return select(this, func);
     }
 
     @Override
-    public LavaList<T> where(MatchOneCallback<T> callback) {
-        return where(this, callback);
+    public LavaCollection<T> where(Func<T, Boolean> func) {
+        return where(this, func);
     }
 
     @Override

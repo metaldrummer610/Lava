@@ -1,9 +1,8 @@
 package org.icechamps.lava.collection;
 
 import org.icechamps.lava.LavaBase;
-import org.icechamps.lava.callback.MatchOneCallback;
-import org.icechamps.lava.callback.SelectOneCallback;
-import org.icechamps.lava.interfaces.ILavaCollection;
+import org.icechamps.lava.callback.Func;
+import org.icechamps.lava.interfaces.LavaCollection;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -15,7 +14,7 @@ import java.util.Set;
  * Date: 2/27/13
  * Time: 7:17 PM
  */
-public class LavaSet<T> extends LavaBase implements Set<T>, ILavaCollection<T, LavaSet> {
+public class LavaSet<T> extends LavaBase implements Set<T>, LavaCollection<T> {
     private Set<T> set;
 
     public LavaSet() {
@@ -27,18 +26,18 @@ public class LavaSet<T> extends LavaBase implements Set<T>, ILavaCollection<T, L
     }
 
     @Override
-    public LavaSet<T> distinct() {
+    public LavaCollection<T> distinct() {
         return distinct(this);
     }
 
     @Override
-    public <E> LavaSet<E> select(SelectOneCallback<T, E> callback) {
-        return select(this, callback);
+    public <E> LavaCollection<E> select(Func<T, E> func) {
+        return select(this, func);
     }
 
     @Override
-    public LavaSet<T> where(MatchOneCallback<T> callback) {
-        return where(this, callback);
+    public LavaCollection<T> where(Func<T, Boolean> func) {
+        return where(this, func);
     }
 
     @Override
