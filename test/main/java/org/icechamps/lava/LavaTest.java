@@ -1,6 +1,8 @@
 package org.icechamps.lava;
 
+import org.icechamps.lava.callback.Func;
 import org.icechamps.lava.collection.LavaList;
+import org.icechamps.lava.interfaces.LavaCollection;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,61 +18,59 @@ import java.util.List;
  */
 public class LavaTest {
 
-	private static List<Person> people;
+    private static List<Person> people;
 
-	@BeforeClass
-	public static void setup() {
-		people = new ArrayList<Person>();
+    @BeforeClass
+    public static void setup() {
+        people = new ArrayList<Person>();
 
-		for(int i = 0; i < 10; i++) {
-			Person p = new Person();
-			p.name = "Test" + i;
-			p.age = i * 5;
-			p.birthdate = new Date();
+        for (int i = 0; i < 10; i++) {
+            Person p = new Person();
+            p.name = "Test" + i;
+            p.age = i * 5;
+            p.birthdate = new Date();
 
-			people.add(p);
-		}
-	}
+            people.add(p);
+        }
+    }
 
-	@Test
-	public void wherePersonAgeGreaterThanTen() {
-		LavaList<Person> ret = Lava.where(people, new MatchOneCallback<Person>() {
-			public boolean matches(Person person) {
-				return person.age > 10;
-			}
-		});
+    @Test
+    public void wherePersonAgeGreaterThanTen() {
+        LavaCollection<Person> ret = Lava.where(people, new Func<Person, Boolean>() {
+            public Boolean callback(Person person) {
+                return person.age > 10;
+            }
+        });
 
-		LavaList<String> strings = ret.select(ret, new SelectOneCallback<Person, String>() {
-			public String select(Person object) {
-				return object.name;
-			}
-		});
+        LavaCollection<String> strings = ret.select(new Func<Person, String>() {
+            public String callback(Person object) {
+                return object.name;
+            }
+        });
 
-		Assert.assertTrue(ret.size() > 0);
-	}
+        Assert.assertTrue(ret.size() > 0);
+    }
 
-	@Test
-	public void test() {
-		LavaList<String> list = Lava.where(people, new MatchOneCallback<Person>() {
-			@Override
-			public boolean matches(Person object) {
-				return true;
-			}
-		}).distinct().select(new SelectOneCallback<Person, String>() {
-			@Override
-			public String select(Person object) {
-				return null;
-			}
-		});
+    @Test
+    public void test() {
+        LavaCollection<String> list = Lava.where(people, new Func<Person, Boolean>() {
+            public Boolean callback(Person object) {
+                return true;
+            }
+        }).distinct().select(new Func<Person, String>() {
+            public String callback(Person object) {
+                return null;
+            }
+        });
 
         LavaList<Person> ret = new LavaList<Person>(people).orderBy(people);
-	}
+    }
 }
 
 class Person implements Comparable<Person> {
-	public String name;
-	public int age;
-	public Date birthdate;
+    public String name;
+    public int age;
+    public Date birthdate;
 
     @Override
     public int compareTo(Person o) {

@@ -2,6 +2,7 @@ package org.icechamps.lava.collection;
 
 import com.google.common.base.Preconditions;
 import org.icechamps.lava.LavaBase;
+import org.icechamps.lava.callback.Func;
 import org.icechamps.lava.interfaces.LavaCollection;
 
 import java.util.*;
@@ -46,13 +47,13 @@ public class LavaList<T> extends LavaBase implements List<T>, LavaCollection<T> 
     }
 
     @Override
-    public <E> LavaList<E> select(SelectOneCallback<T, E> callback) {
-        return select(this, callback);
+    public <E> LavaCollection<E> select(Func<T, E> func) {
+        return select(this, func);
     }
 
     @Override
-    public LavaList<T> where(MatchOneCallback<T> callback) {
-        return where(this, callback);
+    public LavaCollection<T> where(Func<T, Boolean> func) {
+        return where(this, func);
     }
 
     @Override
