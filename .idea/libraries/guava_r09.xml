@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="guava-r09">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-23/filestore/com.google.guava/guava/r09/jar/9c8991d491d714053d300de0f8657d95780ff923/guava-r09.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/artifacts-23/filestore/com.google.guava/guava/r09/source/a8ed88e2088ca98b7e033d2b7ebaa483fad25b37/guava-r09-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
