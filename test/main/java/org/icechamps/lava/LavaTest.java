@@ -1,8 +1,6 @@
 package org.icechamps.lava;
 
 import org.icechamps.lava.collection.LavaList;
-import org.icechamps.lava.callback.MatchOneCallback;
-import org.icechamps.lava.callback.SelectOneCallback;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

@@ -1,11 +1,9 @@
 package org.icechamps.lava;
 
-import org.icechamps.lava.collection.LavaList;
-import org.icechamps.lava.collection.LavaSet;
-import org.icechamps.lava.callback.MatchOneCallback;
+import org.icechamps.lava.callback.Func;
+import org.icechamps.lava.interfaces.LavaCollection;
 
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * User: Robert.Diaz
@@ -19,11 +17,7 @@ import java.util.Set;
 public class Lava {
 	private static LavaBase lavaBase = new LavaBase();
 
-	public static <T extends Object> LavaList<T> where(List<T> list, MatchOneCallback<T> searchCriteria) {
-		return lavaBase.where(list, searchCriteria);
-	}
-
-	public static <T extends Object> LavaSet<T> where(Set<T> set, MatchOneCallback<T> searchCriteria) {
-		return lavaBase.where(set, searchCriteria);
+	public static <T extends Object> LavaCollection<T> where(Collection<T> collection, Func<T, Boolean> searchCriteria) {
+		return lavaBase.where(collection, searchCriteria);
 	}
 }

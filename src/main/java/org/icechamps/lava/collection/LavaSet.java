@@ -1,9 +1,7 @@
 package org.icechamps.lava.collection;
 
 import org.icechamps.lava.LavaBase;
-import org.icechamps.lava.callback.MatchOneCallback;
-import org.icechamps.lava.callback.SelectOneCallback;
-import org.icechamps.lava.interfaces.ILavaCollection;
+import org.icechamps.lava.interfaces.LavaCollection;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -15,7 +13,7 @@ import java.util.Set;
  * Date: 2/27/13
  * Time: 7:17 PM
  */
-public class LavaSet<T> extends LavaBase implements Set<T>, ILavaCollection<T, LavaSet> {
+public class LavaSet<T> extends LavaBase implements Set<T>, LavaCollection<T, LavaSet> {
     private Set<T> set;
 
     public LavaSet() {

@@ -1,16 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="92a28f32-0e3b-404e-be35-461aea8d966c" name="Default" comment="" />
+    <list default="true" id="92a28f32-0e3b-404e-be35-461aea8d966c" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/Func.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/Func2.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/interfaces/LavaCollection.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/LavaFlags.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/AggregateOneCallback.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/MatchOneCallback.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/MatchTwoCallback.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/SelectOneCallback.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/SelectTwoCallback.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/collection/LavaMap.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/interfaces/ILavaCollection.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/interfaces/ILavaMap.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/Lava.java" afterPath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/Lava.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/LavaBase.java" afterPath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/LavaBase.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/collection/LavaList.java" afterPath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/collection/LavaList.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/collection/LavaSet.java" afterPath="$PROJECT_DIR$/src/main/java/org/icechamps/lava/collection/LavaSet.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/main/java/org/icechamps/lava/LavaTest.java" afterPath="$PROJECT_DIR$/test/main/java/org/icechamps/lava/LavaTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="Lava.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Lava.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362116810441" ignored="false" />
+    <file path="/Lava.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362239374345" ignored="false" />
     <file path="/LavaCallback.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362080095682" ignored="false" />
     <file path="/LavaTest.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362176125926" ignored="false" />
     <file path="/build.gradle" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362022774290" ignored="false" />
-    <file path="/LavaList.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362174878364" ignored="false" />
+    <file path="/LavaList.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362238191624" ignored="false" />
     <file path="/LavaSet.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362116510072" ignored="false" />
-    <file path="/LavaBase.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362179986877" ignored="false" />
+    <file path="/LavaBase.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362239973631" ignored="false" />
     <file path="/fragment.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362113522861" ignored="false" />
     <file path="/ILavaSet.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362013553384" ignored="false" />
     <file path="/ILavaList.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362013706711" ignored="false" />
@@ -23,7 +45,7 @@
     <file path="/ILava.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362113953167" ignored="false" />
     <file path="/ILavaMap.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362115419090" ignored="false" />
     <file path="/SelectTwoCallback.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362115495581" ignored="false" />
-    <file path="/ILavaCollection.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362116702114" ignored="false" />
+    <file path="/ILavaCollection.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362237083513" ignored="false" />
     <file path="/MatchOneCallback.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362171222193" ignored="false" />
     <file path="$PROJECT_DIR$/build/docs/javadoc/overview-frame.html" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362173512141" ignored="false" />
     <file path="$PROJECT_DIR$/build/docs/javadoc/overview-summary.html" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362173512141" ignored="false" />
@@ -45,6 +67,9 @@
     <file path="$PROJECT_DIR$/build/docs/javadoc/allclasses-noframe.html" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362173512141" ignored="false" />
     <file path="/MultipleElementsFoundException.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362173603714" ignored="false" />
     <file path="/AggregateOneCallback.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362179016949" ignored="false" />
+    <file path="/Dummy.txt" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362236932974" ignored="false" />
+    <file path="/Func.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362239269199" ignored="false" />
+    <file path="/Func2.java" changelist="92a28f32-0e3b-404e-be35-461aea8d966c" time="1362239318643" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,111 +129,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="LavaBase.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="LavaBase.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/LavaBase.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="256" column="12" selection-start="7695" selection-end="7695" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="docComment;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#aggregate#0;class#LavaBase#0" expanded="false" />
-                <element signature="method#aggregate#0;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#aggregateKeys#0;class#LavaBase#0" expanded="false" />
-                <element signature="method#aggregateKeys#0;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#aggregateValues#0;class#LavaBase#0" expanded="false" />
-                <element signature="method#aggregateValues#0;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#all#0;class#LavaBase#0" expanded="false" />
-                <element signature="method#all#0;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#all#1;class#LavaBase#0" expanded="false" />
-                <element signature="method#all#1;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#any#0;class#LavaBase#0" expanded="false" />
-                <element signature="method#any#0;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#any#1;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#distinct#0;class#LavaBase#0" expanded="false" />
-                <element signature="method#distinct#0;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#distinct#1;class#LavaBase#0" expanded="false" />
-                <element signature="method#distinct#1;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#distinct#2;class#LavaBase#0" expanded="false" />
-                <element signature="method#distinct#2;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#distinct#3;class#LavaBase#0" expanded="false" />
-                <element signature="method#distinct#3;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#distinctInternalList#0;class#LavaBase#0" expanded="false" />
-                <element signature="method#distinctInternalList#0;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#distinctInternalMap#0;class#LavaBase#0" expanded="false" />
-                <element signature="method#selectInternalList#0;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#selectInternalMap#0;class#LavaBase#0" expanded="false" />
-                <element signature="method#selectInternalMap#0;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#singleOrDefault#0;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#singleOrDefault#1;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#where#0;class#LavaBase#0" expanded="false" />
-                <element signature="method#where#0;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#where#1;class#LavaBase#0" expanded="false" />
-                <element signature="method#where#1;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#where#2;class#LavaBase#0" expanded="false" />
-                <element signature="method#where#2;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#whereInternalList#0;class#LavaBase#0" expanded="false" />
-                <element signature="method#whereInternalList#0;class#LavaBase#0" expanded="false" />
-                <element signature="docComment;method#whereInternalMap#0;class#LavaBase#0" expanded="false" />
-                <element signature="method#whereInternalMap#0;class#LavaBase#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LavaMap.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/collection/LavaMap.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="22" selection-start="644" selection-end="644" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LavaList.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/collection/LavaList.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="70" selection-start="794" selection-end="794" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ILavaCollection.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/interfaces/ILavaCollection.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="7" selection-start="511" selection-end="511" vertical-scroll-proportion="0.30701753">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HashMap.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar:///Library/Java/JavaVirtualMachines/1.6.0_41-b02-445.jdk/Contents/Home/src.jar!/src/java/util/HashMap.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="107" column="19" selection-start="5262" selection-end="5262" vertical-scroll-proportion="0.0">
+            <state line="311" column="29" selection-start="10345" selection-end="10345" vertical-scroll-proportion="4.4866734">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AbstractMap.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar:///Library/Java/JavaVirtualMachines/1.6.0_41-b02-445.jdk/Contents/Home/src.jar!/src/java/util/AbstractMap.java">
+      <file leaf-file-name="Func.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/Func.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="548" column="36" selection-start="17700" selection-end="17700" vertical-scroll-proportion="0.0">
+            <state line="15" column="15" selection-start="380" selection-end="380" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AggregateOneCallback.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/AggregateOneCallback.java">
+      <file leaf-file-name="Func2.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/Func2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="32" selection-start="541" selection-end="541" vertical-scroll-proportion="0.0">
+            <state line="7" column="18" selection-start="118" selection-end="118" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -220,6 +162,14 @@
     <FindUsagesManager>
       <setting name="OPEN_NEW_TAB" value="false" />
     </FindUsagesManager>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitLogSettings">
+    <option name="myDateState">
+      <MyDateState />
+    </option>
   </component>
   <component name="GradleLocalSettings">
     <option name="expandStates">
@@ -233,21 +183,21 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/test/org/icechamps/lava/LavaBaseTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/interfaces/ILavaList.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/interfaces/ILava.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/interfaces/ILavaMap.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/callbacks/SelectTwoCallback.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/interfaces/ILavaCollection.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/Lava.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/collections/LavaList.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/collections/LavaMap.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/collections/LavaSet.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/callbacks/MatchOneCallback.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/exception/MultipleElementsFoundException.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/collection/LavaList.java" />
         <option value="$PROJECT_DIR$/test/main/java/org/icechamps/lava/LavaTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/AggregateOneCallback.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/interfaces/ILavaCollection.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/collection/LavaList.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/Func.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/Func2.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/Lava.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/icechamps/lava/LavaBase.java" />
       </list>
     </option>
@@ -257,7 +207,23 @@
     <option name="width" value="1920" />
     <option name="height" value="1174" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>Abstraction issues</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkout" />
@@ -266,7 +232,7 @@
     <OptionsSetting value="true" id="Edit" />
     <OptionsSetting value="true" id="Undo Check Out" />
     <OptionsSetting value="true" id="Get Latest Version" />
-    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="2" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
@@ -493,7 +459,7 @@
     <property name="OverrideImplement.combined" value="false" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="MemberChooser.sorted" value="false" />
-    <property name="options.lastSelected" value="preferences.keymap" />
+    <property name="options.lastSelected" value="vcs.Subversion" />
     <property name="recentsLimit" value="5" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -723,6 +689,7 @@
     <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
     <option name="FORCE_UPDATE" value="false" />
     <option name="IGNORE_EXTERNALS" value="false" />
+    <configuration useDefault="true">$USER_HOME$/.subversion</configuration>
     <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
   </component>
   <component name="TaskManager">
@@ -833,38 +800,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar:///Library/Java/JavaVirtualMachines/1.6.0_41-b02-445.jdk/Contents/Home/src.jar!/src/java/util/Comparator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="94" column="63" selection-start="4547" selection-end="4547" vertical-scroll-proportion="0.32662538">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/SelectOneCallback.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="30" selection-start="283" selection-end="283" vertical-scroll-proportion="0.12770897">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/main/java/org/icechamps/lava/LavaTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="1" selection-start="1534" selection-end="1534" vertical-scroll-proportion="0.6733746">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1328#1449#0" expanded="true" />
-            <element signature="e#1444#1445#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/1.6.0_41-b02-445.jdk/Contents/Home/src.jar!/src/java/util/Arrays.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1132" column="24" selection-start="38310" selection-end="38310" vertical-scroll-proportion="0.33281735">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/1.6.0_41-b02-445.jdk/Contents/Home/src.jar!/src/java/util/Collections.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="114" column="14" selection-start="5418" selection-end="5418" vertical-scroll-proportion="0.35603714">
@@ -886,96 +821,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/LavaBase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="256" column="12" selection-start="7695" selection-end="7695" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="docComment;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#aggregate#0;class#LavaBase#0" expanded="false" />
-            <element signature="method#aggregate#0;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#aggregateKeys#0;class#LavaBase#0" expanded="false" />
-            <element signature="method#aggregateKeys#0;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#aggregateValues#0;class#LavaBase#0" expanded="false" />
-            <element signature="method#aggregateValues#0;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#all#0;class#LavaBase#0" expanded="false" />
-            <element signature="method#all#0;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#all#1;class#LavaBase#0" expanded="false" />
-            <element signature="method#all#1;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#any#0;class#LavaBase#0" expanded="false" />
-            <element signature="method#any#0;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#any#1;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#distinct#0;class#LavaBase#0" expanded="false" />
-            <element signature="method#distinct#0;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#distinct#1;class#LavaBase#0" expanded="false" />
-            <element signature="method#distinct#1;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#distinct#2;class#LavaBase#0" expanded="false" />
-            <element signature="method#distinct#2;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#distinct#3;class#LavaBase#0" expanded="false" />
-            <element signature="method#distinct#3;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#distinctInternalList#0;class#LavaBase#0" expanded="false" />
-            <element signature="method#distinctInternalList#0;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#distinctInternalMap#0;class#LavaBase#0" expanded="false" />
-            <element signature="method#selectInternalList#0;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#selectInternalMap#0;class#LavaBase#0" expanded="false" />
-            <element signature="method#selectInternalMap#0;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#singleOrDefault#0;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#singleOrDefault#1;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#where#0;class#LavaBase#0" expanded="false" />
-            <element signature="method#where#0;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#where#1;class#LavaBase#0" expanded="false" />
-            <element signature="method#where#1;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#where#2;class#LavaBase#0" expanded="false" />
-            <element signature="method#where#2;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#whereInternalList#0;class#LavaBase#0" expanded="false" />
-            <element signature="method#whereInternalList#0;class#LavaBase#0" expanded="false" />
-            <element signature="docComment;method#whereInternalMap#0;class#LavaBase#0" expanded="false" />
-            <element signature="method#whereInternalMap#0;class#LavaBase#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/1.6.0_41-b02-445.jdk/Contents/Home/src.jar!/src/java/util/HashMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="107" column="19" selection-start="5262" selection-end="5262" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/1.6.0_41-b02-445.jdk/Contents/Home/src.jar!/src/java/util/AbstractMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="548" column="36" selection-start="17700" selection-end="17700" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/collection/LavaMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="22" selection-start="644" selection-end="644" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/1.6.0_41-b02-445.jdk/Contents/Home/src.jar!/src/java/util/ArrayList.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="117" column="11" selection-start="5154" selection-end="5154" vertical-scroll-proportion="0.1871345">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/collection/LavaList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="70" selection-start="794" selection-end="794" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/AggregateOneCallback.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="32" selection-start="541" selection-end="541" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -989,12 +837,63 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/interfaces/ILavaCollection.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/collection/LavaList.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="7" selection-start="511" selection-end="511" vertical-scroll-proportion="0.30701753">
+        <state line="45" column="25" selection-start="1351" selection-end="1351" vertical-scroll-proportion="0.65789473">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/interfaces/LavaCollection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="0" selection-start="1410" selection-end="1410" vertical-scroll-proportion="0.5847953">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/1.6.0_41-b02-445.jdk/Contents/Home/src.jar!/src/java/util/HashMap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="107" column="19" selection-start="5262" selection-end="5262" vertical-scroll-proportion="0.39473686">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/1.6.0_41-b02-445.jdk/Contents/Home/src.jar!/src/java/util/AbstractMap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="548" column="36" selection-start="17700" selection-end="17700" vertical-scroll-proportion="7.9385967">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/Lava.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="102" selection-start="600" selection-end="600" vertical-scroll-proportion="0.23391813">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/Func.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="15" selection-start="380" selection-end="380" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/callback/Func2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="18" selection-start="118" selection-end="118" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/icechamps/lava/LavaBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="311" column="29" selection-start="10345" selection-end="10345" vertical-scroll-proportion="4.4866734">
+          <folding />
         </state>
       </provider>
     </entry>
