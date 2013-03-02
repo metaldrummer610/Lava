@@ -1,3 +1,4 @@
 .gradle
 out
 .DS_Store
+/.idea/workspace.xml
