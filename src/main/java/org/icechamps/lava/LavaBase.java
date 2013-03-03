@@ -33,8 +33,8 @@ public class LavaBase {
      * @return The aggregated object from the collection
      */
     protected <T, V> V aggregate(Collection<T> collection, Func2<T, V, V> func) {
-        Preconditions.checkArgument(collection != null);
-        Preconditions.checkArgument(func != null);
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkNotNull(func);
 
         V ret = null;
         for (T t : collection) {
@@ -57,8 +57,8 @@ public class LavaBase {
      * @return Returns true if all of the elements return true for the func. Returns false if a single element doesn't match.
      */
     protected <T> boolean all(Collection<T> collection, Func<T, Boolean> func) {
-        Preconditions.checkArgument(collection != null);
-        Preconditions.checkArgument(func != null);
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkNotNull(func);
 
         for (T obj : collection) {
             if (!func.callback(obj))
@@ -80,7 +80,7 @@ public class LavaBase {
      * @return True if there are any elements in the collection, false if not.
      */
     protected <T> boolean any(Collection<T> collection) {
-        Preconditions.checkArgument(collection != null);
+        Preconditions.checkNotNull(collection);
         return !collection.isEmpty();
     }
 
@@ -96,7 +96,7 @@ public class LavaBase {
      * @return A subset of the inital list containing no duplicates.
      */
     protected <T> LavaCollection<T> distinct(Collection<T> collection) {
-        Preconditions.checkArgument(collection != null);
+        Preconditions.checkNotNull(collection);
 
         LavaCollection<T> ret = buildLavaCollectionFromCollection(collection);
 
@@ -119,11 +119,11 @@ public class LavaBase {
      * @return The first object in the collection
      */
     protected <T> T first(Collection<T> collection) {
-        Preconditions.checkArgument(collection != null);
+        Preconditions.checkNotNull(collection);
 
-        if (collection.isEmpty()) {
+        if (collection.isEmpty())
             throw new NoSuchElementException("The collection is empty");
-        }
+
         return collection.iterator().next();
     }
 
@@ -136,7 +136,7 @@ public class LavaBase {
      * @return The first match the callback function finds
      */
     protected <T> T first(Collection<T> collection, Func<T, Boolean> func) {
-        Preconditions.checkArgument(collection != null);
+        Preconditions.checkNotNull(collection);
 
         for (T t : collection) {
             if (func.callback(t))
@@ -144,6 +144,224 @@ public class LavaBase {
         }
 
         throw new NoSuchElementException("No element found that matches the callback function");
+    }
+
+    ///////////////
+    // First Or Default
+    ///////////////
+
+    /**
+     * Returns the first item in the collection, or null if there isn't one. Throws an exception if the collection is empty
+     *
+     * @param collection The collection to search
+     * @param <T>        The type of the object in the collection
+     * @return The first item in the collection, or null.
+     */
+    protected <T> T firstOrDefault(Collection<T> collection) {
+        return first(collection);
+    }
+
+    /**
+     * Returns the first item in the collection using the callback function, or null if there isn't one.
+     *
+     * @param collection The collection to use
+     * @param func       The callback function to use
+     * @param <T>        The type of the object
+     * @return The first item in the collection, or null.
+     */
+    protected <T> T firstOrDefault(Collection<T> collection, Func<T, Boolean> func) {
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkNotNull(func);
+
+        if (collection.isEmpty()) {
+            throw new NoSuchElementException("The collection is empty");
+        }
+
+        for (T t : collection) {
+            if (func.callback(t))
+                return t;
+        }
+
+        return null;
+    }
+
+    ///////////////
+    // Intersect
+    ///////////////
+
+    /**
+     * Creates an intersection between the two collections. The resulting LavaCollection implementation will be of the same type as the first collection.
+     *
+     * @param first  The first collection
+     * @param second The second collection
+     * @param <T>    The type of object in the collections
+     * @return The intersection of the two collections
+     */
+    protected <T> LavaCollection<T> intersect(Collection<T> first, Collection<T> second) {
+        Preconditions.checkNotNull(first);
+        Preconditions.checkNotNull(second);
+
+        LavaCollection<T> firstDistinct = distinct(first);
+        LavaCollection<T> secondDistinct = distinct(second);
+
+        LavaCollection<T> ret = buildLavaCollectionFromCollection(first);
+
+        for (T f : firstDistinct) {
+            for (T s : secondDistinct) {
+                if (f.equals(s))
+                    ret.add(f);
+            }
+        }
+
+        return ret;
+    }
+
+    ///////////////
+    // Join
+    ///////////////
+
+    //TODO: Finish the implementation of this method....
+
+    /**
+     * Joins the two collections on
+     *
+     * @param outerCollection
+     * @param innerCollection
+     * @param outerKeyFunc
+     * @param innerKeyFunc
+     * @param resultFunc
+     * @param <Outer>
+     * @param <Inner>
+     * @param <Key>
+     * @param <Result>
+     * @return
+     */
+    protected <Outer, Inner, Key, Result> LavaCollection<Result> join(Collection<Outer> outerCollection,
+                                                                      Collection<Inner> innerCollection,
+                                                                      Func<Outer, Key> outerKeyFunc,
+                                                                      Func<Inner, Key> innerKeyFunc,
+                                                                      Func2<Outer, Inner, Result> resultFunc) {
+        Preconditions.checkArgument(outerCollection != null);
+        Preconditions.checkArgument(innerCollection != null);
+        Preconditions.checkArgument(outerKeyFunc != null);
+        Preconditions.checkArgument(innerKeyFunc != null);
+        Preconditions.checkArgument(resultFunc != null);
+
+        LavaCollection<Result> results = buildLavaCollectionFromCollection(outerCollection);
+        ArrayList<JoinedKey> outerKeys = new ArrayList<JoinedKey>();
+        ArrayList<JoinedKey> innerKeys = new ArrayList<JoinedKey>();
+
+        // Collect the keys from each collection
+        for (Outer outer : outerCollection) {
+            Key key = outerKeyFunc.callback(outer);
+            outerKeys.add(new JoinedKey(key, outer));
+        }
+
+        for (Inner inner : innerCollection) {
+            Key key = innerKeyFunc.callback(inner);
+            innerKeys.add(new JoinedKey(key, inner));
+        }
+
+        Iterator<JoinedKey> outerIterator = outerKeys.iterator();
+        Iterator<JoinedKey> innerIterator = innerKeys.iterator();
+
+//        while (outerIterator.hasNext() && innerIterator.hasNext()) {
+//            results.add(resultFunc.callback(outerIterator.next(), innerIterator.next()));
+//        }
+
+        return results;
+    }
+
+    private class JoinedKey<K, V> {
+        public K key;
+        public V value;
+
+        public JoinedKey(K k, V v) {
+            key = k;
+            value = v;
+        }
+    }
+
+    ///////////////
+    // Last
+    ///////////////
+
+    /**
+     * Obtains the last element in the collection
+     *
+     * @param collection The collection to search
+     * @param <T>        The type of the object
+     * @return The last element in the collection
+     */
+    protected <T> T last(Collection<T> collection) {
+        Preconditions.checkNotNull(collection);
+
+        if (collection.isEmpty())
+            throw new NoSuchElementException("Collection is empty");
+
+        Object[] elements = collection.toArray();
+        return (T) elements[collection.size() - 1];
+    }
+
+    /**
+     * Obtains the last element in the collection that satisfies the given callback function
+     *
+     * @param collection The collection to search
+     * @param func       The callback function to use
+     * @param <T>        The type of the elements in the collection
+     * @return The last element in the list that satisfies the callback
+     * @throws NoSuchElementException If no elements are found
+     */
+    protected <T> T last(Collection<T> collection, Func<T, Boolean> func) {
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkNotNull(func);
+
+        T ret = null;
+        for (T t : collection) {
+            if (func.callback(t))
+                ret = t;
+        }
+
+        if (ret == null)
+            throw new NoSuchElementException("Element not found");
+
+        return ret;
+    }
+
+    ///////////////
+    // Last Or Default
+    ///////////////
+
+    /**
+     * Obtains the last element in the collection, or returns null.
+     *
+     * @param collection The collection to search
+     * @param <T>        The type of the element
+     * @return The last element or null
+     */
+    protected <T> T lastOrDefault(Collection<T> collection) {
+        return last(collection);
+    }
+
+    /**
+     * Obtains the last element in the collection that satisfies the given callback function, or null
+     *
+     * @param collection The collection to search
+     * @param func       The callback function to use
+     * @param <T>        The type of the element
+     * @return The last element to satisfy the callback function, or null
+     */
+    protected <T> T lastOrDefault(Collection<T> collection, Func<T, Boolean> func) {
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkNotNull(func);
+
+        T ret = null;
+        for (T t : collection) {
+            if (func.callback(t))
+                ret = t;
+        }
+
+        return ret;
     }
 
     ///////////////
@@ -182,7 +400,7 @@ public class LavaBase {
      * @return The ordered collection
      */
     private <T extends Comparable<? super T>> LavaList<T> orderByListInternal(Collection<T> collection, Comparator<T> comparator) {
-        Preconditions.checkArgument(collection != null);
+        Preconditions.checkNotNull(collection);
 
         LavaList<T> list = new LavaList<T>(collection);
 
@@ -208,8 +426,8 @@ public class LavaBase {
      * @return A collection of transformed objects
      */
     protected <T, E> LavaCollection<E> select(Collection<T> collection, Func<T, E> func) {
-        Preconditions.checkArgument(collection != null);
-        Preconditions.checkArgument(func != null);
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkNotNull(func);
 
         LavaCollection<E> ret = buildLavaCollectionFromCollection(collection);
 
@@ -236,8 +454,8 @@ public class LavaBase {
      * @throws MultipleElementsFoundException If there are multiple elements that match the func.
      */
     protected <T> T single(Collection<T> collection, Func<T, Boolean> func) {
-        Preconditions.checkArgument(collection != null);
-        Preconditions.checkArgument(func != null);
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkNotNull(func);
 
         T ret = null;
 
@@ -272,8 +490,8 @@ public class LavaBase {
      * @throws MultipleElementsFoundException If there are multiple elements that match the callback.
      */
     protected <T> T singleOrDefault(Collection<T> collection, Func<T, Boolean> func) {
-        Preconditions.checkArgument(collection != null);
-        Preconditions.checkArgument(func != null);
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkNotNull(func);
 
         T ret = null;
 
@@ -302,8 +520,8 @@ public class LavaBase {
      * @return A subset of the list where all of the objects return a match in the callback function.
      */
     protected <T> LavaCollection<T> where(Collection<T> collection, Func<T, Boolean> func) {
-        Preconditions.checkArgument(collection != null);
-        Preconditions.checkArgument(func != null);
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkNotNull(func);
 
         LavaCollection<T> ret = buildLavaCollectionFromCollection(collection);
 
@@ -335,6 +553,6 @@ public class LavaBase {
         return ret;
     }
 
-    //TODO: Add the following methods: First, FirstOrDefault, Intersect, Join, Last, LastOrDefault, Max, Min, OrderByDescending, SelectMany, SequenceEqual, Skip, SkipWhile, Sum, Take, TakeWhile, ThenBy, ToMap, ToList, ToSet, Union, Zip
+    //TODO: Add the following methods: Join, Max, Min, OrderByDescending, SelectMany, SequenceEqual, Skip, SkipWhile, Sum, Take, TakeWhile, ThenBy, ToMap, ToList, ToSet, Union, Zip
 
 }
