@@ -1,11 +1,11 @@
 package org.icechamps.lava.collection;
 
 import com.google.common.base.Preconditions;
-import org.icechamps.lava.LavaBase;
-import org.icechamps.lava.callback.Func;
-import org.icechamps.lava.interfaces.LavaCollection;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * User: Robert.Diaz
@@ -13,7 +13,7 @@ import java.util.*;
  * Time: 5:02 PM
  * <p/>
  * <p>
- * A collection of objects of type {@code T} that implements the {@link org.icechamps.lava.interfaces.LavaCollection} interface.
+ * A collection of objects of type {@code T} that implements the {@link org.icechamps.lava.interfaces.Enumerable} interface.
  * This allows for method chaining.
  * </p>
  * <p>
@@ -21,163 +21,131 @@ import java.util.*;
  * an instance of a different type into the constructor, one can change the backing object.
  * </p>
  */
-public class LavaList<T> extends LavaBase implements List<T>, LavaCollection<T> {
-    private List<T> sourceList;
-
+public class LavaList<T extends Comparable<? super T>> extends LavaEnumerable<T> implements List<T> {
     public LavaList() {
-        sourceList = new ArrayList<T>();
+        collection = new ArrayList<T>();
     }
 
-    public LavaList(Collection<T> collection) {
-        Preconditions.checkArgument(collection != null);
+    public LavaList(Collection<T> col) {
+        Preconditions.checkArgument(col != null);
 
-        if (collection instanceof List)
-            sourceList = (List<T>) collection;
-        else {
-            sourceList = new ArrayList<T>(collection.size());
-            for (T t : collection) {
-                sourceList.add(t);
-            }
+        collection = new ArrayList<T>(col.size());
+        for (T t : col) {
+            collection.add(t);
         }
     }
 
-    @Override
-    public LavaCollection<T> distinct() {
-        return distinct(this);
-    }
-
-    @Override
-    public <E> LavaCollection<E> select(Func<T, E> func) {
-        return select(this, func);
-    }
-
-    @Override
-    public LavaCollection<T> where(Func<T, Boolean> func) {
-        return where(this, func);
+    private List<T> asList() {
+        return (List<T>) collection;
     }
 
     @Override
     public int size() {
-        return sourceList.size();
+        return collection.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return sourceList.isEmpty();
+        return collection.isEmpty();
     }
 
     @Override
     public boolean contains(Object o) {
-        return sourceList.contains(o);
-    }
-
-    @Override
-    public Iterator<T> iterator() {
-        return sourceList.iterator();
+        return collection.contains(o);
     }
 
     @Override
     public Object[] toArray() {
-        return sourceList.toArray();
+        return collection.toArray();
     }
 
     @Override
-    public <T1 extends Object> T1[] toArray(T1[] t1s) {
-        return sourceList.toArray(t1s);
+    public <T1 extends Object> T1[] toArray(T1[] a) {
+        return collection.toArray(a);
     }
 
     @Override
     public boolean add(T t) {
-        return sourceList.add(t);
+        return collection.add(t);
     }
 
     @Override
     public boolean remove(Object o) {
-        return sourceList.remove(o);
+        return collection.remove(o);
     }
 
     @Override
-    public boolean containsAll(Collection<?> objects) {
-        return sourceList.containsAll(objects);
+    public boolean containsAll(Collection<?> c) {
+        return collection.containsAll(c);
     }
 
     @Override
-    public boolean addAll(Collection<? extends T> ts) {
-        return sourceList.addAll(ts);
+    public boolean addAll(Collection<? extends T> c) {
+        return collection.addAll(c);
     }
 
     @Override
     public boolean addAll(int i, Collection<? extends T> ts) {
-        return sourceList.addAll(i, ts);
+        return asList().addAll(i, ts);
     }
 
     @Override
-    public boolean removeAll(Collection<?> objects) {
-        return sourceList.removeAll(objects);
+    public boolean removeAll(Collection<?> c) {
+        return collection.removeAll(c);
     }
 
     @Override
-    public boolean retainAll(Collection<?> objects) {
-        return sourceList.retainAll(objects);
+    public boolean retainAll(Collection<?> c) {
+        return collection.retainAll(c);
     }
 
     @Override
     public void clear() {
-        sourceList.clear();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return sourceList.equals(o);
-    }
-
-    @Override
-    public int hashCode() {
-        return sourceList.hashCode();
+        collection.clear();
     }
 
     @Override
     public T get(int i) {
-        return sourceList.get(i);
+        return asList().get(i);
     }
 
     @Override
     public T set(int i, T t) {
-        return sourceList.set(i, t);
+        return asList().set(i, t);
     }
 
     @Override
     public void add(int i, T t) {
-        sourceList.add(i, t);
+        asList().add(i, t);
     }
 
     @Override
     public T remove(int i) {
-        return sourceList.remove(i);
+        return asList().remove(i);
     }
 
     @Override
     public int indexOf(Object o) {
-        return sourceList.indexOf(o);
+        return asList().indexOf(o);
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return sourceList.lastIndexOf(o);
+        return asList().lastIndexOf(o);
     }
 
     @Override
     public ListIterator<T> listIterator() {
-        return sourceList.listIterator();
+        return asList().listIterator();
     }
 
     @Override
     public ListIterator<T> listIterator(int i) {
-        return sourceList.listIterator(i);
+        return asList().listIterator(i);
     }
 
     @Override
     public List<T> subList(int i, int i2) {
-        return sourceList.subList(i, i2);
+        return asList().subList(i, i2);
     }
 }

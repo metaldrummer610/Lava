@@ -1,9 +1,5 @@
 package org.icechamps.lava.collection;
 
-import org.icechamps.lava.LavaBase;
-import org.icechamps.lava.callback.Func;
-import org.icechamps.lava.interfaces.LavaCollection;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,7 +10,7 @@ import java.util.Set;
  * Date: 2/27/13
  * Time: 7:17 PM
  */
-public class LavaSet<T> extends LavaBase implements Set<T>, LavaCollection<T> {
+public class LavaSet<T extends Comparable<? super T>> extends LavaEnumerable<T> implements Set<T> {
     private Set<T> set;
 
     public LavaSet() {
@@ -23,21 +19,6 @@ public class LavaSet<T> extends LavaBase implements Set<T>, LavaCollection<T> {
 
     public LavaSet(Set<T> set) {
         this.set = set;
-    }
-
-    @Override
-    public LavaCollection<T> distinct() {
-        return distinct(this);
-    }
-
-    @Override
-    public <E> LavaCollection<E> select(Func<T, E> func) {
-        return select(this, func);
-    }
-
-    @Override
-    public LavaCollection<T> where(Func<T, Boolean> func) {
-        return where(this, func);
     }
 
     @Override
