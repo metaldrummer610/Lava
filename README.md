@@ -12,3 +12,7 @@ So far, the only dependency for the project is the [Guava](https://code.google.c
 To contribute to the project, please follow the [Git Flow](https://github.com/nvie/gitflow) workflow. I have checked the develop branch into github so that any cutting-edge development can take place there, while leaving the master for tagged releases. Please try to adhere to these guidelines.
 
 If you do add some functionality to the project, or modify something, please make sure there is a unit test for it. I know I haven't fully implemented all the unit tests for the existing functionality yet, but that will come with time.
+<<<<<<< HEAD
+=======
+
+>>>>>>> release/initial_release
