@@ -197,6 +197,24 @@ public interface Enumerable<T> extends Iterable<T> {
     public <E extends Comparable<? super E>> Enumerable<E> select(Func<T, E> func);
 
     /**
+     * Performs a one to many projection from the source object to a resulting collection
+     *
+     * @param func     The function that returns a collection based on the source object
+     * @param <Result> The type of the result object
+     * @return A collection of the resulting objects from the callback function
+     */
+    public <Result extends Comparable<? super Result>> Enumerable<Result> selectMany(Func<T, Collection<Result>> func);
+
+    /**
+     * Performs a one to many projection from the source object to a resulting collection. Passes the index of each object to the callback function
+     *
+     * @param func     The function that returns a collection based on the source object
+     * @param <Result> The type of the result object
+     * @return A collection of the resulting objects from the callback function
+     */
+    public <Result extends Comparable<? super Result>> Enumerable<Result> selectMany(Func2<T, Integer, Collection<Result>> func);
+
+    /**
      * Preforms a one to many projection from the source collection to a resulting collection
      *
      * @param collectionFunc The function that returns a collection based on the element passed in

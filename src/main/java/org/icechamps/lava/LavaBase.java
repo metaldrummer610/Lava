@@ -425,7 +425,7 @@ public class LavaBase {
                 continue;
             }
 
-            if (ret.compareTo(t) > 0) {
+            if (ret.compareTo(t) < 0) {
                 ret = t;
             }
         }
@@ -455,7 +455,7 @@ public class LavaBase {
                 continue;
             }
 
-            if (ret.compareTo(e) > 0) {
+            if (ret.compareTo(e) < 0) {
                 ret = e;
             }
         }
@@ -484,7 +484,7 @@ public class LavaBase {
                 continue;
             }
 
-            if (ret.compareTo(t) < 0) {
+            if (ret.compareTo(t) > 0) {
                 ret = t;
             }
         }
@@ -514,7 +514,7 @@ public class LavaBase {
                 continue;
             }
 
-            if (ret.compareTo(e) < 0) {
+            if (ret.compareTo(e) > 0) {
                 ret = e;
             }
         }
@@ -677,6 +677,74 @@ public class LavaBase {
     ///////////////
 
     /**
+     * Performs a one to many projection from the source object to a resulting collection
+     *
+     * @param sourceCollection The source collection
+     * @param func             The function that returns a collection based on the source object
+     * @param <Source>         The type of the source object
+     * @param <Result>         The type of the result object
+     * @return A collection of the resulting objects from the callback function
+     */
+    protected <Source, Result extends Comparable<? super Result>> Enumerable<Result> selectMany(Collection<Source> sourceCollection,
+                                                                                                Func<Source, Collection<Result>> func) {
+        Preconditions.checkNotNull(sourceCollection);
+        Preconditions.checkNotNull(func);
+
+        return new SelectManyEnumerable1<Source, Result>(sourceCollection, func);
+    }
+
+    class SelectManyEnumerable1<Source, Result extends Comparable<? super Result>> extends LavaEnumerable<Result> {
+
+        public SelectManyEnumerable1(Collection<Source> sourceCollection, Func<Source, Collection<Result>> func) {
+            collection = new ArrayList<Result>();
+
+            for (Source source : sourceCollection) {
+                Collection<Result> results = func.callback(source);
+
+                if (results != null)
+                    collection.addAll(results);
+            }
+
+            iterator = collection.iterator();
+        }
+    }
+
+    /**
+     * Performs a one to many projection from the source object to a resulting collection. Passes the index of each object to the callback function
+     *
+     * @param sourceCollection The source collection
+     * @param func             The function that returns a collection based on the source object
+     * @param <Source>         The type of the source object
+     * @param <Result>         The type of the result object
+     * @return A collection of the resulting objects from the callback function
+     */
+    protected <Source, Result extends Comparable<? super Result>> Enumerable<Result> selectMany(Collection<Source> sourceCollection,
+                                                                                                Func2<Source, Integer, Collection<Result>> func) {
+        Preconditions.checkNotNull(sourceCollection);
+        Preconditions.checkNotNull(func);
+
+        return new SelectManyEnumerable2<Source, Result>(sourceCollection, func);
+    }
+
+    class SelectManyEnumerable2<Source, Result extends Comparable<? super Result>> extends LavaEnumerable<Result> {
+
+        public SelectManyEnumerable2(Collection<Source> sourceCollection, Func2<Source, Integer, Collection<Result>> func) {
+            collection = new ArrayList<Result>();
+
+            int index = 0;
+            for (Iterator<Source> sourceIterator = sourceCollection.iterator(); sourceIterator.hasNext(); index++) {
+                Source source = sourceIterator.next();
+                Collection<Result> results = func.callback(source, index);
+
+                if (results != null)
+                    collection.addAll(results);
+            }
+
+            iterator = collection.iterator();
+        }
+    }
+
+    /**
      * Preforms a one to many projection from the source collection to a resulting collection
      *
      * @param sourceCollection The source collection
@@ -694,18 +762,21 @@ public class LavaBase {
         Preconditions.checkNotNull(collectionFunc);
         Preconditions.checkNotNull(resultFunc);
 
-        return new SelectManyEnumerable<Source, TCollection, Result>(sourceCollection, collectionFunc, resultFunc);
+        return new SelectManyEnumerable3<Source, TCollection, Result>(sourceCollection, collectionFunc, resultFunc);
     }
 
-    class SelectManyEnumerable<Source, TCollection, Result extends Comparable<? super Result>> extends LavaEnumerable<Result> {
-        SelectManyEnumerable(Collection<Source> sourceCollection,
-                             Func<Source, Collection<TCollection>> collectionFunc,
-                             Func2<Source, TCollection, Result> resultFunc) {
+    class SelectManyEnumerable3<Source, TCollection, Result extends Comparable<? super Result>> extends LavaEnumerable<Result> {
+        SelectManyEnumerable3(Collection<Source> sourceCollection,
+                              Func<Source, Collection<TCollection>> collectionFunc,
+                              Func2<Source, TCollection, Result> resultFunc) {
             collection = new ArrayList<Result>();
 
             for (Source source : sourceCollection) {
                 for (TCollection collection : collectionFunc.callback(source)) {
-                    this.collection.add(resultFunc.callback(source, collection));
+                    Result result = resultFunc.callback(source, collection);
+
+                    if (result != null)
+                        this.collection.add(result);
                 }
             }
 
@@ -827,7 +898,7 @@ public class LavaBase {
     protected <T extends Comparable<? super T>> Enumerable<T> skip(Collection<T> collection, int count) {
         Preconditions.checkNotNull(collection);
         Preconditions.checkArgument(count >= 0);
-        Preconditions.checkArgument(count > collection.size());
+        Preconditions.checkArgument(count < collection.size());
 
         return new SkipEnumerable<T>(collection, count);
     }
@@ -1002,6 +1073,8 @@ public class LavaBase {
 
     /**
      * Sums up the collection and returns the results
+     * <p/>
+     * TODO: Determine if this method is really needed, or if this is too similar to Aggregate
      *
      * @param collection The collection to sum
      * @param func       The callback function that does the addition. The first argument is the result of all the sums so far. The second is the current item in the iteration. The result is the addition of the two. On first run, the first argument will be null.
@@ -1094,6 +1167,8 @@ public class LavaBase {
             for (T next : col) {
                 if (func.callback(next))
                     collection.add(next);
+                else
+                    break;
             }
 
             iterator = collection.iterator();
