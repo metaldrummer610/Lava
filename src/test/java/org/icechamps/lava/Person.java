@@ -1,5 +1,7 @@
 package org.icechamps.lava;
 
+import java.util.ArrayList;
+
 /**
  * User: Robert.Diaz
  * Date: 3/8/13
@@ -8,6 +10,7 @@ package org.icechamps.lava;
 public class Person implements Comparable<Person> {
     public String name;
     public int age;
+    public ArrayList<Pet> pets;
 
     @Override
     public int compareTo(Person o) {
@@ -58,6 +61,7 @@ public class Person implements Comparable<Person> {
         return "Person{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
+                ", pets=" + pets +
                 '}';
     }
 }

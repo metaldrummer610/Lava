@@ -158,6 +158,16 @@ public abstract class LavaEnumerable<T extends Comparable<? super T>> extends La
     }
 
     @Override
+    public <Result extends Comparable<? super Result>> Enumerable<Result> selectMany(Func<T, Collection<Result>> resultFunc) {
+        return selectMany(collection, resultFunc);
+    }
+
+    @Override
+    public <Result extends Comparable<? super Result>> Enumerable<Result> selectMany(Func2<T, Integer, Collection<Result>> resultFunc) {
+        return selectMany(collection, resultFunc);
+    }
+
+    @Override
     public <TCollection, Result extends Comparable<? super Result>> Enumerable<Result> selectMany(Func<T, Collection<TCollection>> collectionFunc, Func2<T, TCollection, Result> resultFunc) {
         return selectMany(collection, collectionFunc, resultFunc);
     }

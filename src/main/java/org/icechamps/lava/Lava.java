@@ -121,6 +121,16 @@ public class Lava {
         return lavaBase.select(collection, func);
     }
 
+    public static <Source, Result extends Comparable<? super Result>> Enumerable<Result> selectMany(Collection<Source> sourceCollection,
+                                                                                                    Func<Source, Collection<Result>> resultFunc) {
+        return lavaBase.selectMany(sourceCollection, resultFunc);
+    }
+
+    public static <Source, Result extends Comparable<? super Result>> Enumerable<Result> selectMany(Collection<Source> sourceCollection,
+                                                                                                    Func2<Source, Integer, Collection<Result>> resultFunc) {
+        return lavaBase.selectMany(sourceCollection, resultFunc);
+    }
+
     public static <Source, TCollection, Result extends Comparable<? super Result>> Enumerable<Result> selectMany(Collection<Source> sourceCollection,
                                                                                                                  Func<Source, Collection<TCollection>> collectionFunc,
                                                                                                                  Func2<Source, TCollection, Result> resultFunc) {
