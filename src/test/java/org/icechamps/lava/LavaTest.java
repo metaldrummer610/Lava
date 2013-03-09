@@ -7,10 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: Robert.Diaz
@@ -112,22 +109,50 @@ public class LavaTest {
 
     @Test
     public void testFirst() throws Exception {
+        Person person = Lava.first(people);
 
+        Assert.assertEquals(person, people.get(0));
     }
 
     @Test
     public void testFirstWithFunc() throws Exception {
+        Person person = Lava.first(people, new Func<Person, Boolean>() {
+            @Override
+            public Boolean callback(Person person) {
+                return person.name.equals("Robbie");
+            }
+        });
 
+        Assert.assertEquals(person, people.get(0));
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testFirstWithFuncException() throws Exception {
+        Lava.first(people, new Func<Person, Boolean>() {
+            @Override
+            public Boolean callback(Person person) {
+                return person.name.equals("Foo");
+            }
+        });
     }
 
     @Test
     public void testFirstOrDefault() throws Exception {
+        Person person = Lava.firstOrDefault(people);
 
+        Assert.assertEquals(person, people.get(0));
     }
 
     @Test
     public void testFirstOrDefaultWithFunc() throws Exception {
+        Person person = Lava.firstOrDefault(people, new Func<Person, Boolean>() {
+            @Override
+            public Boolean callback(Person person) {
+                return person.name.equals("Foo");
+            }
+        });
 
+        Assert.assertNull(person);
     }
 
     @Test
@@ -142,42 +167,86 @@ public class LavaTest {
 
     @Test
     public void testLast() throws Exception {
+        Person person = Lava.last(people);
 
+        Assert.assertEquals(person, people.get(8));
     }
 
     @Test
     public void testLastWithFunc() throws Exception {
+        Person person = Lava.last(people, new Func<Person, Boolean>() {
+            @Override
+            public Boolean callback(Person person) {
+                return person.name.equals("Robbie");
+            }
+        });
 
+        Assert.assertEquals(person, people.get(1));
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testLastWithFuncException() throws Exception {
+        Lava.last(people, new Func<Person, Boolean>() {
+            @Override
+            public Boolean callback(Person person) {
+                return person.name.equals("Foo");
+            }
+        });
     }
 
     @Test
     public void testLastOrDefault() throws Exception {
+        Person person = Lava.lastOrDefault(people);
 
+        Assert.assertEquals(person, people.get(8));
     }
 
     @Test
     public void testLastOrDefaultWithFunc() throws Exception {
+        Person person = Lava.lastOrDefault(people, new Func<Person, Boolean>() {
+            @Override
+            public Boolean callback(Person person) {
+                return person.name.equals("Foo");
+            }
+        });
 
+        Assert.assertNull(person);
     }
 
     @Test
     public void testMax() throws Exception {
-
+        Person person = Lava.max(people);
+        Assert.assertTrue(person.age == 44);
     }
 
     @Test
     public void testMaxWithFunc() throws Exception {
+        int age = Lava.max(people, new Func<Person, Integer>() {
+            @Override
+            public Integer callback(Person person) {
+                return person.age;
+            }
+        });
 
+        Assert.assertTrue(age == 44);
     }
 
     @Test
     public void testMin() throws Exception {
-
+        Person person = Lava.min(people);
+        Assert.assertTrue(person.age == 1);
     }
 
     @Test
     public void testMinWithFunc() throws Exception {
+        int age = Lava.min(people, new Func<Person, Integer>() {
+            @Override
+            public Integer callback(Person person) {
+                return person.age;
+            }
+        });
 
+        Assert.assertTrue(age == 1);
     }
 
     @Test

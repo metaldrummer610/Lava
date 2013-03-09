@@ -425,7 +425,7 @@ public class LavaBase {
                 continue;
             }
 
-            if (ret.compareTo(t) > 0) {
+            if (ret.compareTo(t) < 0) {
                 ret = t;
             }
         }
@@ -455,7 +455,7 @@ public class LavaBase {
                 continue;
             }
 
-            if (ret.compareTo(e) > 0) {
+            if (ret.compareTo(e) < 0) {
                 ret = e;
             }
         }
@@ -484,7 +484,7 @@ public class LavaBase {
                 continue;
             }
 
-            if (ret.compareTo(t) < 0) {
+            if (ret.compareTo(t) > 0) {
                 ret = t;
             }
         }
@@ -514,7 +514,7 @@ public class LavaBase {
                 continue;
             }
 
-            if (ret.compareTo(e) < 0) {
+            if (ret.compareTo(e) > 0) {
                 ret = e;
             }
         }
