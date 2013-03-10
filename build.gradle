@@ -1,4 +1,10 @@
 apply plugin: 'java'
+apply plugin: 'maven'
+
+defaultTasks 'clean', 'test', 'jar'
+
+group = 'org.icechamps'
+description = 'A Java library that provides extension methods for collections which allow them to be queried and manipulated easily'
 
 sourceCompatibility = 1.6
 version = '0.2'
