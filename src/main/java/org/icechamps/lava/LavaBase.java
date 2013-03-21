@@ -339,8 +339,7 @@ public class LavaBase {
         if (collection.isEmpty())
             throw new NoSuchElementException("Collection is empty");
 
-        Object[] elements = collection.toArray();
-        return (T) elements[collection.size() - 1];
+        return toList(collection).get(0);
     }
 
     /**
@@ -565,7 +564,7 @@ public class LavaBase {
     class OrderByEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
 
         OrderByEnumerable(Collection<T> col, Comparator<T> comparator) {
-            List list = new ArrayList<T>(col);
+            List<T> list = new ArrayList<T>(col);
 
             if (comparator != null)
                 Collections.sort(list, comparator);
@@ -625,7 +624,7 @@ public class LavaBase {
     class OrderByDescendingEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
 
         OrderByDescendingEnumerable(Collection<T> col, Comparator<T> comparator) {
-            List list = new ArrayList<T>(col);
+            List<T> list = new ArrayList<T>(col);
 
             if (comparator != null)
                 Collections.sort(list, comparator);
@@ -948,7 +947,9 @@ public class LavaBase {
             collection = new ArrayList<T>();
 
             Iterator<T> iter = col.iterator();
-            while (func.callback(iter.next())) ;
+            // Purposely empty while loop
+            while (func.callback(iter.next())) {
+            }
 
             while (iter.hasNext()) {
                 collection.add(iter.next());
