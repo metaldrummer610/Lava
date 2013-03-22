@@ -662,4 +662,35 @@ public class LavaTest {
 
         printList(ret);
     }
+
+    @Test
+    public void testUnion() throws Exception {
+        ArrayList<Integer> ints1 = new ArrayList<Integer>();
+
+        ints1.add(5);
+        ints1.add(3);
+        ints1.add(9);
+        ints1.add(7);
+        ints1.add(5);
+        ints1.add(9);
+        ints1.add(3);
+        ints1.add(7);
+
+        ArrayList<Integer> ints2 = new ArrayList<Integer>();
+
+        ints2.add(8);
+        ints2.add(3);
+        ints2.add(6);
+        ints2.add(4);
+        ints2.add(4);
+        ints2.add(9);
+        ints2.add(1);
+        ints2.add(0);
+
+        Enumerable<Integer> ints = Lava.union(ints1, ints2);
+
+        assertNotNull(ints);
+        assertTrue(ints.any());
+        assertTrue(ints.count() == 9);
+    }
 }

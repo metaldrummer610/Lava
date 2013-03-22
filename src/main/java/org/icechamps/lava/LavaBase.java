@@ -122,9 +122,7 @@ public class LavaBase {
      */
     class DistinctEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
         protected DistinctEnumerable(Collection<T> col) {
-            super();
             collection = new HashSet<T>(col);
-            iterator = collection.iterator();
         }
     }
 
@@ -241,8 +239,6 @@ public class LavaBase {
                 for (T s : second)
                     if (f.equals(s))
                         collection.add(f);
-
-            iterator = collection.iterator();
         }
     }
 
@@ -338,8 +334,6 @@ public class LavaBase {
                     }
                 }
             }
-
-            iterator = collection.iterator();
         }
     }
 
@@ -692,7 +686,6 @@ public class LavaBase {
                 Collections.sort(list);
 
             collection = list;
-            iterator = collection.iterator();
         }
     }
 
@@ -754,7 +747,6 @@ public class LavaBase {
             Collections.reverse(list);
 
             collection = list;
-            iterator = collection.iterator();
         }
     }
 
@@ -786,8 +778,6 @@ public class LavaBase {
                 E transformed = func.callback(obj);
                 collection.add(transformed);
             }
-
-            iterator = collection.iterator();
         }
     }
 
@@ -823,8 +813,6 @@ public class LavaBase {
                 if (results != null)
                     collection.addAll(results);
             }
-
-            iterator = collection.iterator();
         }
     }
 
@@ -858,8 +846,6 @@ public class LavaBase {
                 if (results != null)
                     collection.addAll(results);
             }
-
-            iterator = collection.iterator();
         }
     }
 
@@ -898,8 +884,6 @@ public class LavaBase {
                         this.collection.add(result);
                 }
             }
-
-            iterator = collection.iterator();
         }
     }
 
@@ -1039,8 +1023,6 @@ public class LavaBase {
             while (iter.hasNext()) {
                 collection.add(iter.next());
             }
-
-            iterator = collection.iterator();
         }
     }
     ///////////////
@@ -1074,8 +1056,6 @@ public class LavaBase {
             while (iter.hasNext()) {
                 collection.add(iter.next());
             }
-
-            iterator = collection.iterator();
         }
     }
 
@@ -1226,8 +1206,6 @@ public class LavaBase {
                 else
                     throw new IndexOutOfBoundsException();
             }
-
-            iterator = collection.iterator();
         }
     }
 
@@ -1263,8 +1241,6 @@ public class LavaBase {
                 else
                     break;
             }
-
-            iterator = collection.iterator();
         }
     }
 
@@ -1360,12 +1336,49 @@ public class LavaBase {
                 if (func.callback(obj))
                     collection.add(obj);
             }
-
-            iterator = collection.iterator();
         }
     }
 
-    //TODO: Add the following methods: Union, Zip
+    ///////////////
+    // Union
+    ///////////////
+
+    /**
+     * Creates an enumerable containing the union of the two collections
+     *
+     * @param first  The first collection
+     * @param second The second collection
+     * @param <T>    The type of the object in the collection
+     * @return The enumerable containing the union
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> union(Collection<T> first, Collection<T> second) {
+        Preconditions.checkNotNull(first);
+        Preconditions.checkNotNull(second);
+
+        return new UnionEnumerable<T>(first, second);
+    }
+
+    /**
+     * Enumerable that provides the logic to produce the union
+     *
+     * @param <T> The type of object in the collection
+     */
+    class UnionEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
+        public UnionEnumerable(Collection<T> first, Collection<T> second) {
+            collection = new HashSet<T>();
+
+            for (T f : first)
+                if (!collection.contains(f))
+                    collection.add(f);
+
+            for (T s : second)
+                if (!collection.contains(s))
+                    collection.add(s);
+        }
+    }
+
+
+    //TODO: Add the following methods: Zip
     //TODO: Phase 2: Average, Cast, Concat, ElementAt?, ElementAtOrDefault?, Except, GroupBy, GroupJoin, Join, OfType, Range, Repeat, Reverse
 
 }

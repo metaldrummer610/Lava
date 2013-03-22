@@ -313,4 +313,12 @@ public interface Enumerable<T> extends Iterable<T> {
      * @return A subset of the collection where all of the objects return a match in the callback function.
      */
     public Enumerable<T> where(Func<T, Boolean> func);
+
+    /**
+     * Creates an enumerable containing the union of the two collections
+     *
+     * @param second The second collection
+     * @return The enumerable containing the union
+     */
+    public Enumerable<T> union(Collection<T> second);
 }

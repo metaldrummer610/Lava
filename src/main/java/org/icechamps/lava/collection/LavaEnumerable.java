@@ -14,30 +14,29 @@ import java.util.*;
  */
 public abstract class LavaEnumerable<T extends Comparable<? super T>> extends LavaBase implements Enumerable<T>, Iterator<T> {
     protected Collection<T> collection;
-    protected Iterator<T> iterator;
 
     // Iterable method
 
     @Override
     public Iterator<T> iterator() {
-        return iterator;
+        return collection.iterator();
     }
 
     // Iterator methods
 
     @Override
     public boolean hasNext() {
-        return iterator.hasNext();
+        return iterator().hasNext();
     }
 
     @Override
     public T next() {
-        return iterator.next();
+        return iterator().next();
     }
 
     @Override
     public void remove() {
-        iterator.remove();
+        iterator().remove();
     }
 
     // Lava methods
@@ -219,6 +218,11 @@ public abstract class LavaEnumerable<T extends Comparable<? super T>> extends La
     @Override
     public Enumerable<T> where(Func<T, Boolean> func) {
         return where(collection, func);
+    }
+
+    @Override
+    public Enumerable<T> union(Collection<T> second) {
+        return union(collection, second);
     }
 
     @Override

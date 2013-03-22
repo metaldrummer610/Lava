@@ -209,4 +209,8 @@ public class Lava {
     public static <T extends Comparable<? super T>> Enumerable<T> where(Collection<T> collection, Func<T, Boolean> searchCriteria) {
         return lavaBase.where(collection, searchCriteria);
     }
+
+    public static <T extends Comparable<? super T>> Enumerable<T> union(Collection<T> first, Collection<T> second) {
+        return lavaBase.union(first, second);
+    }
 }
