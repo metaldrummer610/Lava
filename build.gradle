@@ -7,7 +7,7 @@ group = 'org.icechamps'
 description = 'A Java library that provides extension methods for collections which allow them to be queried and manipulated easily'
 
 sourceCompatibility = 1.6
-version = '0.2'
+version = '0.3'
 jar {
     manifest {
         attributes 'Implementation-Title': 'Lava Java Library', 'Implementation-Version': version
