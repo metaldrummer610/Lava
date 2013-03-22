@@ -283,7 +283,37 @@ public class LavaBase {
         Preconditions.checkArgument(innerKeyFunc != null);
         Preconditions.checkArgument(resultFunc != null);
 
-        return new JoinEnumerable<Outer, Inner, Key, Result>(outerCollection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc);
+        return new JoinEnumerable<Outer, Inner, Key, Result>(outerCollection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc, null);
+    }
+
+    /**
+     * Joins the two collections on a set of common keys using the supplied callback functions.
+     *
+     * @param outerCollection The first collection to join on
+     * @param innerCollection The second collection to join on
+     * @param outerKeyFunc    The callback function used to generate a common key from the first collection
+     * @param innerKeyFunc    The callback function used to generate a common key from the second collection
+     * @param resultFunc      The callback function used to generate a result object based on the outputs of the other callback functions
+     * @param <Outer>         The type of the object in the first collection
+     * @param <Inner>         The type of the object in the second collection
+     * @param <Key>           The type of the common key
+     * @param <Result>        The type of the result object
+     * @return An enumerable instance that contains the results of the join
+     */
+    protected <Outer, Inner, Key, Result extends Comparable<? super Result>> Enumerable<Result> join(Collection<Outer> outerCollection,
+                                                                                                     Collection<Inner> innerCollection,
+                                                                                                     Func<Outer, Key> outerKeyFunc,
+                                                                                                     Func<Inner, Key> innerKeyFunc,
+                                                                                                     Func2<Outer, Inner, Result> resultFunc,
+                                                                                                     Comparator<Key> keyComparator) {
+        Preconditions.checkArgument(outerCollection != null);
+        Preconditions.checkArgument(innerCollection != null);
+        Preconditions.checkArgument(outerKeyFunc != null);
+        Preconditions.checkArgument(innerKeyFunc != null);
+        Preconditions.checkArgument(resultFunc != null);
+        Preconditions.checkNotNull(keyComparator);
+
+        return new JoinEnumerable<Outer, Inner, Key, Result>(outerCollection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc, keyComparator);
     }
 
     /**
@@ -299,10 +329,11 @@ public class LavaBase {
                        Collection<Inner> innerCollection,
                        Func<Outer, Key> outerKeyFunc,
                        Func<Inner, Key> innerKeyFunc,
-                       Func2<Outer, Inner, Result> resultFunc) {
+                       Func2<Outer, Inner, Result> resultFunc,
+                       Comparator<Key> keyComparator) {
             collection = new ArrayList<Result>();
 
-            Lookup<Key, Inner> lookup = new Lookup<Key, Inner>(innerCollection, innerKeyFunc);
+            Lookup<Key, Inner> lookup = new Lookup<Key, Inner>(innerCollection, innerKeyFunc, keyComparator);
 
             for (Outer outer : outerCollection) {
                 Key outerKey = outerKeyFunc.callback(outer);
@@ -327,17 +358,21 @@ public class LavaBase {
      */
     private class Lookup<K, V> {
         private ArrayList<Group<K, V>> groups;
+        private Comparator<K> comparator;
 
         /**
          * Constructor that takes in a collection and a callback function. It then populates the internal group structure with the results of the callback
          *
-         * @param collection The source collection
-         * @param func       The callback function used to generate the keys
+         * @param collection    The source collection
+         * @param func          The callback function used to generate the keys
+         * @param keyComparator A comparator that is used to compare the keys. If it is null, a default "==" is used
          */
-        public Lookup(Collection<V> collection, Func<V, K> func) {
+        public Lookup(Collection<V> collection, Func<V, K> func, Comparator<K> keyComparator) {
             Preconditions.checkNotNull(collection);
             Preconditions.checkNotNull(func);
+            Preconditions.checkNotNull(keyComparator);
             groups = new ArrayList<Group<K, V>>();
+            comparator = keyComparator;
 
             for (V v : collection) {
                 K key = func.callback(v);
@@ -356,6 +391,9 @@ public class LavaBase {
          */
         public Group<K, V> getGroupForKey(K key, boolean createNew) {
             for (Group<K, V> g : groups) {
+                if (comparator != null && comparator.compare(g.key, key) == 0)
+                    return g;
+
                 if (g.key == key) {
                     return g;
                 }
