@@ -621,10 +621,6 @@ public class LavaTest {
     }
 
     @Test
-    public void testSumGeneric() throws Exception {
-    }
-
-    @Test
     public void testTake() throws Exception {
         Enumerable<Person> persons = Lava.take(people, 3);
 

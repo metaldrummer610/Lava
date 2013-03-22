@@ -1192,34 +1192,6 @@ public class LavaBase {
         return (short) ret;
     }
 
-    /**
-     * Sums up the collection and returns the results
-     * <p/>
-     * TODO: Determine if this method is really needed, or if this is too similar to Aggregate
-     *
-     * @param collection The collection to sum
-     * @param func       The callback function that does the addition. The first argument is the result of all the sums so far. The second is the current item in the iteration. The result is the addition of the two. On first run, the first argument will be null.
-     * @param <T>        The type of object in the collection
-     * @return The added values of the collection
-     */
-    protected <T> T sum(Collection<T> collection, Func2<T, T, T> func) {
-        Preconditions.checkNotNull(collection);
-        Preconditions.checkNotNull(func);
-
-        if (collection.isEmpty()) {
-            return null;
-        }
-
-        Iterator<T> iterator = collection.iterator();
-        T ret = func.callback(null, iterator.next());
-
-        while (iterator.hasNext()) {
-            ret = func.callback(ret, iterator.next());
-        }
-
-        return ret;
-    }
-
     ///////////////
     // Take
     ///////////////

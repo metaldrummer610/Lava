@@ -190,10 +190,6 @@ public class Lava {
         return lavaBase.sum(collection);
     }
 
-    public static <T extends Comparable<? super T>> T sum(Collection<T> collection, Func2<T, T, T> func) {
-        return lavaBase.sum(collection, func);
-    }
-
     public static <T extends Comparable<? super T>> Enumerable<T> take(Collection<T> collection, int count) {
         return lavaBase.take(collection, count);
     }

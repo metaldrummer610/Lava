@@ -198,11 +198,6 @@ public abstract class LavaEnumerable<T extends Comparable<? super T>> extends La
     }
 
     @Override
-    public T sum(Func2<T, T, T> func) {
-        return sum(collection, func);
-    }
-
-    @Override
     public Enumerable<T> take(int count) {
         return take(collection, count);
     }
