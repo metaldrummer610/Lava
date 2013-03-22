@@ -172,7 +172,24 @@ public class LavaTest {
 
     @Test
     public void testIntersect() throws Exception {
+        // Populate the test lists
+        ArrayList<String> first = new ArrayList<String>();
+        ArrayList<String> second = new ArrayList<String>();
 
+        first.add("a");
+        first.add("b");
+        first.add("c");
+        first.add("d");
+
+        second.add("a");
+        second.add("b");
+        second.add("c");
+
+        Enumerable<String> strings = Lava.intersect(first, second);
+
+        assertNotNull(strings);
+        assertTrue(strings.any());
+        assertTrue(strings.count() == 3);
     }
 
     @Test

@@ -222,8 +222,8 @@ public class LavaBase {
         Preconditions.checkNotNull(first);
         Preconditions.checkNotNull(second);
 
-        Enumerable<T> firstDistinct = distinct(first);
-        Enumerable<T> secondDistinct = distinct(second);
+        List<T> firstDistinct = distinct(first).toList();
+        List<T> secondDistinct = distinct(second).toList();
 
         return new IntersectEnumerable<T>(firstDistinct, secondDistinct);
     }
@@ -234,23 +234,15 @@ public class LavaBase {
      * @param <T> The type of the object in the enumerable
      */
     class IntersectEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
-        private Enumerable<T> first;
-        private Enumerable<T> second;
+        IntersectEnumerable(List<T> first, List<T> second) {
+            collection = new ArrayList<T>();
 
-        IntersectEnumerable(Enumerable<T> first, Enumerable<T> second) {
-            this.first = first;
-            this.iterator = this.first.iterator();
-            this.second = second;
-        }
+            for (T f : first)
+                for (T s : second)
+                    if (f.equals(s))
+                        collection.add(f);
 
-        public T next() {
-            T next = iterator.next();
-
-            for (T s : second)
-                if (next.equals(s))
-                    return s;
-
-            return null;
+            iterator = collection.iterator();
         }
     }
 
