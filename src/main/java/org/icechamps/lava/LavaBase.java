@@ -355,7 +355,7 @@ public class LavaBase {
          * @return Either the existing Group, a new Group, or null.
          */
         public Group<K, V> getGroupForKey(K key, boolean createNew) {
-            for (Group g : groups) {
+            for (Group<K, V> g : groups) {
                 if (g.key == key) {
                     return g;
                 }
