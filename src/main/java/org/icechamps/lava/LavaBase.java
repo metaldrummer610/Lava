@@ -371,7 +371,7 @@ public class LavaBase {
         public Lookup(Collection<V> collection, Func<V, K> func, Comparator<K> keyComparator) {
             Preconditions.checkNotNull(collection);
             Preconditions.checkNotNull(func);
-            Preconditions.checkNotNull(keyComparator);
+
             groups = new ArrayList<Group<K, V>>();
             comparator = keyComparator;
 
@@ -467,7 +467,7 @@ public class LavaBase {
         if (collection.isEmpty())
             throw new NoSuchElementException("Collection is empty");
 
-        return toList(collection).get(0);
+        return toList(collection).get(collection.size() - 1);
     }
 
     /**
