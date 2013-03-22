@@ -4,11 +4,12 @@ import org.icechamps.lava.callback.Func;
 import org.icechamps.lava.callback.Func2;
 import org.icechamps.lava.exception.MultipleElementsFoundException;
 import org.icechamps.lava.interfaces.Enumerable;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * User: Robert.Diaz
@@ -46,6 +47,7 @@ public class LavaTest {
         for (int i = 0; i < age; i++) {
             Pet pet = new Pet();
             pet.name = String.format("%s-%d", name, i);
+            pet.owner = p;
             p.pets.add(pet);
         }
 
@@ -77,7 +79,7 @@ public class LavaTest {
             }
         });
 
-        Assert.assertEquals(240, aggregatedAge);
+        assertEquals(240, aggregatedAge);
     }
 
     @Test
@@ -89,7 +91,7 @@ public class LavaTest {
             }
         });
 
-        Assert.assertTrue(all);
+        assertTrue(all);
     }
 
     @Test
@@ -101,14 +103,14 @@ public class LavaTest {
             }
         });
 
-        Assert.assertFalse(list.any());
+        assertFalse(list.any());
 
-        Assert.assertFalse(Lava.any(new ArrayList<Comparable>()));
+        assertFalse(Lava.any(new ArrayList<Comparable>()));
     }
 
     @Test
     public void testCount() throws Exception {
-        Assert.assertTrue(Lava.count(people) == people.size());
+        assertTrue(Lava.count(people) == people.size());
     }
 
     @Test
@@ -117,14 +119,14 @@ public class LavaTest {
 
         printList(list);
 
-        Assert.assertTrue(list.count() == peopleCount - 1);
+        assertTrue(list.count() == peopleCount - 1);
     }
 
     @Test
     public void testFirst() throws Exception {
         Person person = Lava.first(people);
 
-        Assert.assertEquals(person, people.get(0));
+        assertEquals(person, people.get(0));
     }
 
     @Test
@@ -136,7 +138,7 @@ public class LavaTest {
             }
         });
 
-        Assert.assertEquals(person, people.get(0));
+        assertEquals(person, people.get(0));
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -153,7 +155,7 @@ public class LavaTest {
     public void testFirstOrDefault() throws Exception {
         Person person = Lava.firstOrDefault(people);
 
-        Assert.assertEquals(person, people.get(0));
+        assertEquals(person, people.get(0));
     }
 
     @Test
@@ -165,7 +167,7 @@ public class LavaTest {
             }
         });
 
-        Assert.assertNull(person);
+        assertNull(person);
     }
 
     @Test
@@ -175,14 +177,86 @@ public class LavaTest {
 
     @Test
     public void testJoin() throws Exception {
+        // Grab all the pets from all the people
+        Enumerable<Pet> pets = Lava.selectMany(people, new Func<Person, Collection<Pet>>() {
+            @Override
+            public Collection<Pet> callback(Person person) {
+                return person.pets;
+            }
+        });
 
+        assertNotNull(pets);
+        assertTrue(pets.any());
+
+        Enumerable<PetOwner> petOwners = Lava.join(people, pets.toList(), new Func<Person, Person>() {
+                    @Override
+                    public Person callback(Person person) {
+                        return person;
+                    }
+                }, new Func<Pet, Person>() {
+                    @Override
+                    public Person callback(Pet pet) {
+                        return pet.owner;
+                    }
+                }, new Func2<Person, Pet, PetOwner>() {
+                    @Override
+                    public PetOwner callback(Person person, Pet pet) {
+                        return new PetOwner(person, pet);
+                    }
+                }
+        );
+
+        assertNotNull(petOwners);
+        assertTrue(petOwners.any());
+    }
+
+    @Test
+    public void testJoinWithComparator() throws Exception {
+        // Grab all the pets from all the people
+        Enumerable<Pet> pets = Lava.selectMany(people, new Func<Person, Collection<Pet>>() {
+            @Override
+            public Collection<Pet> callback(Person person) {
+                return person.pets;
+            }
+        });
+
+        assertNotNull(pets);
+        assertTrue(pets.any());
+
+        Enumerable<PetOwner> petOwners = Lava.join(people, pets.toList(), new Func<Person, Person>() {
+                    @Override
+                    public Person callback(Person person) {
+                        return person;
+                    }
+                }, new Func<Pet, Person>() {
+                    @Override
+                    public Person callback(Pet pet) {
+                        return pet.owner;
+                    }
+                }, new Func2<Person, Pet, PetOwner>() {
+                    @Override
+                    public PetOwner callback(Person person, Pet pet) {
+                        return new PetOwner(person, pet);
+                    }
+                }, new Comparator<Person>() {
+                    @Override
+                    public int compare(Person o1, Person o2) {
+                        return o1.name.compareTo(o2.name);
+                    }
+                }
+        );
+
+        assertNotNull(petOwners);
+        assertTrue(petOwners.any());
+
+        printList(petOwners);
     }
 
     @Test
     public void testLast() throws Exception {
         Person person = Lava.last(people);
 
-        Assert.assertEquals(person, people.get(peopleCount - 1));
+        assertEquals(person, people.get(peopleCount - 1));
     }
 
     @Test
@@ -194,7 +268,7 @@ public class LavaTest {
             }
         });
 
-        Assert.assertEquals(person, people.get(1));
+        assertEquals(person, people.get(1));
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -211,7 +285,7 @@ public class LavaTest {
     public void testLastOrDefault() throws Exception {
         Person person = Lava.lastOrDefault(people);
 
-        Assert.assertEquals(person, people.get(peopleCount - 1));
+        assertEquals(person, people.get(peopleCount - 1));
     }
 
     @Test
@@ -223,13 +297,13 @@ public class LavaTest {
             }
         });
 
-        Assert.assertNull(person);
+        assertNull(person);
     }
 
     @Test
     public void testMax() throws Exception {
         Person person = Lava.max(people);
-        Assert.assertTrue(person.age == 44);
+        assertTrue(person.age == 44);
     }
 
     @Test
@@ -241,13 +315,13 @@ public class LavaTest {
             }
         });
 
-        Assert.assertTrue(age == 44);
+        assertTrue(age == 44);
     }
 
     @Test
     public void testMin() throws Exception {
         Person person = Lava.min(people);
-        Assert.assertTrue(person.age == 1);
+        assertTrue(person.age == 1);
     }
 
     @Test
@@ -259,7 +333,7 @@ public class LavaTest {
             }
         });
 
-        Assert.assertTrue(age == 1);
+        assertTrue(age == 1);
     }
 
     @Test
@@ -314,12 +388,12 @@ public class LavaTest {
             }
         });
 
-        Assert.assertTrue(names.count() == peopleCount);
+        assertTrue(names.count() == peopleCount);
 
         printList(names);
 
         for (String name : names) {
-            Assert.assertTrue(!name.isEmpty());
+            assertTrue(!name.isEmpty());
         }
     }
 
@@ -332,7 +406,7 @@ public class LavaTest {
             }
         });
 
-        Assert.assertTrue(pets.any());
+        assertTrue(pets.any());
     }
 
     @Test
@@ -344,7 +418,7 @@ public class LavaTest {
             }
         });
 
-        Assert.assertTrue(pets.any());
+        assertTrue(pets.any());
     }
 
     @Test
@@ -362,12 +436,12 @@ public class LavaTest {
                 }
         );
 
-        Assert.assertTrue(petNames.any());
+        assertTrue(petNames.any());
     }
 
     @Test
     public void testSequenceEqual() throws Exception {
-        Assert.assertTrue(Lava.sequenceEqual(people, people));
+        assertTrue(Lava.sequenceEqual(people, people));
     }
 
     @Test
@@ -379,7 +453,7 @@ public class LavaTest {
             }
         });
 
-        Assert.assertNotNull(person);
+        assertNotNull(person);
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -411,7 +485,7 @@ public class LavaTest {
             }
         });
 
-        Assert.assertNotNull(person);
+        assertNotNull(person);
     }
 
     @Test
@@ -423,14 +497,14 @@ public class LavaTest {
             }
         });
 
-        Assert.assertNull(person);
+        assertNull(person);
     }
 
     @Test
     public void testSkip() throws Exception {
         Enumerable<Person> persons = Lava.skip(people, 3);
 
-        Assert.assertEquals(peopleCount - 3, persons.count());
+        assertEquals(peopleCount - 3, persons.count());
     }
 
     @Test
@@ -442,7 +516,7 @@ public class LavaTest {
             }
         });
 
-        Assert.assertEquals(peopleCount - 4, persons.count());
+        assertEquals(peopleCount - 4, persons.count());
     }
 
     @Test
@@ -456,7 +530,7 @@ public class LavaTest {
 
         Byte sum = Lava.sum(list);
 
-        Assert.assertTrue((byte) 10 == sum);
+        assertTrue((byte) 10 == sum);
     }
 
     @Test
@@ -470,7 +544,7 @@ public class LavaTest {
 
         Double sum = Lava.sum(list);
 
-        Assert.assertTrue((double) 10 == sum);
+        assertTrue((double) 10 == sum);
     }
 
     @Test
@@ -484,7 +558,7 @@ public class LavaTest {
 
         Float sum = Lava.sum(list);
 
-        Assert.assertTrue((float) 10 == sum);
+        assertTrue((float) 10 == sum);
     }
 
     @Test
@@ -498,7 +572,7 @@ public class LavaTest {
 
         Integer sum = Lava.sum(list);
 
-        Assert.assertTrue(10 == sum);
+        assertTrue(10 == sum);
     }
 
     @Test
@@ -512,7 +586,7 @@ public class LavaTest {
 
         Long sum = Lava.sum(list);
 
-        Assert.assertTrue((long) 10 == sum);
+        assertTrue((long) 10 == sum);
     }
 
     @Test
@@ -526,7 +600,7 @@ public class LavaTest {
 
         Short sum = Lava.sum(list);
 
-        Assert.assertTrue((short) 10 == sum);
+        assertTrue((short) 10 == sum);
     }
 
     @Test
@@ -537,7 +611,7 @@ public class LavaTest {
     public void testTake() throws Exception {
         Enumerable<Person> persons = Lava.take(people, 3);
 
-        Assert.assertEquals(3, persons.count());
+        assertEquals(3, persons.count());
     }
 
     @Test
@@ -549,19 +623,19 @@ public class LavaTest {
             }
         });
 
-        Assert.assertEquals(3, persons.count());
+        assertEquals(3, persons.count());
     }
 
     @Test
     public void testToList() throws Exception {
         List<Person> persons = Lava.toList(people);
-        Assert.assertNotNull(persons);
+        assertNotNull(persons);
     }
 
     @Test
     public void testToSet() throws Exception {
         Set<Person> persons = Lava.toSet(people);
-        Assert.assertNotNull(persons);
+        assertNotNull(persons);
     }
 
     @Test
@@ -571,7 +645,7 @@ public class LavaTest {
                 return person.age > 10;
             }
         });
-        Assert.assertTrue(ret.count() == 8);
+        assertTrue(ret.count() == 8);
 
         printList(ret);
     }
