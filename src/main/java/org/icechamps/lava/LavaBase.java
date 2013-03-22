@@ -6,7 +6,6 @@ import org.icechamps.lava.callback.Func2;
 import org.icechamps.lava.collection.LavaEnumerable;
 import org.icechamps.lava.exception.MultipleElementsFoundException;
 import org.icechamps.lava.interfaces.Enumerable;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 
@@ -123,9 +122,7 @@ public class LavaBase {
      */
     class DistinctEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
         protected DistinctEnumerable(Collection<T> col) {
-            super();
             collection = new HashSet<T>(col);
-            iterator = collection.iterator();
         }
     }
 
@@ -223,8 +220,8 @@ public class LavaBase {
         Preconditions.checkNotNull(first);
         Preconditions.checkNotNull(second);
 
-        Enumerable<T> firstDistinct = distinct(first);
-        Enumerable<T> secondDistinct = distinct(second);
+        List<T> firstDistinct = distinct(first).toList();
+        List<T> secondDistinct = distinct(second).toList();
 
         return new IntersectEnumerable<T>(firstDistinct, secondDistinct);
     }
@@ -235,23 +232,13 @@ public class LavaBase {
      * @param <T> The type of the object in the enumerable
      */
     class IntersectEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
-        private Enumerable<T> first;
-        private Enumerable<T> second;
+        IntersectEnumerable(List<T> first, List<T> second) {
+            collection = new ArrayList<T>();
 
-        IntersectEnumerable(Enumerable<T> first, Enumerable<T> second) {
-            this.first = first;
-            this.iterator = this.first.iterator();
-            this.second = second;
-        }
-
-        public T next() {
-            T next = iterator.next();
-
-            for (T s : second)
-                if (next.equals(s))
-                    return s;
-
-            return null;
+            for (T f : first)
+                for (T s : second)
+                    if (f.equals(s))
+                        collection.add(f);
         }
     }
 
@@ -259,66 +246,193 @@ public class LavaBase {
     // Join
     ///////////////
 
-    //TODO: Finish the implementation of this method....
-
     /**
-     * Joins the two collections on
+     * Joins the two collections on a set of common keys using the supplied callback functions.
      *
-     * @param outerCollection
-     * @param innerCollection
-     * @param outerKeyFunc
-     * @param innerKeyFunc
-     * @param resultFunc
-     * @param <Outer>
-     * @param <Inner>
-     * @param <Key>
-     * @param <Result>
-     * @return
+     * @param outerCollection The first collection to join on
+     * @param innerCollection The second collection to join on
+     * @param outerKeyFunc    The callback function used to generate a common key from the first collection
+     * @param innerKeyFunc    The callback function used to generate a common key from the second collection
+     * @param resultFunc      The callback function used to generate a result object based on the outputs of the other callback functions
+     * @param <Outer>         The type of the object in the first collection
+     * @param <Inner>         The type of the object in the second collection
+     * @param <Key>           The type of the common key
+     * @param <Result>        The type of the result object
+     * @return An enumerable instance that contains the results of the join
      */
-    protected <Outer, Inner, Key, Result> Enumerable<Result> join(Collection<Outer> outerCollection,
-                                                                  Collection<Inner> innerCollection,
-                                                                  Func<Outer, Key> outerKeyFunc,
-                                                                  Func<Inner, Key> innerKeyFunc,
-                                                                  Func2<Outer, Inner, Result> resultFunc) {
-//        Preconditions.checkArgument(outerCollection != null);
-//        Preconditions.checkArgument(innerCollection != null);
-//        Preconditions.checkArgument(outerKeyFunc != null);
-//        Preconditions.checkArgument(innerKeyFunc != null);
-//        Preconditions.checkArgument(resultFunc != null);
-//
-//        Enumerable<Result> results = buildLavaCollectionFromCollection(outerCollection);
-//        ArrayList<JoinedKey> outerKeys = new ArrayList<JoinedKey>();
-//        ArrayList<JoinedKey> innerKeys = new ArrayList<JoinedKey>();
-//
-//        // Collect the keys from each collection
-//        for (Outer outer : outerCollection) {
-//            Key key = outerKeyFunc.callback(outer);
-//            outerKeys.add(new JoinedKey(key, outer));
-//        }
-//
-//        for (Inner inner : innerCollection) {
-//            Key key = innerKeyFunc.callback(inner);
-//            innerKeys.add(new JoinedKey(key, inner));
-//        }
-//
-//        Iterator<JoinedKey> outerIterator = outerKeys.iterator();
-//        Iterator<JoinedKey> innerIterator = innerKeys.iterator();
-//
-////        while (outerIterator.hasNext() && innerIterator.hasNext()) {
-////            results.add(resultFunc.callback(outerIterator.next(), innerIterator.next()));
-////        }
-//
-//        return results;
-        throw new NotImplementedException();
+    protected <Outer, Inner, Key, Result extends Comparable<? super Result>> Enumerable<Result> join(Collection<Outer> outerCollection,
+                                                                                                     Collection<Inner> innerCollection,
+                                                                                                     Func<Outer, Key> outerKeyFunc,
+                                                                                                     Func<Inner, Key> innerKeyFunc,
+                                                                                                     Func2<Outer, Inner, Result> resultFunc) {
+        Preconditions.checkArgument(outerCollection != null);
+        Preconditions.checkArgument(innerCollection != null);
+        Preconditions.checkArgument(outerKeyFunc != null);
+        Preconditions.checkArgument(innerKeyFunc != null);
+        Preconditions.checkArgument(resultFunc != null);
+
+        return new JoinEnumerable<Outer, Inner, Key, Result>(outerCollection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc, null);
     }
 
-    private class JoinedKey<K, V> {
-        protected K key;
-        protected V value;
+    /**
+     * Joins the two collections on a set of common keys using the supplied callback functions.
+     *
+     * @param outerCollection The first collection to join on
+     * @param innerCollection The second collection to join on
+     * @param outerKeyFunc    The callback function used to generate a common key from the first collection
+     * @param innerKeyFunc    The callback function used to generate a common key from the second collection
+     * @param resultFunc      The callback function used to generate a result object based on the outputs of the other callback functions
+     * @param keyComparator   The comparator used to compare the keys
+     * @param <Outer>         The type of the object in the first collection
+     * @param <Inner>         The type of the object in the second collection
+     * @param <Key>           The type of the common key
+     * @param <Result>        The type of the result object
+     * @return An enumerable instance that contains the results of the join
+     */
+    protected <Outer, Inner, Key, Result extends Comparable<? super Result>> Enumerable<Result> join(Collection<Outer> outerCollection,
+                                                                                                     Collection<Inner> innerCollection,
+                                                                                                     Func<Outer, Key> outerKeyFunc,
+                                                                                                     Func<Inner, Key> innerKeyFunc,
+                                                                                                     Func2<Outer, Inner, Result> resultFunc,
+                                                                                                     Comparator<Key> keyComparator) {
+        Preconditions.checkArgument(outerCollection != null);
+        Preconditions.checkArgument(innerCollection != null);
+        Preconditions.checkArgument(outerKeyFunc != null);
+        Preconditions.checkArgument(innerKeyFunc != null);
+        Preconditions.checkArgument(resultFunc != null);
+        Preconditions.checkNotNull(keyComparator);
 
-        protected JoinedKey(K k, V v) {
+        return new JoinEnumerable<Outer, Inner, Key, Result>(outerCollection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc, keyComparator);
+    }
+
+    /**
+     * Enumerable that implements the join functionality
+     *
+     * @param <Outer>  The type of the outer key
+     * @param <Inner>  The type of the inner key
+     * @param <Key>    The type of the common join key
+     * @param <Result> The type of the resulting object
+     */
+    class JoinEnumerable<Outer, Inner, Key, Result extends Comparable<? super Result>> extends LavaEnumerable<Result> {
+        JoinEnumerable(Collection<Outer> outerCollection,
+                       Collection<Inner> innerCollection,
+                       Func<Outer, Key> outerKeyFunc,
+                       Func<Inner, Key> innerKeyFunc,
+                       Func2<Outer, Inner, Result> resultFunc,
+                       Comparator<Key> keyComparator) {
+            collection = new ArrayList<Result>();
+
+            Lookup<Key, Inner> lookup = new Lookup<Key, Inner>(innerCollection, innerKeyFunc, keyComparator);
+
+            for (Outer outer : outerCollection) {
+                Key outerKey = outerKeyFunc.callback(outer);
+                Group<Key, Inner> group = lookup.getGroupForKey(outerKey, false);
+
+                if (group != null) {
+                    for (Inner inner : group) {
+                        collection.add(resultFunc.callback(outer, inner));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * A helper class for the join operation. This provides a way to lookup groups of results based on a common key
+     *
+     * @param <K> The type of the key
+     * @param <V> The type of the value
+     */
+    private class Lookup<K, V> {
+        private ArrayList<Group<K, V>> groups;
+        private Comparator<K> comparator;
+
+        /**
+         * Constructor that takes in a collection and a callback function. It then populates the internal group structure with the results of the callback
+         *
+         * @param collection    The source collection
+         * @param func          The callback function used to generate the keys
+         * @param keyComparator A comparator that is used to compare the keys. If it is null, a default "==" is used
+         */
+        public Lookup(Collection<V> collection, Func<V, K> func, Comparator<K> keyComparator) {
+            Preconditions.checkNotNull(collection);
+            Preconditions.checkNotNull(func);
+
+            groups = new ArrayList<Group<K, V>>();
+            comparator = keyComparator;
+
+            for (V v : collection) {
+                K key = func.callback(v);
+
+                Group<K, V> group = getGroupForKey(key, true);
+                group.add(v);
+            }
+        }
+
+        /**
+         * Looks up a group based on the given key. If createNew is true, we create a new Group using the given key.
+         *
+         * @param key       The key used in the lookup
+         * @param createNew Should we create a new Group if it wasn't found?
+         * @return Either the existing Group, a new Group, or null.
+         */
+        public Group<K, V> getGroupForKey(K key, boolean createNew) {
+            for (Group<K, V> g : groups) {
+                if (comparator != null && comparator.compare(g.key, key) == 0)
+                    return g;
+
+                if (g.key == key) {
+                    return g;
+                }
+            }
+
+            if (createNew) {
+                Group<K, V> group = new Group<K, V>(key);
+                groups.add(group);
+                return group;
+            }
+
+            return null;
+        }
+    }
+
+    /**
+     * Represents a grouping of values for a single key
+     *
+     * @param <K> The type of the key
+     * @param <V> The type of the values being held
+     */
+    private class Group<K, V> implements Iterable<V> {
+        private K key;
+        private ArrayList<V> values;
+
+        /**
+         * Constructor that creates a new group using the given key
+         *
+         * @param k The key that represents this group
+         */
+        Group(K k) {
             key = k;
-            value = v;
+            values = new ArrayList<V>();
+        }
+
+        /**
+         * Adds a new value to the internal collection
+         *
+         * @param value The value to add
+         */
+        public void add(V value) {
+            values.add(value);
+        }
+
+        /**
+         * Provides a convenient method for iterating over the collection
+         *
+         * @return The iterator for the internal collection
+         */
+        @Override
+        public Iterator<V> iterator() {
+            return values.iterator();
         }
     }
 
@@ -339,8 +453,7 @@ public class LavaBase {
         if (collection.isEmpty())
             throw new NoSuchElementException("Collection is empty");
 
-        Object[] elements = collection.toArray();
-        return (T) elements[collection.size() - 1];
+        return toList(collection).get(collection.size() - 1);
     }
 
     /**
@@ -565,7 +678,7 @@ public class LavaBase {
     class OrderByEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
 
         OrderByEnumerable(Collection<T> col, Comparator<T> comparator) {
-            List list = new ArrayList<T>(col);
+            List<T> list = new ArrayList<T>(col);
 
             if (comparator != null)
                 Collections.sort(list, comparator);
@@ -573,7 +686,6 @@ public class LavaBase {
                 Collections.sort(list);
 
             collection = list;
-            iterator = collection.iterator();
         }
     }
 
@@ -625,7 +737,7 @@ public class LavaBase {
     class OrderByDescendingEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
 
         OrderByDescendingEnumerable(Collection<T> col, Comparator<T> comparator) {
-            List list = new ArrayList<T>(col);
+            List<T> list = new ArrayList<T>(col);
 
             if (comparator != null)
                 Collections.sort(list, comparator);
@@ -635,7 +747,6 @@ public class LavaBase {
             Collections.reverse(list);
 
             collection = list;
-            iterator = collection.iterator();
         }
     }
 
@@ -667,8 +778,6 @@ public class LavaBase {
                 E transformed = func.callback(obj);
                 collection.add(transformed);
             }
-
-            iterator = collection.iterator();
         }
     }
 
@@ -704,8 +813,6 @@ public class LavaBase {
                 if (results != null)
                     collection.addAll(results);
             }
-
-            iterator = collection.iterator();
         }
     }
 
@@ -739,8 +846,6 @@ public class LavaBase {
                 if (results != null)
                     collection.addAll(results);
             }
-
-            iterator = collection.iterator();
         }
     }
 
@@ -779,8 +884,6 @@ public class LavaBase {
                         this.collection.add(result);
                 }
             }
-
-            iterator = collection.iterator();
         }
     }
 
@@ -920,8 +1023,6 @@ public class LavaBase {
             while (iter.hasNext()) {
                 collection.add(iter.next());
             }
-
-            iterator = collection.iterator();
         }
     }
     ///////////////
@@ -948,13 +1049,13 @@ public class LavaBase {
             collection = new ArrayList<T>();
 
             Iterator<T> iter = col.iterator();
-            while (func.callback(iter.next())) ;
+            // Purposely empty while loop
+            while (func.callback(iter.next())) {
+            }
 
             while (iter.hasNext()) {
                 collection.add(iter.next());
             }
-
-            iterator = collection.iterator();
         }
     }
 
@@ -1071,34 +1172,6 @@ public class LavaBase {
         return (short) ret;
     }
 
-    /**
-     * Sums up the collection and returns the results
-     * <p/>
-     * TODO: Determine if this method is really needed, or if this is too similar to Aggregate
-     *
-     * @param collection The collection to sum
-     * @param func       The callback function that does the addition. The first argument is the result of all the sums so far. The second is the current item in the iteration. The result is the addition of the two. On first run, the first argument will be null.
-     * @param <T>        The type of object in the collection
-     * @return The added values of the collection
-     */
-    protected <T> T sum(Collection<T> collection, Func2<T, T, T> func) {
-        Preconditions.checkNotNull(collection);
-        Preconditions.checkNotNull(func);
-
-        if (collection.isEmpty()) {
-            return null;
-        }
-
-        Iterator<T> iterator = collection.iterator();
-        T ret = func.callback(null, iterator.next());
-
-        while (iterator.hasNext()) {
-            ret = func.callback(ret, iterator.next());
-        }
-
-        return ret;
-    }
-
     ///////////////
     // Take
     ///////////////
@@ -1133,8 +1206,6 @@ public class LavaBase {
                 else
                     throw new IndexOutOfBoundsException();
             }
-
-            iterator = collection.iterator();
         }
     }
 
@@ -1170,8 +1241,6 @@ public class LavaBase {
                 else
                     break;
             }
-
-            iterator = collection.iterator();
         }
     }
 
@@ -1267,12 +1336,93 @@ public class LavaBase {
                 if (func.callback(obj))
                     collection.add(obj);
             }
-
-            iterator = collection.iterator();
         }
     }
 
-    //TODO: Add the following methods: Union, Zip
+    ///////////////
+    // Union
+    ///////////////
+
+    /**
+     * Creates an enumerable containing the union of the two collections
+     *
+     * @param first  The first collection
+     * @param second The second collection
+     * @param <T>    The type of the object in the collection
+     * @return The enumerable containing the union
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> union(Collection<T> first, Collection<T> second) {
+        Preconditions.checkNotNull(first);
+        Preconditions.checkNotNull(second);
+
+        return new UnionEnumerable<T>(first, second);
+    }
+
+    /**
+     * Enumerable that provides the logic to produce the union
+     *
+     * @param <T> The type of object in the collection
+     */
+    class UnionEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
+        public UnionEnumerable(Collection<T> first, Collection<T> second) {
+            collection = new HashSet<T>();
+
+            for (T f : first)
+                if (!collection.contains(f))
+                    collection.add(f);
+
+            for (T s : second)
+                if (!collection.contains(s))
+                    collection.add(s);
+        }
+    }
+
+    ///////////////
+    // Zip
+    ///////////////
+
+    /**
+     * Creates an enumerable that contains the mapping of the two collections into a single collection.
+     *
+     * @param first    The first collection
+     * @param second   The second collection
+     * @param func     The callback function used to create the mapping
+     * @param <First>  The type of the first object
+     * @param <Second> The type of the second object
+     * @param <Result> The type of the mapped object
+     * @return The enumerable that contains the mapping
+     */
+    protected <First, Second, Result extends Comparable<? super Result>> Enumerable<Result> zip(Collection<First> first,
+                                                                                                Collection<Second> second,
+                                                                                                Func2<First, Second, Result> func) {
+        Preconditions.checkNotNull(first);
+        Preconditions.checkNotNull(second);
+        Preconditions.checkNotNull(func);
+
+        return new ZipEnumerable<First, Second, Result>(first, second, func);
+    }
+
+    /**
+     * Enumerable that provides the logic to produce the mapping
+     *
+     * @param <First>  The type of the first object
+     * @param <Second> The type of the second object
+     * @param <Result> The type of the mapped object
+     */
+    class ZipEnumerable<First, Second, Result extends Comparable<? super Result>> extends LavaEnumerable<Result> {
+        public ZipEnumerable(Collection<First> first, Collection<Second> second, Func2<First, Second, Result> func) {
+            collection = new ArrayList<Result>();
+            Iterator<First> firstIterator = first.iterator();
+            Iterator<Second> secondIterator = second.iterator();
+
+            while (firstIterator.hasNext() || secondIterator.hasNext()) {
+                Result result = func.callback(firstIterator.next(), secondIterator.next());
+                if (result != null)
+                    collection.add(result);
+            }
+        }
+    }
+
     //TODO: Phase 2: Average, Cast, Concat, ElementAt?, ElementAtOrDefault?, Except, GroupBy, GroupJoin, Join, OfType, Range, Repeat, Reverse
 
 }

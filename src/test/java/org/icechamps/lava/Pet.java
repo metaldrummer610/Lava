@@ -7,6 +7,7 @@ package org.icechamps.lava;
  */
 public class Pet implements Comparable<Pet> {
     public String name;
+    public Person owner;
 
     @Override
     public String toString() {
@@ -23,6 +24,7 @@ public class Pet implements Comparable<Pet> {
         Pet pet = (Pet) o;
 
         if (!name.equals(pet.name)) return false;
+        if (!owner.equals(pet.owner)) return false;
 
         return true;
     }

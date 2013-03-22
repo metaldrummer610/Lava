@@ -276,14 +276,6 @@ public interface Enumerable<T> extends Iterable<T> {
     public Enumerable<T> skipWhile(Func<T, Boolean> func);
 
     /**
-     * Sums up the collection and returns the results
-     *
-     * @param func The callback function that does the addition. The first argument is the result of all the sums so far. The second is the current item in the iteration. The result is the addition of the two. On first run, the first argument will be null.
-     * @return The added values of the collection
-     */
-    public T sum(Func2<T, T, T> func);
-
-    /**
      * Takes the first {@code count} elements from the collection and returns them in a new collection.
      *
      * @param count The number of elements to take
@@ -321,4 +313,23 @@ public interface Enumerable<T> extends Iterable<T> {
      * @return A subset of the collection where all of the objects return a match in the callback function.
      */
     public Enumerable<T> where(Func<T, Boolean> func);
+
+    /**
+     * Creates an enumerable containing the union of the two collections
+     *
+     * @param second The second collection
+     * @return The enumerable containing the union
+     */
+    public Enumerable<T> union(Collection<T> second);
+
+    /**
+     * Creates an enumerable that contains the mapping of the two collections into a single collection.
+     *
+     * @param second   The second collection
+     * @param func     The callback function used to create the mapping
+     * @param <Second> The type of the second object
+     * @param <Result> The type of the mapped object
+     * @return The enumerable that contains the mapping
+     */
+    public <Second, Result extends Comparable<? super Result>> Enumerable<Result> zip(Collection<Second> second, Func2<T, Second, Result> func);
 }

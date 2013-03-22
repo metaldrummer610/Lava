@@ -16,7 +16,7 @@ import java.util.Set;
  * <p/>
  * Main class in the Lava library.
  * This allows static access to methods that act on standard java collection types.
- * Each method returns a Lava* collection type so that method calls can be chained.
+ * Each method returns a {@link org.icechamps.lava.collection.LavaEnumerable} type so that method calls can be chained.
  */
 public class Lava {
     private static LavaBase lavaBase = new LavaBase();
@@ -61,12 +61,21 @@ public class Lava {
         return lavaBase.intersect(first, second);
     }
 
-    public static <Outer, Inner, Key, Result> Enumerable<Result> join(Collection<Outer> outerCollection,
-                                                                      Collection<Inner> innerCollection,
-                                                                      Func<Outer, Key> outerKeyFunc,
-                                                                      Func<Inner, Key> innerKeyFunc,
-                                                                      Func2<Outer, Inner, Result> resultFunc) {
+    public static <Outer, Inner, Key, Result extends Comparable<? super Result>> Enumerable<Result> join(Collection<Outer> outerCollection,
+                                                                                                         Collection<Inner> innerCollection,
+                                                                                                         Func<Outer, Key> outerKeyFunc,
+                                                                                                         Func<Inner, Key> innerKeyFunc,
+                                                                                                         Func2<Outer, Inner, Result> resultFunc) {
         return lavaBase.join(outerCollection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc);
+    }
+
+    public static <Outer, Inner, Key, Result extends Comparable<? super Result>> Enumerable<Result> join(Collection<Outer> outerCollection,
+                                                                                                         Collection<Inner> innerCollection,
+                                                                                                         Func<Outer, Key> outerKeyFunc,
+                                                                                                         Func<Inner, Key> innerKeyFunc,
+                                                                                                         Func2<Outer, Inner, Result> resultFunc,
+                                                                                                         Comparator<Key> keyComparator) {
+        return lavaBase.join(outerCollection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc, keyComparator);
     }
 
     public static <T extends Comparable<? super T>> T last(Collection<T> collection) {
@@ -181,10 +190,6 @@ public class Lava {
         return lavaBase.sum(collection);
     }
 
-    public static <T extends Comparable<? super T>> T sum(Collection<T> collection, Func2<T, T, T> func) {
-        return lavaBase.sum(collection, func);
-    }
-
     public static <T extends Comparable<? super T>> Enumerable<T> take(Collection<T> collection, int count) {
         return lavaBase.take(collection, count);
     }
@@ -203,5 +208,15 @@ public class Lava {
 
     public static <T extends Comparable<? super T>> Enumerable<T> where(Collection<T> collection, Func<T, Boolean> searchCriteria) {
         return lavaBase.where(collection, searchCriteria);
+    }
+
+    public static <T extends Comparable<? super T>> Enumerable<T> union(Collection<T> first, Collection<T> second) {
+        return lavaBase.union(first, second);
+    }
+
+    public static <First, Second, Result extends Comparable<? super Result>> Enumerable<Result> zip(Collection<First> first,
+                                                                                                    Collection<Second> second,
+                                                                                                    Func2<First, Second, Result> func) {
+        return lavaBase.zip(first, second, func);
     }
 }
