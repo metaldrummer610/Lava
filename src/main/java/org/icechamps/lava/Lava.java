@@ -213,4 +213,10 @@ public class Lava {
     public static <T extends Comparable<? super T>> Enumerable<T> union(Collection<T> first, Collection<T> second) {
         return lavaBase.union(first, second);
     }
+
+    public static <First, Second, Result extends Comparable<? super Result>> Enumerable<Result> zip(Collection<First> first,
+                                                                                                    Collection<Second> second,
+                                                                                                    Func2<First, Second, Result> func) {
+        return lavaBase.zip(first, second, func);
+    }
 }

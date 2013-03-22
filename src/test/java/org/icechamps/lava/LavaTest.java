@@ -693,4 +693,28 @@ public class LavaTest {
         assertTrue(ints.any());
         assertTrue(ints.count() == 9);
     }
+
+    @Test
+    public void testZip() throws Exception {
+        ArrayList<String> strings = new ArrayList<String>();
+        strings.add("One");
+        strings.add("Two");
+        strings.add("Three");
+
+        ArrayList<Integer> ints = new ArrayList<Integer>();
+        ints.add(1);
+        ints.add(2);
+        ints.add(3);
+
+        Enumerable<String> zipped = Lava.zip(strings, ints, new Func2<String, Integer, String>() {
+            @Override
+            public String callback(String s, Integer i) {
+                return String.format("%s %d", s, i);
+            }
+        });
+
+        assertNotNull(zipped);
+        assertTrue(zipped.any());
+        assertTrue(zipped.count() == 3);
+    }
 }

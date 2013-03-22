@@ -226,6 +226,11 @@ public abstract class LavaEnumerable<T extends Comparable<? super T>> extends La
     }
 
     @Override
+    public <Second, Result extends Comparable<? super Result>> Enumerable<Result> zip(Collection<Second> second, Func2<T, Second, Result> func) {
+        return zip(collection, second, func);
+    }
+
+    @Override
     public boolean equals(Object o) {
         return o instanceof Collection && collection.equals(o);
     }

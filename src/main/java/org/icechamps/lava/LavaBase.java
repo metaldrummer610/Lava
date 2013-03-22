@@ -1377,8 +1377,52 @@ public class LavaBase {
         }
     }
 
+    ///////////////
+    // Zip
+    ///////////////
 
-    //TODO: Add the following methods: Zip
+    /**
+     * Creates an enumerable that contains the mapping of the two collections into a single collection.
+     *
+     * @param first    The first collection
+     * @param second   The second collection
+     * @param func     The callback function used to create the mapping
+     * @param <First>  The type of the first object
+     * @param <Second> The type of the second object
+     * @param <Result> The type of the mapped object
+     * @return The enumerable that contains the mapping
+     */
+    protected <First, Second, Result extends Comparable<? super Result>> Enumerable<Result> zip(Collection<First> first,
+                                                                                                Collection<Second> second,
+                                                                                                Func2<First, Second, Result> func) {
+        Preconditions.checkNotNull(first);
+        Preconditions.checkNotNull(second);
+        Preconditions.checkNotNull(func);
+
+        return new ZipEnumerable<First, Second, Result>(first, second, func);
+    }
+
+    /**
+     * Enumerable that provides the logic to produce the mapping
+     *
+     * @param <First>  The type of the first object
+     * @param <Second> The type of the second object
+     * @param <Result> The type of the mapped object
+     */
+    class ZipEnumerable<First, Second, Result extends Comparable<? super Result>> extends LavaEnumerable<Result> {
+        public ZipEnumerable(Collection<First> first, Collection<Second> second, Func2<First, Second, Result> func) {
+            collection = new ArrayList<Result>();
+            Iterator<First> firstIterator = first.iterator();
+            Iterator<Second> secondIterator = second.iterator();
+
+            while (firstIterator.hasNext() || secondIterator.hasNext()) {
+                Result result = func.callback(firstIterator.next(), secondIterator.next());
+                if (result != null)
+                    collection.add(result);
+            }
+        }
+    }
+
     //TODO: Phase 2: Average, Cast, Concat, ElementAt?, ElementAtOrDefault?, Except, GroupBy, GroupJoin, Join, OfType, Range, Repeat, Reverse
 
 }

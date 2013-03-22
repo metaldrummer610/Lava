@@ -321,4 +321,15 @@ public interface Enumerable<T> extends Iterable<T> {
      * @return The enumerable containing the union
      */
     public Enumerable<T> union(Collection<T> second);
+
+    /**
+     * Creates an enumerable that contains the mapping of the two collections into a single collection.
+     *
+     * @param second   The second collection
+     * @param func     The callback function used to create the mapping
+     * @param <Second> The type of the second object
+     * @param <Result> The type of the mapped object
+     * @return The enumerable that contains the mapping
+     */
+    public <Second, Result extends Comparable<? super Result>> Enumerable<Result> zip(Collection<Second> second, Func2<T, Second, Result> func);
 }
