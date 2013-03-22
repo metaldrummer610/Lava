@@ -294,6 +294,7 @@ public class LavaBase {
      * @param outerKeyFunc    The callback function used to generate a common key from the first collection
      * @param innerKeyFunc    The callback function used to generate a common key from the second collection
      * @param resultFunc      The callback function used to generate a result object based on the outputs of the other callback functions
+     * @param keyComparator   The comparator used to compare the keys
      * @param <Outer>         The type of the object in the first collection
      * @param <Inner>         The type of the object in the second collection
      * @param <Key>           The type of the common key

@@ -16,7 +16,7 @@ import java.util.Set;
  * <p/>
  * Main class in the Lava library.
  * This allows static access to methods that act on standard java collection types.
- * Each method returns a Lava* collection type so that method calls can be chained.
+ * Each method returns a {@link org.icechamps.lava.collection.LavaEnumerable} type so that method calls can be chained.
  */
 public class Lava {
     private static LavaBase lavaBase = new LavaBase();
@@ -61,12 +61,21 @@ public class Lava {
         return lavaBase.intersect(first, second);
     }
 
-    public static <Outer, Inner, Key, Result> Enumerable<Result> join(Collection<Outer> outerCollection,
-                                                                      Collection<Inner> innerCollection,
-                                                                      Func<Outer, Key> outerKeyFunc,
-                                                                      Func<Inner, Key> innerKeyFunc,
-                                                                      Func2<Outer, Inner, Result> resultFunc) {
+    public static <Outer, Inner, Key, Result extends Comparable<? super Result>> Enumerable<Result> join(Collection<Outer> outerCollection,
+                                                                                                         Collection<Inner> innerCollection,
+                                                                                                         Func<Outer, Key> outerKeyFunc,
+                                                                                                         Func<Inner, Key> innerKeyFunc,
+                                                                                                         Func2<Outer, Inner, Result> resultFunc) {
         return lavaBase.join(outerCollection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc);
+    }
+
+    public static <Outer, Inner, Key, Result extends Comparable<? super Result>> Enumerable<Result> join(Collection<Outer> outerCollection,
+                                                                                                         Collection<Inner> innerCollection,
+                                                                                                         Func<Outer, Key> outerKeyFunc,
+                                                                                                         Func<Inner, Key> innerKeyFunc,
+                                                                                                         Func2<Outer, Inner, Result> resultFunc,
+                                                                                                         Comparator<Key> keyComparator) {
+        return lavaBase.join(outerCollection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc, keyComparator);
     }
 
     public static <T extends Comparable<? super T>> T last(Collection<T> collection) {
