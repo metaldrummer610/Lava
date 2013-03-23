@@ -84,6 +84,95 @@ public class LavaBase {
     }
 
     ///////////////
+    // Average
+    ///////////////
+
+    /**
+     * Averages the collection and returns the results
+     *
+     * @param collection The collection to average
+     * @return The average values of the collection
+     */
+    protected Byte average(Collection<Byte> collection) {
+        Preconditions.checkNotNull(collection);
+        return averageInternal(collection).byteValue();
+    }
+
+    /**
+     * Averages the collection and returns the results
+     *
+     * @param collection The collection to average
+     * @return The average values of the collection
+     */
+    protected Double average(Collection<Double> collection) {
+        Preconditions.checkNotNull(collection);
+        return averageInternal(collection).doubleValue();
+    }
+
+    /**
+     * Averages the collection and returns the results
+     *
+     * @param collection The collection to average
+     * @return The average values of the collection
+     */
+    protected Float average(Collection<Float> collection) {
+        Preconditions.checkNotNull(collection);
+        return averageInternal(collection).floatValue();
+    }
+
+    /**
+     * Averages the collection and returns the results
+     *
+     * @param collection The collection to average
+     * @return The average values of the collection
+     */
+    protected Integer average(Collection<Integer> collection) {
+        Preconditions.checkNotNull(collection);
+        return averageInternal(collection).intValue();
+    }
+
+    /**
+     * Averages the collection and returns the results
+     *
+     * @param collection The collection to average
+     * @return The average values of the collection
+     */
+    protected Long average(Collection<Long> collection) {
+        Preconditions.checkNotNull(collection);
+        return averageInternal(collection).longValue();
+    }
+
+    /**
+     * Averages the collection and returns the results
+     *
+     * @param collection The collection to average
+     * @return The average values of the collection
+     */
+    protected Short average(Collection<Short> collection) {
+        Preconditions.checkNotNull(collection);
+        return averageInternal(collection).shortValue();
+    }
+
+    /**
+     * Internal method that implements the actual logic for the other average methods. This is only done so we don't copy/paste the logic multiple times.
+     *
+     * @param collection The collection of Numbers to average
+     * @param <T>        The type of the number
+     * @return The average of the numbers
+     */
+    private <T extends Number> Number averageInternal(Collection<T> collection) {
+        Preconditions.checkNotNull(collection);
+
+        Double ret = (double) 0;
+
+        for (Number s : collection) {
+            ret += s.doubleValue();
+        }
+
+        return ret / collection.size();
+    }
+
+    ///////////////
     // Count
     ///////////////
 
@@ -1071,14 +1160,7 @@ public class LavaBase {
      */
     protected Byte sum(Collection<Byte> collection) {
         Preconditions.checkNotNull(collection);
-
-        int ret = 0;
-
-        for (Byte b : collection) {
-            ret += b;
-        }
-
-        return (byte) ret;
+        return sumInternal(collection).byteValue();
     }
 
     /**
@@ -1089,14 +1171,7 @@ public class LavaBase {
      */
     protected Double sum(Collection<Double> collection) {
         Preconditions.checkNotNull(collection);
-
-        Double ret = (double) 0;
-
-        for (Double d : collection) {
-            ret += d;
-        }
-
-        return ret;
+        return sumInternal(collection).doubleValue();
     }
 
     /**
@@ -1107,14 +1182,7 @@ public class LavaBase {
      */
     protected Float sum(Collection<Float> collection) {
         Preconditions.checkNotNull(collection);
-
-        Float ret = (float) 0;
-
-        for (Float f : collection) {
-            ret += f;
-        }
-
-        return ret;
+        return sumInternal(collection).floatValue();
     }
 
     /**
@@ -1125,14 +1193,7 @@ public class LavaBase {
      */
     protected Integer sum(Collection<Integer> collection) {
         Preconditions.checkNotNull(collection);
-
-        Integer ret = 0;
-
-        for (Integer i : collection) {
-            ret += i;
-        }
-
-        return ret;
+        return sumInternal(collection).intValue();
     }
 
     /**
@@ -1144,14 +1205,7 @@ public class LavaBase {
 
     protected Long sum(Collection<Long> collection) {
         Preconditions.checkNotNull(collection);
-
-        Long ret = (long) 0;
-
-        for (Long l : collection) {
-            ret += l;
-        }
-
-        return ret;
+        return sumInternal(collection).longValue();
     }
 
     /**
@@ -1162,14 +1216,24 @@ public class LavaBase {
      */
     protected Short sum(Collection<Short> collection) {
         Preconditions.checkNotNull(collection);
+        return sumInternal(collection).shortValue();
+    }
 
-        int ret = 0;
+    /**
+     * Internal method for summing up the Numbers in a collection. This is done so the logic doesn't need to be copy pasted a bunch of times.
+     *
+     * @param collection The collection to sum
+     * @param <T>        The type of the Number
+     * @return The sum of the Numbers in the collection
+     */
+    private <T extends Number> Number sumInternal(Collection<T> collection) {
+        Double ret = (double) 0;
 
-        for (Short s : collection) {
-            ret = ret + s;
+        for (T d : collection) {
+            ret += d.doubleValue();
         }
 
-        return (short) ret;
+        return ret;
     }
 
     ///////////////

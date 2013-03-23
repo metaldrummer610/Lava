@@ -109,6 +109,90 @@ public class LavaTest {
     }
 
     @Test
+    public void testAverageByte() throws Exception {
+        ArrayList<Byte> list = new ArrayList<Byte>();
+        list.add((byte) 0);
+        list.add((byte) 1);
+        list.add((byte) 2);
+        list.add((byte) 3);
+        list.add((byte) 4);
+
+        Byte average = Lava.average(list);
+
+        assertTrue((byte) 2 == average);
+    }
+
+    @Test
+    public void testAverageDouble() throws Exception {
+        ArrayList<Double> list = new ArrayList<Double>();
+        list.add((double) 0);
+        list.add((double) 1);
+        list.add((double) 2);
+        list.add((double) 3);
+        list.add((double) 4);
+
+        Double average = Lava.average(list);
+
+        assertTrue((double) 2 == average);
+    }
+
+    @Test
+    public void testAverageFloat() throws Exception {
+        ArrayList<Float> list = new ArrayList<Float>();
+        list.add((float) 0);
+        list.add((float) 1);
+        list.add((float) 2);
+        list.add((float) 3);
+        list.add((float) 4);
+
+        Float average = Lava.average(list);
+
+        assertTrue((float) 2 == average);
+    }
+
+    @Test
+    public void testAverageInteger() throws Exception {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(0);
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+
+        Integer average = Lava.average(list);
+
+        assertTrue(2 == average);
+    }
+
+    @Test
+    public void testAverageLong() throws Exception {
+        ArrayList<Long> list = new ArrayList<Long>();
+        list.add((long) 0);
+        list.add((long) 1);
+        list.add((long) 2);
+        list.add((long) 3);
+        list.add((long) 4);
+
+        Long average = Lava.average(list);
+
+        assertTrue((long) 2 == average);
+    }
+
+    @Test
+    public void testAverageShort() throws Exception {
+        ArrayList<Short> list = new ArrayList<Short>();
+        list.add((short) 0);
+        list.add((short) 1);
+        list.add((short) 2);
+        list.add((short) 3);
+        list.add((short) 4);
+
+        Short average = Lava.average(list);
+
+        assertTrue((short) 2 == average);
+    }
+
+    @Test
     public void testCount() throws Exception {
         assertTrue(Lava.count(people) == people.size());
     }

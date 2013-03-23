@@ -33,6 +33,30 @@ public class Lava {
         return lavaBase.any(collection);
     }
 
+    public static Byte average(Collection<Byte> collection) {
+        return lavaBase.average(collection);
+    }
+
+    public static Double average(Collection<Double> collection) {
+        return lavaBase.average(collection);
+    }
+
+    public static Float average(Collection<Float> collection) {
+        return lavaBase.average(collection);
+    }
+
+    public static Integer average(Collection<Integer> collection) {
+        return lavaBase.average(collection);
+    }
+
+    public static Long average(Collection<Long> collection) {
+        return lavaBase.average(collection);
+    }
+
+    public static Short average(Collection<Short> collection) {
+        return lavaBase.average(collection);
+    }
+
     public static <T extends Comparable<? super T>> int count(Collection<T> collection) {
         return lavaBase.count(collection);
     }
