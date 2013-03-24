@@ -192,6 +192,18 @@ public class LavaTest {
         assertTrue((short) 2 == average);
     }
 
+    @SuppressWarnings("RedundantTypeArguments")
+    @Test
+    public void testCast() throws Exception {
+        List unTyped = people;
+        // Dev Note: The <Person> is required on the Lava call because of some weird Java generics thing
+        Enumerable<Person> list = Lava.<Person>cast(unTyped);
+
+        assertNotNull(list);
+        assertTrue(list.any());
+        assertTrue(list.count() == unTyped.size());
+    }
+
     @Test
     public void testCount() throws Exception {
         assertTrue(Lava.count(people) == people.size());

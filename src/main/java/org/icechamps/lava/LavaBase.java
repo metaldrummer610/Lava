@@ -173,6 +173,38 @@ public class LavaBase {
     }
 
     ///////////////
+    // Cast
+    ///////////////
+
+    /**
+     * Casts the untyped collection to a typed Enumerable containing the elements of the collection.
+     *
+     * @param collection The collection who's elements will be cast
+     * @param <T>        The type of object to be cast to
+     * @return An Enumerable instance containing all of the elements of the collection in a typed manner
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> cast(Collection collection) {
+        Preconditions.checkNotNull(collection);
+        return new CastEnumerable<T>(collection);
+    }
+
+    /**
+     * Implements the logic to cast the elements of the collection to type T. We suppress the warnings because of Java's type erasure.
+     *
+     * @param <T> The type of the object in the collection
+     */
+    @SuppressWarnings("unchecked")
+    class CastEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
+        public CastEnumerable(Collection source) {
+            collection = new ArrayList<T>();
+
+            for (Object obj : source) {
+                collection.add((T) obj);
+            }
+        }
+    }
+
+    ///////////////
     // Count
     ///////////////
 
@@ -1487,6 +1519,6 @@ public class LavaBase {
         }
     }
 
-    //TODO: Phase 2: Average, Cast, Concat, ElementAt?, ElementAtOrDefault?, Except, GroupBy, GroupJoin, Join, OfType, Range, Repeat, Reverse
+    //TODO: Phase 2: Cast, Concat, ElementAt?, ElementAtOrDefault?, Except, GroupBy, GroupJoin, Join, OfType, Range, Repeat, Reverse
 
 }

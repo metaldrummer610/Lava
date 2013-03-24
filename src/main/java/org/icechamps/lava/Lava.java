@@ -57,6 +57,12 @@ public class Lava {
         return lavaBase.average(collection);
     }
 
+    @SuppressWarnings("RedundantTypeArguments")
+    public static <T extends Comparable<? super T>> Enumerable<T> cast(Collection collection) {
+        // Dev note: The <T> is REQUIRED because of some type casting thing. Not sure why, but if you remove it, javac complains to no end with cryptic error messages
+        return lavaBase.<T>cast(collection);
+    }
+
     public static <T extends Comparable<? super T>> int count(Collection<T> collection) {
         return lavaBase.count(collection);
     }
