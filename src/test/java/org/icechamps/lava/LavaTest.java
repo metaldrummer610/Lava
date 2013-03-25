@@ -205,6 +205,15 @@ public class LavaTest {
     }
 
     @Test
+    public void testConcat() throws Exception {
+        Enumerable<Person> list = Lava.concat(people, people);
+
+        assertNotNull(list);
+        assertTrue(list.any());
+        assertTrue(list.count() == (people.size() * 2));
+    }
+
+    @Test
     public void testCount() throws Exception {
         assertTrue(Lava.count(people) == people.size());
     }

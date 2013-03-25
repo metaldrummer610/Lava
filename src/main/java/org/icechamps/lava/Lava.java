@@ -63,6 +63,10 @@ public class Lava {
         return lavaBase.<T>cast(collection);
     }
 
+    public static <T extends Comparable<? super T>> Enumerable<T> concat(Collection<T> first, Collection<T> second) {
+        return lavaBase.concat(first, second);
+    }
+
     public static <T extends Comparable<? super T>> int count(Collection<T> collection) {
         return lavaBase.count(collection);
     }

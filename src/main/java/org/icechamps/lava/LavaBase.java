@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import org.icechamps.lava.callback.Func;
 import org.icechamps.lava.callback.Func2;
 import org.icechamps.lava.collection.LavaEnumerable;
+import org.icechamps.lava.collection.LavaList;
 import org.icechamps.lava.exception.MultipleElementsFoundException;
 import org.icechamps.lava.interfaces.Enumerable;
 
@@ -202,6 +203,28 @@ public class LavaBase {
                 collection.add((T) obj);
             }
         }
+    }
+
+    ///////////////
+    // Concat
+    ///////////////
+
+    /**
+     * Concatenates the two collections together to create a new Enumerable.
+     *
+     * @param first  The first collection to use
+     * @param second The second collection to use
+     * @param <T>    The type of the objects in the collections
+     * @return A new Enumerable that contains all of the elements from both collections
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> concat(Collection<T> first, Collection<T> second) {
+        Preconditions.checkNotNull(first);
+        Preconditions.checkNotNull(second);
+
+        LavaList<T> ret = new LavaList<T>(first);
+        ret.addAll(second);
+
+        return ret;
     }
 
     ///////////////
@@ -1519,6 +1542,6 @@ public class LavaBase {
         }
     }
 
-    //TODO: Phase 2: Cast, Concat, ElementAt?, ElementAtOrDefault?, Except, GroupBy, GroupJoin, Join, OfType, Range, Repeat, Reverse
+    //TODO: Phase 2: Concat, ElementAt?, ElementAtOrDefault?, Except, GroupBy, GroupJoin, Join, OfType, Range, Repeat, Reverse
 
 }
