@@ -228,6 +228,14 @@ public class LavaTest {
     }
 
     @Test
+    public void testElementAt() throws Exception {
+        Person person = Lava.elementAt(people, 0);
+
+        assertNotNull(person);
+        assertTrue(person == people.get(0));
+    }
+
+    @Test
     public void testFirst() throws Exception {
         Person person = Lava.first(people);
 

@@ -271,6 +271,26 @@ public class LavaBase {
     }
 
     ///////////////
+    // Element At
+    ///////////////
+
+    /**
+     * Returns the element in the collection at the specified index. Useful for collections that do not allow positional access.
+     *
+     * @param collection The collection to use
+     * @param index      The index of the element
+     * @param <T>        The type of the element
+     * @return The element in the collection at the specified index
+     */
+    @SuppressWarnings("unchecked")
+    protected <T extends Comparable<? super T>> T elementAt(Collection<T> collection, int index) {
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkPositionIndex(index, collection.size());
+
+        return (T)collection.toArray()[index];
+    }
+
+    ///////////////
     // First
     ///////////////
 
@@ -1542,6 +1562,6 @@ public class LavaBase {
         }
     }
 
-    //TODO: Phase 2: Concat, ElementAt?, ElementAtOrDefault?, Except, GroupBy, GroupJoin, Join, OfType, Range, Repeat, Reverse
+    //TODO: Phase 2: ElementAtOrDefault?, Except, GroupBy, GroupJoin, Join, OfType, Range, Repeat, Reverse
 
 }

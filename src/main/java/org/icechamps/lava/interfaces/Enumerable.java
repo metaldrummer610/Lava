@@ -55,6 +55,14 @@ public interface Enumerable<T> extends Iterable<T> {
     public Enumerable<T> distinct();
 
     /**
+     * Returns the element in the collection at the specified index. Useful for collections that do not allow positional access.
+     *
+     * @param index The index of the element
+     * @return The element in the collection at the specified index
+     */
+    public T elementAt(int index);
+
+    /**
      * Returns the first object in the collection.
      *
      * @return The first object in the collection
