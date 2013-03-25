@@ -79,6 +79,10 @@ public class Lava {
         return lavaBase.elementAt(collection, index);
     }
 
+    public static  <T extends Comparable<? super T>> T elementAtOrDefault(Collection<T> collection, int index) {
+        return lavaBase.elementAtOrDefault(collection, index);
+    }
+
     public static <T extends Comparable<? super T>> T first(Collection<T> collection) {
         return lavaBase.first(collection);
     }

@@ -236,6 +236,21 @@ public class LavaTest {
     }
 
     @Test
+    public void testElementAtOrDefault() throws Exception {
+        Person person = Lava.elementAtOrDefault(people, 0);
+
+        assertNotNull(person);
+        assertTrue(person == people.get(0));
+    }
+
+    @Test
+    public void testElementAtOrDefaultWithNull() throws Exception {
+        Person person = Lava.elementAtOrDefault(people, 100);
+
+        assertNull(person);
+    }
+
+    @Test
     public void testFirst() throws Exception {
         Person person = Lava.first(people);
 

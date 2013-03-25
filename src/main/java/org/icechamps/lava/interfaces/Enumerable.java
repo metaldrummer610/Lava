@@ -63,6 +63,14 @@ public interface Enumerable<T> extends Iterable<T> {
     public T elementAt(int index);
 
     /**
+     * Returns the element in the collection at the specified index, or null if the index is out of bounds. Useful for collections that do not allow positional access.
+     *
+     * @param index The index of the element
+     * @return The element in the collection at the specified index or null if the index is out of bounds
+     */
+    public T elementAtOrDefault(int index);
+
+    /**
      * Returns the first object in the collection.
      *
      * @return The first object in the collection

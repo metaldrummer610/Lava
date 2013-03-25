@@ -287,6 +287,36 @@ public class LavaBase {
         Preconditions.checkNotNull(collection);
         Preconditions.checkPositionIndex(index, collection.size());
 
+        if(collection instanceof List) {
+            return ((List<T>) collection).get(index);
+        }
+
+        return (T)collection.toArray()[index];
+    }
+
+    ///////////////
+    // Element At Or Default
+    ///////////////
+
+    /**
+     * Returns the element in the collection at the specified index, or null if the index is out of bounds. Useful for collections that do not allow positional access.
+     *
+     * @param collection The collection to use
+     * @param index      The index of the element
+     * @param <T>        The type of the element
+     * @return The element in the collection at the specified index or null if the index is out of bounds
+     */
+    @SuppressWarnings("unchecked")
+    protected <T extends Comparable<? super T>> T elementAtOrDefault(Collection<T> collection, int index) {
+        Preconditions.checkNotNull(collection);
+
+        if(index >= collection.size())
+            return null;
+
+        if(collection instanceof List) {
+            return ((List<T>) collection).get(index);
+        }
+
         return (T)collection.toArray()[index];
     }
 
@@ -1562,6 +1592,6 @@ public class LavaBase {
         }
     }
 
-    //TODO: Phase 2: ElementAtOrDefault?, Except, GroupBy, GroupJoin, Join, OfType, Range, Repeat, Reverse
+    //TODO: Phase 2: Except, GroupBy, GroupJoin, Join, OfType, Range, Repeat, Reverse
 
 }

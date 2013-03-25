@@ -72,6 +72,11 @@ public abstract class LavaEnumerable<T extends Comparable<? super T>> extends La
     }
 
     @Override
+    public T elementAtOrDefault(int index) {
+        return elementAtOrDefault(collection, index);
+    }
+
+    @Override
     public T first() {
         return first(collection);
     }
