@@ -71,6 +71,14 @@ public interface Enumerable<T> extends Iterable<T> {
     public T elementAtOrDefault(int index);
 
     /**
+     * Creates an enumerable containing the difference between the two collections
+     *
+     * @param second The second collection
+     * @return The enumerable containing the difference
+     */
+    public Enumerable<T> except(Collection<T> second);
+
+    /**
      * Returns the first object in the collection.
      *
      * @return The first object in the collection

@@ -77,6 +77,11 @@ public abstract class LavaEnumerable<T extends Comparable<? super T>> extends La
     }
 
     @Override
+    public Enumerable<T> except(Collection<T> second) {
+        return except(collection, second);
+    }
+
+    @Override
     public T first() {
         return first(collection);
     }

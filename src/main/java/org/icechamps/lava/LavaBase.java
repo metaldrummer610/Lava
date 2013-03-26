@@ -287,11 +287,11 @@ public class LavaBase {
         Preconditions.checkNotNull(collection);
         Preconditions.checkPositionIndex(index, collection.size());
 
-        if(collection instanceof List) {
+        if (collection instanceof List) {
             return ((List<T>) collection).get(index);
         }
 
-        return (T)collection.toArray()[index];
+        return (T) collection.toArray()[index];
     }
 
     ///////////////
@@ -310,14 +310,51 @@ public class LavaBase {
     protected <T extends Comparable<? super T>> T elementAtOrDefault(Collection<T> collection, int index) {
         Preconditions.checkNotNull(collection);
 
-        if(index >= collection.size())
+        if (index >= collection.size())
             return null;
 
-        if(collection instanceof List) {
+        if (collection instanceof List) {
             return ((List<T>) collection).get(index);
         }
 
-        return (T)collection.toArray()[index];
+        return (T) collection.toArray()[index];
+    }
+
+    ///////////////
+    // Except
+    ///////////////
+
+    /**
+     * Creates an enumerable containing the difference between the two collections
+     *
+     * @param first  The first collection
+     * @param second The second collection
+     * @param <T>    The type of the object in the collection
+     * @return The enumerable containing the difference
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> except(Collection<T> first, Collection<T> second) {
+        Preconditions.checkNotNull(first);
+        Preconditions.checkNotNull(second);
+
+        return new ExceptEnumerable<T>(first, second);
+    }
+
+    /**
+     * Enumerable that provides the logic to produce the difference
+     *
+     * @param <T> The type of object in the collection
+     */
+    class ExceptEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
+        public ExceptEnumerable(Collection<T> first, Collection<T> second) {
+            collection = new ArrayList<T>();
+            ArrayList<T> temp = new ArrayList<T>();
+
+            temp.addAll(second);
+
+            for (T f : first)
+                if (!temp.contains(f))
+                    collection.add(f);
+        }
     }
 
     ///////////////
@@ -1592,6 +1629,6 @@ public class LavaBase {
         }
     }
 
-    //TODO: Phase 2: Except, GroupBy, GroupJoin, Join, OfType, Range, Repeat, Reverse
+    //TODO: Phase 2: GroupBy, GroupJoin, Join, OfType, Range, Repeat, Reverse
 
 }

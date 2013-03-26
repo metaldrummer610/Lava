@@ -251,6 +251,26 @@ public class LavaTest {
     }
 
     @Test
+    public void testExcept() throws Exception {
+        ArrayList<Double> numbers1 = new ArrayList<Double>();
+        numbers1.add(2.0);
+        numbers1.add(2.1);
+        numbers1.add(2.2);
+        numbers1.add(2.3);
+        numbers1.add(2.4);
+        numbers1.add(2.5);
+
+        ArrayList<Double> numbers2 = new ArrayList<Double>();
+        numbers2.add(2.2);
+
+        Enumerable<Double> list = Lava.except(numbers1, numbers2);
+
+        assertNotNull(list);
+        assertTrue(list.any());
+        assertTrue(list.count() == numbers1.size() - 1);
+    }
+
+    @Test
     public void testFirst() throws Exception {
         Person person = Lava.first(people);
 

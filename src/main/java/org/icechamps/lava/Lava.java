@@ -75,12 +75,16 @@ public class Lava {
         return lavaBase.distinct(collection);
     }
 
-    public static  <T extends Comparable<? super T>> T elementAt(Collection<T> collection, int index) {
+    public static <T extends Comparable<? super T>> T elementAt(Collection<T> collection, int index) {
         return lavaBase.elementAt(collection, index);
     }
 
-    public static  <T extends Comparable<? super T>> T elementAtOrDefault(Collection<T> collection, int index) {
+    public static <T extends Comparable<? super T>> T elementAtOrDefault(Collection<T> collection, int index) {
         return lavaBase.elementAtOrDefault(collection, index);
+    }
+
+    public static <T extends Comparable<? super T>> Enumerable<T> except(Collection<T> first, Collection<T> second) {
+        return lavaBase.except(first, second);
     }
 
     public static <T extends Comparable<? super T>> T first(Collection<T> collection) {
