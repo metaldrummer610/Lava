@@ -12,10 +12,11 @@ So far, the only dependency for the project is the [Guava](https://code.google.c
 To contribute to the project, please follow the [Git Flow](https://github.com/nvie/gitflow) workflow. I have checked the develop branch into github so that any cutting-edge development can take place there, while leaving the master for tagged releases. Please try to adhere to these guidelines.
 
 Steps to add a method to the project:
-1.  run `git flow feature start {name of method}`
-2.  Add the desired method to LavaBase.java
-3.  Add the static version of the method to Lava.java
-4.  Add the instance version of the method to Enumerable.java (but make sure to remove the 'source' collection from the parameters, as the source will become the current Enumerable's `collection` member)
-5.  Add a unit test for the new function (make sure it works!)
-6.  Make sure it's all committed and run `git flow feature finish`
-7.  Push your changes to the develop branch
+
+1. run `git flow feature start {name of method}`
+2. Add the desired method to LavaBase.java
+3. Add the static version of the method to Lava.java
+4. Add the instance version of the method to Enumerable.java (but make sure to remove the 'source' collection from the parameters, as the source will become the current Enumerable's `collection` member)
+5. Add a unit test for the new function (make sure it works!)
+6. Make sure it's all committed and run `git flow feature finish`
+7. Push your changes to the develop branch
