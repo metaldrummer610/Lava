@@ -7,6 +7,8 @@ import org.icechamps.lava.collection.LavaEnumerable;
 import org.icechamps.lava.collection.LavaList;
 import org.icechamps.lava.exception.MultipleElementsFoundException;
 import org.icechamps.lava.interfaces.Enumerable;
+import org.icechamps.lava.util.Group;
+import org.icechamps.lava.util.Lookup;
 
 import java.util.*;
 
@@ -565,105 +567,6 @@ public class LavaBase {
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * A helper class for the join operation. This provides a way to lookup groups of results based on a common key
-     *
-     * @param <K> The type of the key
-     * @param <V> The type of the value
-     */
-    private class Lookup<K, V> {
-        private ArrayList<Group<K, V>> groups;
-        private Comparator<K> comparator;
-
-        /**
-         * Constructor that takes in a collection and a callback function. It then populates the internal group structure with the results of the callback
-         *
-         * @param collection    The source collection
-         * @param func          The callback function used to generate the keys
-         * @param keyComparator A comparator that is used to compare the keys. If it is null, a default "==" is used
-         */
-        public Lookup(Collection<V> collection, Func<V, K> func, Comparator<K> keyComparator) {
-            Preconditions.checkNotNull(collection);
-            Preconditions.checkNotNull(func);
-
-            groups = new ArrayList<Group<K, V>>();
-            comparator = keyComparator;
-
-            for (V v : collection) {
-                K key = func.callback(v);
-
-                Group<K, V> group = getGroupForKey(key, true);
-                group.add(v);
-            }
-        }
-
-        /**
-         * Looks up a group based on the given key. If createNew is true, we create a new Group using the given key.
-         *
-         * @param key       The key used in the lookup
-         * @param createNew Should we create a new Group if it wasn't found?
-         * @return Either the existing Group, a new Group, or null.
-         */
-        public Group<K, V> getGroupForKey(K key, boolean createNew) {
-            for (Group<K, V> g : groups) {
-                if (comparator != null && comparator.compare(g.key, key) == 0)
-                    return g;
-
-                if (g.key == key) {
-                    return g;
-                }
-            }
-
-            if (createNew) {
-                Group<K, V> group = new Group<K, V>(key);
-                groups.add(group);
-                return group;
-            }
-
-            return null;
-        }
-    }
-
-    /**
-     * Represents a grouping of values for a single key
-     *
-     * @param <K> The type of the key
-     * @param <V> The type of the values being held
-     */
-    private class Group<K, V> implements Iterable<V> {
-        private K key;
-        private ArrayList<V> values;
-
-        /**
-         * Constructor that creates a new group using the given key
-         *
-         * @param k The key that represents this group
-         */
-        Group(K k) {
-            key = k;
-            values = new ArrayList<V>();
-        }
-
-        /**
-         * Adds a new value to the internal collection
-         *
-         * @param value The value to add
-         */
-        public void add(V value) {
-            values.add(value);
-        }
-
-        /**
-         * Provides a convenient method for iterating over the collection
-         *
-         * @return The iterator for the internal collection
-         */
-        @Override
-        public Iterator<V> iterator() {
-            return values.iterator();
         }
     }
 
