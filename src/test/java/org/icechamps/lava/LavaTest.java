@@ -393,11 +393,11 @@ public class LavaTest {
     @Test
     public void testGroupBy4() throws Exception {
         Enumerable<Integer> list = Lava.groupBy(people, new Func<Person, Integer>() {
-            @Override
-            public Integer callback(Person person) {
-                return person.name.length();
-            }
-        }, new Func<Person, String>() {
+                    @Override
+                    public Integer callback(Person person) {
+                        return person.name.length();
+                    }
+                }, new Func<Person, String>() {
                     @Override
                     public String callback(Person person) {
                         return person.name;
@@ -407,7 +407,8 @@ public class LavaTest {
                     public Integer callback(Integer integer, Collection<String> strings) {
                         return integer + strings.size();
                     }
-                });
+                }
+        );
 
         assertNotNull(list);
         assertTrue(list.count() == 5);
