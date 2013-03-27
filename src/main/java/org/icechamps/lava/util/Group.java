@@ -9,7 +9,7 @@ import java.util.Iterator;
  * @param <K> The type of the key
  * @param <V> The type of the values being held
  */
-public class Group<K, V> implements Iterable<V> {
+public class Group<K extends Comparable<? super K>, V> implements Iterable<V>, Comparable<Group<K, V>> {
     private K key;
     private ArrayList<V> values;
 
@@ -48,5 +48,9 @@ public class Group<K, V> implements Iterable<V> {
 
     public ArrayList<V> getValues() {
         return values;
+    }
+
+    public int compareTo(Group<K, V> o) {
+        return o.key.compareTo(key);
     }
 }

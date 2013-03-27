@@ -4,6 +4,7 @@ import org.icechamps.lava.callback.Func;
 import org.icechamps.lava.callback.Func2;
 import org.icechamps.lava.exception.MultipleElementsFoundException;
 import org.icechamps.lava.interfaces.Enumerable;
+import org.icechamps.lava.util.Group;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,9 +18,9 @@ import static org.junit.Assert.*;
  * Time: 10:39 AM
  */
 public class LavaTest {
-    private static List<Person> people;
+    private List<Person> people;
 
-    private static int peopleCount;
+    private int peopleCount;
 
     @Before
     public void setUp() throws Exception {
@@ -38,7 +39,7 @@ public class LavaTest {
         peopleCount = people.size();
     }
 
-    private static Person createPerson(String name, int age) {
+    private Person createPerson(String name, int age) {
         Person p = new Person();
         p.name = name;
         p.age = age;
@@ -54,7 +55,7 @@ public class LavaTest {
         return p;
     }
 
-    private static <T> void printList(Enumerable<T> list) {
+    private <T> void printList(Enumerable<T> list) {
         System.out.println("Printing List!!");
 
         for (T o : list) {
@@ -316,6 +317,104 @@ public class LavaTest {
         });
 
         assertNull(person);
+    }
+
+    @Test
+    public void testGroupBy1() throws Exception {
+        Enumerable<Group<Integer, Person>> list = Lava.groupBy(people, new Func<Person, Integer>() {
+            @Override
+            public Integer callback(Person person) {
+                return person.name.length();
+            }
+        });
+
+        assertNotNull(list);
+        assertTrue(list.count() == 5);
+
+        for (Group<Integer, Person> group : list) {
+            System.out.println(group.getKey());
+            assertFalse(group.getValues().isEmpty());
+
+            for (Person person : group.getValues())
+                System.out.println("\t" + person.toString());
+        }
+    }
+
+    @Test
+    public void testGroupBy2() throws Exception {
+        Enumerable<Group<Integer, String>> list = Lava.groupBy(people, new Func<Person, Integer>() {
+                    @Override
+                    public Integer callback(Person person) {
+                        return person.name.length();
+                    }
+                }, new Func<Person, String>() {
+                    @Override
+                    public String callback(Person person) {
+                        return person.name;
+                    }
+                }
+        );
+
+        assertNotNull(list);
+        assertTrue(list.count() == 5);
+
+        for (Group<Integer, String> group : list) {
+            System.out.println(group.getKey());
+            assertFalse(group.getValues().isEmpty());
+
+            for (String name : group.getValues())
+                System.out.println("\t" + name);
+        }
+    }
+
+    @Test
+    public void testGroupBy3() throws Exception {
+        Enumerable<Integer> list = Lava.groupBy(people, new Func<Person, Integer>() {
+                    @Override
+                    public Integer callback(Person person) {
+                        return person.name.length();
+                    }
+                }, new Func2<Integer, Collection<Person>, Integer>() {
+                    @Override
+                    public Integer callback(Integer integer, Collection<Person> persons) {
+                        return integer;
+                    }
+                }
+        );
+
+        assertNotNull(list);
+        assertTrue(list.count() == 5);
+
+        for (Integer integer : list) {
+            System.out.println(integer);
+        }
+    }
+
+    @Test
+    public void testGroupBy4() throws Exception {
+        Enumerable<Integer> list = Lava.groupBy(people, new Func<Person, Integer>() {
+            @Override
+            public Integer callback(Person person) {
+                return person.name.length();
+            }
+        }, new Func<Person, String>() {
+                    @Override
+                    public String callback(Person person) {
+                        return person.name;
+                    }
+                }, new Func2<Integer, Collection<String>, Integer>() {
+                    @Override
+                    public Integer callback(Integer integer, Collection<String> strings) {
+                        return integer + strings.size();
+                    }
+                });
+
+        assertNotNull(list);
+        assertTrue(list.count() == 5);
+
+        for (Integer integer : list) {
+            System.out.println(integer);
+        }
     }
 
     @Test

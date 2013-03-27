@@ -3,6 +3,7 @@ package org.icechamps.lava;
 import org.icechamps.lava.callback.Func;
 import org.icechamps.lava.callback.Func2;
 import org.icechamps.lava.interfaces.Enumerable;
+import org.icechamps.lava.util.Group;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -103,24 +104,45 @@ public class Lava {
         return lavaBase.firstOrDefault(collection, func);
     }
 
+    public static <T, K extends Comparable<? super K>> Enumerable<Group<K, T>> groupBy(Collection<T> collection, Func<T, K> keyFunc) {
+        return lavaBase.groupBy(collection, keyFunc);
+    }
+
+    public static <T, K extends Comparable<? super K>, V> Enumerable<Group<K, V>> groupBy(Collection<T> collection, Func<T, K> keyFunc, Func<T, V> valueFunc) {
+        return lavaBase.groupBy(collection, keyFunc, valueFunc);
+    }
+
+    public static <T, K extends Comparable<? super K>, Result extends Comparable<? super Result>> Enumerable<Result> groupBy(Collection<T> collection,
+                                                                                                                         Func<T, K> keyFunc,
+                                                                                                                         Func2<K, Collection<T>, Result> resultFunc) {
+        return lavaBase.groupBy(collection, keyFunc, resultFunc);
+    }
+
+    public static <T, K extends Comparable<? super K>, V, Result extends Comparable<? super Result>> Enumerable<Result> groupBy(Collection<T> collection,
+                                                                                                                            Func<T, K> keyFunc,
+                                                                                                                            Func<T, V> valueFunc,
+                                                                                                                            Func2<K, Collection<V>, Result> resultFunc) {
+        return lavaBase.groupBy(collection, keyFunc, valueFunc, resultFunc);
+    }
+
     public static <T extends Comparable<? super T>> Enumerable<T> intersect(Collection<T> first, Collection<T> second) {
         return lavaBase.intersect(first, second);
     }
 
-    public static <Outer, Inner, Key, Result extends Comparable<? super Result>> Enumerable<Result> join(Collection<Outer> outerCollection,
-                                                                                                         Collection<Inner> innerCollection,
-                                                                                                         Func<Outer, Key> outerKeyFunc,
-                                                                                                         Func<Inner, Key> innerKeyFunc,
-                                                                                                         Func2<Outer, Inner, Result> resultFunc) {
+    public static <Outer, Inner, Key extends Comparable<? super Key>, Result extends Comparable<? super Result>> Enumerable<Result> join(Collection<Outer> outerCollection,
+                                                                                                                                         Collection<Inner> innerCollection,
+                                                                                                                                         Func<Outer, Key> outerKeyFunc,
+                                                                                                                                         Func<Inner, Key> innerKeyFunc,
+                                                                                                                                         Func2<Outer, Inner, Result> resultFunc) {
         return lavaBase.join(outerCollection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc);
     }
 
-    public static <Outer, Inner, Key, Result extends Comparable<? super Result>> Enumerable<Result> join(Collection<Outer> outerCollection,
-                                                                                                         Collection<Inner> innerCollection,
-                                                                                                         Func<Outer, Key> outerKeyFunc,
-                                                                                                         Func<Inner, Key> innerKeyFunc,
-                                                                                                         Func2<Outer, Inner, Result> resultFunc,
-                                                                                                         Comparator<Key> keyComparator) {
+    public static <Outer, Inner, Key extends Comparable<? super Key>, Result extends Comparable<? super Result>> Enumerable<Result> join(Collection<Outer> outerCollection,
+                                                                                                                                         Collection<Inner> innerCollection,
+                                                                                                                                         Func<Outer, Key> outerKeyFunc,
+                                                                                                                                         Func<Inner, Key> innerKeyFunc,
+                                                                                                                                         Func2<Outer, Inner, Result> resultFunc,
+                                                                                                                                         Comparator<Key> keyComparator) {
         return lavaBase.join(outerCollection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc, keyComparator);
     }
 
