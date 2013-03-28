@@ -553,6 +553,60 @@ public class LavaBase {
         }
     }
 
+    ///////////////
+    // Group Join
+    ///////////////
+
+    /**
+     * Joins the two collections based on a common key and groups the results together for the result function.
+     *
+     * @param outerCollection The first collection to join
+     * @param innerCollection The second collection to join
+     * @param outerKeyFunc    The callback function that generates keys for the first collection
+     * @param innerKeyFunc    The callback function that generates keys for the second collection
+     * @param resultFunc      The callback function that generates the resulting object after the joins
+     * @param <Outer>         The type in the first collection
+     * @param <Inner>         The type in the second collection
+     * @param <Key>           The type of the common key
+     * @param <Result>        The type of the resulting object
+     * @return An Enumerable instance containing the objects of the result callback
+     */
+    protected <Outer, Inner, Key extends Comparable<? super Key>, Result extends Comparable<? super Result>> Enumerable<Result> groupJoin(Collection<Outer> outerCollection,
+                                                                                                                                          Collection<Inner> innerCollection,
+                                                                                                                                          Func<Outer, Key> outerKeyFunc,
+                                                                                                                                          Func<Inner, Key> innerKeyFunc,
+                                                                                                                                          Func2<Outer, Collection<Inner>, Result> resultFunc) {
+        Preconditions.checkNotNull(outerCollection);
+        Preconditions.checkNotNull(innerCollection);
+        Preconditions.checkNotNull(outerKeyFunc);
+        Preconditions.checkNotNull(innerKeyFunc);
+        Preconditions.checkNotNull(resultFunc);
+
+        return new GroupJoinEnumerator<Outer, Inner, Key, Result>(outerCollection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc);
+    }
+
+    /**
+     * The enumerator instance that provides the logic for the group join
+     *
+     * @param <Outer>  The type in the first collection
+     * @param <Inner>  The type in the second collection
+     * @param <Key>    The type of the common key
+     * @param <Result> The type of the resulting object
+     */
+    class GroupJoinEnumerator<Outer, Inner, Key extends Comparable<? super Key>, Result extends Comparable<? super Result>> extends LavaEnumerable<Result> {
+        GroupJoinEnumerator(Collection<Outer> outerCollection,
+                            Collection<Inner> innerCollection,
+                            Func<Outer, Key> outerKeyFunc,
+                            Func<Inner, Key> innerKeyFunc,
+                            Func2<Outer, Collection<Inner>, Result> resultFunc) {
+            collection = new ArrayList<Result>();
+            Lookup<Key, Inner> lookup = Lookup.createForJoin(innerCollection, innerKeyFunc, null);
+
+            for (Outer outer : outerCollection) {
+                collection.add(resultFunc.callback(outer, lookup.getGroupForKey(outerKeyFunc.callback(outer), false).getValues()));
+            }
+        }
+    }
 
     ///////////////
     // Intersect
@@ -1649,6 +1703,6 @@ public class LavaBase {
         }
     }
 
-    //TODO: Phase 2: GroupJoin, OfType, Range, Repeat, Reverse
+    //TODO: Phase 2: OfType, Range, Repeat, Reverse
 
 }

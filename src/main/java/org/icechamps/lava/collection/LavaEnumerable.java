@@ -102,6 +102,14 @@ public abstract class LavaEnumerable<T extends Comparable<? super T>> extends La
     }
 
     @Override
+    public <Inner, Key extends Comparable<? super Key>, Result extends Comparable<? super Result>> Enumerable<Result> groupJoin(Collection<Inner> innerCollection,
+                                                                                                                                Func<T, Key> outerKeyFunc,
+                                                                                                                                Func<Inner, Key> innerKeyFunc,
+                                                                                                                                Func2<T, Collection<Inner>, Result> resultFunc) {
+        return groupJoin(collection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc);
+    }
+
+    @Override
     public Enumerable<T> intersect(Collection<T> second) {
         return intersect(collection, second);
     }

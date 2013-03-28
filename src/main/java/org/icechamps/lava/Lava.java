@@ -313,6 +313,28 @@ public class Lava {
     }
 
     /**
+     * Joins the two collections based on a common key and groups the results together for the result function.
+     *
+     * @param outerCollection The first collection to join
+     * @param innerCollection The second collection to join
+     * @param outerKeyFunc    The callback function that generates keys for the first collection
+     * @param innerKeyFunc    The callback function that generates keys for the second collection
+     * @param resultFunc      The callback function that generates the resulting object after the joins
+     * @param <Outer>         The type in the first collection
+     * @param <Inner>         The type in the second collection
+     * @param <Key>           The type of the common key
+     * @param <Result>        The type of the resulting object
+     * @return An Enumerable instance containing the objects of the result callback
+     */
+    public static <Outer, Inner, Key extends Comparable<? super Key>, Result extends Comparable<? super Result>> Enumerable<Result> groupJoin(Collection<Outer> outerCollection,
+                                                                                                                                              Collection<Inner> innerCollection,
+                                                                                                                                              Func<Outer, Key> outerKeyFunc,
+                                                                                                                                              Func<Inner, Key> innerKeyFunc,
+                                                                                                                                              Func2<Outer, Collection<Inner>, Result> resultFunc) {
+        return lavaBase.groupJoin(outerCollection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc);
+    }
+
+    /**
      * Creates an intersection between the two collections. The resulting Enumerable implementation will be of the same type as the first collection.
      *
      * @param first  The first collection

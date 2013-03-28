@@ -419,6 +419,42 @@ public class LavaTest {
     }
 
     @Test
+    public void testGroupJoin() throws Exception {
+        // Grab all the pets from all the people
+        Enumerable<Pet> pets = Lava.selectMany(people, new Func<Person, Collection<Pet>>() {
+            @Override
+            public Collection<Pet> callback(Person person) {
+                return person.pets;
+            }
+        });
+
+        assertNotNull(pets);
+        assertTrue(pets.any());
+
+        Enumerable<PetOwner> petOwners = Lava.groupJoin(people, pets.toList(), new Func<Person, Person>() {
+                    @Override
+                    public Person callback(Person person) {
+                        return person;
+                    }
+                }, new Func<Pet, Person>() {
+                    @Override
+                    public Person callback(Pet pet) {
+                        return pet.owner;
+                    }
+                }, new Func2<Person, Collection<Pet>, PetOwner>() {
+                    @Override
+                    public PetOwner callback(Person person, Collection<Pet> petCollection) {
+                        Pet pet = Lava.first(petCollection);
+                        return new PetOwner(person, pet);
+                    }
+                }
+        );
+
+        assertNotNull(petOwners);
+        assertTrue(petOwners.any());
+    }
+
+    @Test
     public void testIntersect() throws Exception {
         // Populate the test lists
         ArrayList<String> first = new ArrayList<String>();
