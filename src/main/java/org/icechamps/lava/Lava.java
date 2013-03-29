@@ -489,6 +489,18 @@ public class Lava {
     }
 
     /**
+     * Filters the untyped collection and returns only the elements that conform to the given class
+     *
+     * @param collection The untyped collection to filter
+     * @param clazz      The class to filter with
+     * @param <T>        The type of the object that is returned
+     * @return The filtered collection that contains only the objects of type clazz
+     */
+    public static <T extends Comparable<? super T>> Enumerable<T> ofType(Collection collection, Class<T> clazz) {
+        return lavaBase.ofType(collection, clazz);
+    }
+
+    /**
      * Orders the given collection using a default comparator
      *
      * @param collection The collection to order

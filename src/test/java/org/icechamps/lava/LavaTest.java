@@ -637,6 +637,26 @@ public class LavaTest {
         assertTrue(age == 1);
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testOfType() throws Exception {
+        ArrayList arrayList = new ArrayList();
+        arrayList.add("Test1");
+        arrayList.add("Test2");
+        arrayList.add("Test3");
+        arrayList.add("Test4");
+        arrayList.add(1);
+        arrayList.add(2);
+        arrayList.add(3);
+        arrayList.add(4);
+
+        Enumerable<String> list = Lava.ofType(arrayList, String.class);
+
+        assertNotNull(list);
+        assertTrue(list.any());
+        assertTrue(list.count() == 4);
+    }
+
     @Test
     public void testOrderBy() throws Exception {
         Enumerable<Person> list = Lava.orderBy(people);

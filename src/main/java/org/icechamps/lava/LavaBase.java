@@ -941,6 +941,43 @@ public class LavaBase {
     }
 
     ///////////////
+    // Of Type
+    ///////////////
+
+    /**
+     * Filters the untyped collection and returns only the elements that conform to the given class
+     *
+     * @param collection The untyped collection to filter
+     * @param clazz      The class to filter with
+     * @param <T>        The type of the object that is returned
+     * @return The filtered collection that contains only the objects of type clazz
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> ofType(Collection collection, Class<T> clazz) {
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkNotNull(clazz);
+
+        return new OfTypeEnumerator<T>(collection, clazz);
+    }
+
+    /**
+     * Enumerator instance that implements the logic for the ofType method
+     *
+     * @param <T> The type of object contained in this Enumerable
+     */
+    class OfTypeEnumerator<T extends Comparable<? super T>> extends LavaEnumerable<T> {
+        @SuppressWarnings("unchecked")
+        OfTypeEnumerator(Collection source, Class<T> clazz) {
+            collection = new ArrayList<T>();
+
+            for (Object obj : source) {
+                if (clazz.isAssignableFrom(obj.getClass())) {
+                    collection.add((T) obj);
+                }
+            }
+        }
+    }
+
+    ///////////////
     // Order By
     ///////////////
 
@@ -1703,6 +1740,6 @@ public class LavaBase {
         }
     }
 
-    //TODO: Phase 2: OfType, Range, Repeat, Reverse
+    //TODO: Phase 2: Range, Repeat, Reverse
 
 }
