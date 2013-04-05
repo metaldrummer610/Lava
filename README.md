@@ -1,3 +1,5 @@
+# Lava [![Build Status](https://travis-ci.org/metaldrummer610/Lava.png)](https://travis-ci.org/metaldrummer610/Lava)
+
 ## What is Lava?
 **Lava** is a Java library that is built to do one thing, make collections easier to work with. Lava is a more or less port of Microsoft's [LINQ](http://msdn.microsoft.com/en-us/library/vstudio/bb397926.aspx) library.
 
