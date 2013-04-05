@@ -710,6 +710,14 @@ public class LavaTest {
     }
 
     @Test
+    public void testRepeat() throws Exception {
+        Enumerable<Person> persons = Lava.repeat(createPerson("asdf", 10), 10);
+
+        assertNotNull(persons);
+        assertTrue(persons.count() == 10);
+    }
+
+    @Test
     public void testSelect() throws Exception {
         Enumerable<String> names = Lava.select(people, new Func<Person, String>() {
             public String callback(Person person) {

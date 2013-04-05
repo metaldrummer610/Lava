@@ -1116,6 +1116,31 @@ public class LavaBase {
     }
 
     ///////////////
+    // Repeat
+    ///////////////
+
+    /**
+     * Creates an enumerable that contains the {@code src} object {@code count} times
+     *
+     * @param src   The object that will be repeated in the enumerable
+     * @param count The number of times to repeat the object
+     * @param <T>   The type of the object in the enumerable
+     * @return An enumerable containing {@code count src} objects
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> repeat(T src, int count) {
+        Preconditions.checkNotNull(src);
+        Preconditions.checkArgument(count >= 0);
+
+        LavaList<T> ret = new LavaList<T>();
+
+        for (int i = 0; i < count; i++) {
+            ret.add(src);
+        }
+
+        return ret;
+    }
+
+    ///////////////
     // Select
     ///////////////
 
