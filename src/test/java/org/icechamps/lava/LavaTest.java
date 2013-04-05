@@ -702,6 +702,14 @@ public class LavaTest {
     }
 
     @Test
+    public void testRange() throws Exception {
+        Enumerable<Integer> range = Lava.range(0, 10);
+
+        assertNotNull(range);
+        assertTrue(range.count() == 10);
+    }
+
+    @Test
     public void testSelect() throws Exception {
         Enumerable<String> names = Lava.select(people, new Func<Person, String>() {
             public String callback(Person person) {

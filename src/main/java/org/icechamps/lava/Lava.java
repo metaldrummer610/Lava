@@ -547,6 +547,17 @@ public class Lava {
     }
 
     /**
+     * Generates a sequence of numbers that starts at {@code start} and ends at {@code start + count}
+     *
+     * @param start The integer to start the counting
+     * @param count The number of integers to count
+     * @return The sequence of numbers between {@code start} and {@code start + count}
+     */
+    public static Enumerable<Integer> range(int start, int count) {
+        return lavaBase.range(start, count);
+    }
+
+    /**
      * Transforms the contents of {@code list} using the {@code func} function into a {@link Enumerable} instance containing objects of type {@code E}
      *
      * @param collection The source collection

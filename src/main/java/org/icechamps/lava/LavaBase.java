@@ -1093,6 +1093,29 @@ public class LavaBase {
     }
 
     ///////////////
+    // Range
+    ///////////////
+
+    /**
+     * Generates a sequence of numbers that starts at {@code start} and ends at {@code start + count}
+     *
+     * @param start The integer to start the counting
+     * @param count The number of integers to count
+     * @return The sequence of numbers between {@code start} and {@code start + count}
+     */
+    protected Enumerable<Integer> range(int start, int count) {
+        Preconditions.checkArgument(start >= 0);
+
+        LavaList<Integer> ret = new LavaList<Integer>();
+
+        for (int i = start; i < count; i++) {
+            ret.add(i);
+        }
+
+        return ret;
+    }
+
+    ///////////////
     // Select
     ///////////////
 
@@ -1219,11 +1242,11 @@ public class LavaBase {
             collection = new ArrayList<Result>();
 
             for (Source source : sourceCollection) {
-                for (TCollection collection : collectionFunc.callback(source)) {
-                    Result result = resultFunc.callback(source, collection);
+                for (TCollection tCollection : collectionFunc.callback(source)) {
+                    Result result = resultFunc.callback(source, tCollection);
 
                     if (result != null)
-                        this.collection.add(result);
+                        collection.add(result);
                 }
             }
         }
@@ -1387,6 +1410,7 @@ public class LavaBase {
     }
 
     class SkipWhileEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
+        @SuppressWarnings("StatementWithEmptyBody")
         SkipWhileEnumerable(Collection<T> col, Func<T, Boolean> func) {
             collection = new ArrayList<T>();
 
@@ -1740,6 +1764,6 @@ public class LavaBase {
         }
     }
 
-    //TODO: Phase 2: Range, Repeat, Reverse
+    //TODO: Phase 2: Repeat, Reverse
 
 }
