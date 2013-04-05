@@ -11,7 +11,7 @@ Well, first you need to clone the master branch of Lava and build the project (s
 
 (Almost) all of the `Lava` methods return an object of type `Enumerable`, which allow you to chain method calls. For example, you could filter a list using `where`, transform the result using `select`, then sort the results using `orderBy` all in a single method chain.
 
-For more information on the classes and methods available in **Lava**, take a look at the [JavaDocs]().
+For more information on the classes and methods available in **Lava**, take a look at the [JavaDocs](http://metaldrummer610.github.com/Lava/javadoc/). More documentation can be found at the project's [homepage](http://metaldrummer610.github.com/Lava)
 
 ## Building the project
 The project uses [Gradle](http://www.gradle.org/) for it's build process. All one must do is a simple `gradle jar` command in the root directory and Gradle will take care of the rest.
