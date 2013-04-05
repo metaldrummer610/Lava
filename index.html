@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>Lava by metaldrummer610</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Lava</h1>
+        <h2>Let the collections flow</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/metaldrummer610/Lava/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/metaldrummer610/Lava/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/metaldrummer610/Lava" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>Lava (Query-able Collections API for Java)</h1>
+
+<p>This library is a more or less port of Microsoft's <a href="http://msdn.microsoft.com/en-us/library/vstudio/bb397926.aspx">LINQ</a> library to Java.</p>
+
+<h2>Building the project</h2>
+
+<p>The project uses <a href="http://www.gradle.org/">Gradle</a> for it's build process. All one must do is a simple <code>gradle jar</code> command in the root directory and Gradle will take care of the rest.</p>
+
+<h3>Dependencies</h3>
+
+<p>So far, the only dependency for the project is the <a href="https://code.google.com/p/guava-libraries/">Guava</a> library. I am also including <a href="http://junit.sourceforge.net/">jUnit</a> for testing, but that is not needed in a production release.</p>
+
+<h2>Contributing to the project</h2>
+
+<p>To contribute to the project, please follow the <a href="https://github.com/nvie/gitflow">Git Flow</a> workflow. I have checked the develop branch into github so that any cutting-edge development can take place there, while leaving the master for tagged releases. Please try to adhere to these guidelines.</p>
+
+<p>Steps to add a method to the project:</p>
+
+<ol>
+<li>run <code>git flow feature start {name of method}</code>
+</li>
+<li>Add the desired method to LavaBase.java</li>
+<li>Add the static version of the method to Lava.java</li>
+<li>Add the instance version of the method to Enumerable.java (but make sure to remove the 'source' collection from the parameters, as the source will become the current Enumerable's <code>collection</code> member)</li>
+<li>Add a unit test for the new function (make sure it works!)</li>
+<li>Make sure it's all committed and run <code>git flow feature finish</code>
+</li>
+<li>Push your changes to the develop branch</li>
+</ol>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
