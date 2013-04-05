@@ -67,6 +67,21 @@ public abstract class LavaEnumerable<T extends Comparable<? super T>> extends La
     }
 
     @Override
+    public T elementAt(int index) {
+        return elementAt(collection, index);
+    }
+
+    @Override
+    public T elementAtOrDefault(int index) {
+        return elementAtOrDefault(collection, index);
+    }
+
+    @Override
+    public Enumerable<T> except(Collection<T> second) {
+        return except(collection, second);
+    }
+
+    @Override
     public T first() {
         return first(collection);
     }
@@ -84,6 +99,14 @@ public abstract class LavaEnumerable<T extends Comparable<? super T>> extends La
     @Override
     public T firstOrDefault(Func<T, Boolean> func) {
         return firstOrDefault(collection, func);
+    }
+
+    @Override
+    public <Inner, Key extends Comparable<? super Key>, Result extends Comparable<? super Result>> Enumerable<Result> groupJoin(Collection<Inner> innerCollection,
+                                                                                                                                Func<T, Key> outerKeyFunc,
+                                                                                                                                Func<Inner, Key> innerKeyFunc,
+                                                                                                                                Func2<T, Collection<Inner>, Result> resultFunc) {
+        return groupJoin(collection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc);
     }
 
     @Override
@@ -149,6 +172,11 @@ public abstract class LavaEnumerable<T extends Comparable<? super T>> extends La
     @Override
     public Enumerable<T> orderBy() {
         return orderBy(collection);
+    }
+
+    @Override
+    public Enumerable<T> reverse() {
+        return reverse(collection);
     }
 
     @Override

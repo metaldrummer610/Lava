@@ -4,8 +4,12 @@ import com.google.common.base.Preconditions;
 import org.icechamps.lava.callback.Func;
 import org.icechamps.lava.callback.Func2;
 import org.icechamps.lava.collection.LavaEnumerable;
+import org.icechamps.lava.collection.LavaList;
 import org.icechamps.lava.exception.MultipleElementsFoundException;
 import org.icechamps.lava.interfaces.Enumerable;
+import org.icechamps.lava.util.Group;
+import org.icechamps.lava.util.IdentityFunction;
+import org.icechamps.lava.util.Lookup;
 
 import java.util.*;
 
@@ -84,6 +88,149 @@ public class LavaBase {
     }
 
     ///////////////
+    // Average
+    ///////////////
+
+    /**
+     * Averages the collection and returns the results
+     *
+     * @param collection The collection to average
+     * @return The average values of the collection
+     */
+    protected Byte average(Collection<Byte> collection) {
+        Preconditions.checkNotNull(collection);
+        return averageInternal(collection).byteValue();
+    }
+
+    /**
+     * Averages the collection and returns the results
+     *
+     * @param collection The collection to average
+     * @return The average values of the collection
+     */
+    protected Double average(Collection<Double> collection) {
+        Preconditions.checkNotNull(collection);
+        return averageInternal(collection).doubleValue();
+    }
+
+    /**
+     * Averages the collection and returns the results
+     *
+     * @param collection The collection to average
+     * @return The average values of the collection
+     */
+    protected Float average(Collection<Float> collection) {
+        Preconditions.checkNotNull(collection);
+        return averageInternal(collection).floatValue();
+    }
+
+    /**
+     * Averages the collection and returns the results
+     *
+     * @param collection The collection to average
+     * @return The average values of the collection
+     */
+    protected Integer average(Collection<Integer> collection) {
+        Preconditions.checkNotNull(collection);
+        return averageInternal(collection).intValue();
+    }
+
+    /**
+     * Averages the collection and returns the results
+     *
+     * @param collection The collection to average
+     * @return The average values of the collection
+     */
+    protected Long average(Collection<Long> collection) {
+        Preconditions.checkNotNull(collection);
+        return averageInternal(collection).longValue();
+    }
+
+    /**
+     * Averages the collection and returns the results
+     *
+     * @param collection The collection to average
+     * @return The average values of the collection
+     */
+    protected Short average(Collection<Short> collection) {
+        Preconditions.checkNotNull(collection);
+        return averageInternal(collection).shortValue();
+    }
+
+    /**
+     * Internal method that implements the actual logic for the other average methods. This is only done so we don't copy/paste the logic multiple times.
+     *
+     * @param collection The collection of Numbers to average
+     * @param <T>        The type of the number
+     * @return The average of the numbers
+     */
+    private <T extends Number> Number averageInternal(Collection<T> collection) {
+        Preconditions.checkNotNull(collection);
+
+        Double ret = (double) 0;
+
+        for (Number s : collection) {
+            ret += s.doubleValue();
+        }
+
+        return ret / collection.size();
+    }
+
+    ///////////////
+    // Cast
+    ///////////////
+
+    /**
+     * Casts the untyped collection to a typed Enumerable containing the elements of the collection.
+     *
+     * @param collection The collection who's elements will be cast
+     * @param <T>        The type of object to be cast to
+     * @return An Enumerable instance containing all of the elements of the collection in a typed manner
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> cast(Collection collection) {
+        Preconditions.checkNotNull(collection);
+        return new CastEnumerable<T>(collection);
+    }
+
+    /**
+     * Implements the logic to cast the elements of the collection to type T. We suppress the warnings because of Java's type erasure.
+     *
+     * @param <T> The type of the object in the collection
+     */
+    @SuppressWarnings("unchecked")
+    class CastEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
+        public CastEnumerable(Collection source) {
+            collection = new ArrayList<T>();
+
+            for (Object obj : source) {
+                collection.add((T) obj);
+            }
+        }
+    }
+
+    ///////////////
+    // Concat
+    ///////////////
+
+    /**
+     * Concatenates the two collections together to create a new Enumerable.
+     *
+     * @param first  The first collection to use
+     * @param second The second collection to use
+     * @param <T>    The type of the objects in the collections
+     * @return A new Enumerable that contains all of the elements from both collections
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> concat(Collection<T> first, Collection<T> second) {
+        Preconditions.checkNotNull(first);
+        Preconditions.checkNotNull(second);
+
+        LavaList<T> ret = new LavaList<T>(first);
+        ret.addAll(second);
+
+        return ret;
+    }
+
+    ///////////////
     // Count
     ///////////////
 
@@ -123,6 +270,93 @@ public class LavaBase {
     class DistinctEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
         protected DistinctEnumerable(Collection<T> col) {
             collection = new HashSet<T>(col);
+        }
+    }
+
+    ///////////////
+    // Element At
+    ///////////////
+
+    /**
+     * Returns the element in the collection at the specified index. Useful for collections that do not allow positional access.
+     *
+     * @param collection The collection to use
+     * @param index      The index of the element
+     * @param <T>        The type of the element
+     * @return The element in the collection at the specified index
+     */
+    @SuppressWarnings("unchecked")
+    protected <T extends Comparable<? super T>> T elementAt(Collection<T> collection, int index) {
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkPositionIndex(index, collection.size());
+
+        if (collection instanceof List) {
+            return ((List<T>) collection).get(index);
+        }
+
+        return (T) collection.toArray()[index];
+    }
+
+    ///////////////
+    // Element At Or Default
+    ///////////////
+
+    /**
+     * Returns the element in the collection at the specified index, or null if the index is out of bounds. Useful for collections that do not allow positional access.
+     *
+     * @param collection The collection to use
+     * @param index      The index of the element
+     * @param <T>        The type of the element
+     * @return The element in the collection at the specified index or null if the index is out of bounds
+     */
+    @SuppressWarnings("unchecked")
+    protected <T extends Comparable<? super T>> T elementAtOrDefault(Collection<T> collection, int index) {
+        Preconditions.checkNotNull(collection);
+
+        if (index >= collection.size())
+            return null;
+
+        if (collection instanceof List) {
+            return ((List<T>) collection).get(index);
+        }
+
+        return (T) collection.toArray()[index];
+    }
+
+    ///////////////
+    // Except
+    ///////////////
+
+    /**
+     * Creates an enumerable containing the difference between the two collections
+     *
+     * @param first  The first collection
+     * @param second The second collection
+     * @param <T>    The type of the object in the collection
+     * @return The enumerable containing the difference
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> except(Collection<T> first, Collection<T> second) {
+        Preconditions.checkNotNull(first);
+        Preconditions.checkNotNull(second);
+
+        return new ExceptEnumerable<T>(first, second);
+    }
+
+    /**
+     * Enumerable that provides the logic to produce the difference
+     *
+     * @param <T> The type of object in the collection
+     */
+    class ExceptEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
+        public ExceptEnumerable(Collection<T> first, Collection<T> second) {
+            collection = new ArrayList<T>();
+            ArrayList<T> temp = new ArrayList<T>();
+
+            temp.addAll(second);
+
+            for (T f : first)
+                if (!temp.contains(f))
+                    collection.add(f);
         }
     }
 
@@ -205,6 +439,176 @@ public class LavaBase {
     }
 
     ///////////////
+    // Group By
+    ///////////////
+
+    /**
+     * Groups the elements in the collection using the keys that are generated by the key function.
+     *
+     * @param collection The collection to group
+     * @param keyFunc    The function used to generate keys
+     * @param <T>        The type of the object in the collection
+     * @param <K>        The type of the key
+     * @return An Enumerable instance that contains the elements of collection grouped by the keys that were generated by the callback function
+     */
+    protected <T, K extends Comparable<? super K>> Enumerable<Group<K, T>> groupBy(Collection<T> collection, Func<T, K> keyFunc) {
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkNotNull(keyFunc);
+
+        return new GroupByEnumerator<T, K, T>(collection, keyFunc, new IdentityFunction<T>());
+    }
+
+    /**
+     * Groups the elements in the collection using keys that are generated by the key function and the values the value function generates
+     *
+     * @param collection The source collection
+     * @param keyFunc    The function used to generate the keys
+     * @param valueFunc  The function used to generate the values
+     * @param <T>        The type of object in the collection
+     * @param <K>        The type of the key
+     * @param <V>        The type of the value
+     * @return An Enumerable instance containing the groupings of keys and values that were generated using the key and value functions and the source collection
+     */
+    protected <T, K extends Comparable<? super K>, V> Enumerable<Group<K, V>> groupBy(Collection<T> collection, Func<T, K> keyFunc, Func<T, V> valueFunc) {
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkNotNull(keyFunc);
+        Preconditions.checkNotNull(valueFunc);
+
+        return new GroupByEnumerator<T, K, V>(collection, keyFunc, valueFunc);
+    }
+
+    /**
+     * Groups the elements in the collection using the keys that are generated by the key function, then transforms the groupings into a single result object
+     *
+     * @param collection The source collection
+     * @param keyFunc    The function used to generate the keys
+     * @param resultFunc The function that transforms each grouping into the result object
+     * @param <T>        The type of object in the collection
+     * @param <K>        The type of the key
+     * @param <Result>   The type of the resulting object
+     * @return An Enumerable instance containing the result objects that were generated from each grouping using the result function
+     */
+    protected <T, K extends Comparable<? super K>, Result extends Comparable<? super Result>> Enumerable<Result> groupBy(Collection<T> collection,
+                                                                                                                         Func<T, K> keyFunc,
+                                                                                                                         Func2<K, Collection<T>, Result> resultFunc) {
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkNotNull(keyFunc);
+
+        return new GroupByResultEnumerator<T, K, T, Result>(collection, keyFunc, new IdentityFunction<T>(), resultFunc);
+    }
+
+    /**
+     * Groups the elements in the collection using keys that are generated by the key function and the values the value function generates, then transforms the groupings into a single result object
+     *
+     * @param collection The source collection
+     * @param keyFunc    The function used to generate the keys
+     * @param valueFunc  The function used to generate the values
+     * @param resultFunc The function that transforms each grouping into the result object
+     * @param <T>        The type of object in the collection
+     * @param <K>        The type of the key
+     * @param <V>        The type of the value
+     * @param <Result>   The type of the resulting object
+     * @return An Enumerable instance containing the result objects that were generated from each grouping using the result function
+     */
+    protected <T, K extends Comparable<? super K>, V, Result extends Comparable<? super Result>> Enumerable<Result> groupBy(Collection<T> collection,
+                                                                                                                            Func<T, K> keyFunc,
+                                                                                                                            Func<T, V> valueFunc,
+                                                                                                                            Func2<K, Collection<V>, Result> resultFunc) {
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkNotNull(keyFunc);
+        Preconditions.checkNotNull(valueFunc);
+
+        return new GroupByResultEnumerator<T, K, V, Result>(collection, keyFunc, valueFunc, resultFunc);
+    }
+
+    /**
+     * Enumerable that implements the logic for the Group By implementation
+     *
+     * @param <T> The type of the source object
+     * @param <K> The type of the key
+     * @param <V> The type of the value
+     */
+    class GroupByEnumerator<T, K extends Comparable<? super K>, V> extends LavaEnumerable<Group<K, V>> {
+        GroupByEnumerator(Collection<T> items, Func<T, K> keyFunc, Func<T, V> valueFunc) {
+            collection = new ArrayList<Group<K, V>>();
+
+            Lookup<K, V> lookup = Lookup.create(items, keyFunc, valueFunc, null);
+            collection.addAll(lookup.getGroups());
+        }
+    }
+
+    /**
+     * Enumerable that implements the logic for the Group By implementation
+     *
+     * @param <T> The type of the source object
+     * @param <K> The type of the key
+     * @param <V> The type of the value
+     */
+    class GroupByResultEnumerator<T, K extends Comparable<? super K>, V, Result extends Comparable<? super Result>> extends LavaEnumerable<Result> {
+        GroupByResultEnumerator(Collection<T> items, Func<T, K> keyFunc, Func<T, V> valueFunc, Func2<K, Collection<V>, Result> resultFunc) {
+            collection = new ArrayList<Result>();
+
+            Lookup<K, V> lookup = Lookup.create(items, keyFunc, valueFunc, null);
+            collection.addAll(lookup.applyResultFunction(resultFunc));
+        }
+    }
+
+    ///////////////
+    // Group Join
+    ///////////////
+
+    /**
+     * Joins the two collections based on a common key and groups the results together for the result function.
+     *
+     * @param outerCollection The first collection to join
+     * @param innerCollection The second collection to join
+     * @param outerKeyFunc    The callback function that generates keys for the first collection
+     * @param innerKeyFunc    The callback function that generates keys for the second collection
+     * @param resultFunc      The callback function that generates the resulting object after the joins
+     * @param <Outer>         The type in the first collection
+     * @param <Inner>         The type in the second collection
+     * @param <Key>           The type of the common key
+     * @param <Result>        The type of the resulting object
+     * @return An Enumerable instance containing the objects of the result callback
+     */
+    protected <Outer, Inner, Key extends Comparable<? super Key>, Result extends Comparable<? super Result>> Enumerable<Result> groupJoin(Collection<Outer> outerCollection,
+                                                                                                                                          Collection<Inner> innerCollection,
+                                                                                                                                          Func<Outer, Key> outerKeyFunc,
+                                                                                                                                          Func<Inner, Key> innerKeyFunc,
+                                                                                                                                          Func2<Outer, Collection<Inner>, Result> resultFunc) {
+        Preconditions.checkNotNull(outerCollection);
+        Preconditions.checkNotNull(innerCollection);
+        Preconditions.checkNotNull(outerKeyFunc);
+        Preconditions.checkNotNull(innerKeyFunc);
+        Preconditions.checkNotNull(resultFunc);
+
+        return new GroupJoinEnumerator<Outer, Inner, Key, Result>(outerCollection, innerCollection, outerKeyFunc, innerKeyFunc, resultFunc);
+    }
+
+    /**
+     * The enumerator instance that provides the logic for the group join
+     *
+     * @param <Outer>  The type in the first collection
+     * @param <Inner>  The type in the second collection
+     * @param <Key>    The type of the common key
+     * @param <Result> The type of the resulting object
+     */
+    class GroupJoinEnumerator<Outer, Inner, Key extends Comparable<? super Key>, Result extends Comparable<? super Result>> extends LavaEnumerable<Result> {
+        GroupJoinEnumerator(Collection<Outer> outerCollection,
+                            Collection<Inner> innerCollection,
+                            Func<Outer, Key> outerKeyFunc,
+                            Func<Inner, Key> innerKeyFunc,
+                            Func2<Outer, Collection<Inner>, Result> resultFunc) {
+            collection = new ArrayList<Result>();
+            Lookup<Key, Inner> lookup = Lookup.createForJoin(innerCollection, innerKeyFunc, null);
+
+            for (Outer outer : outerCollection) {
+                collection.add(resultFunc.callback(outer, lookup.getGroupForKey(outerKeyFunc.callback(outer), false).getValues()));
+            }
+        }
+    }
+
+    ///////////////
     // Intersect
     ///////////////
 
@@ -260,11 +664,11 @@ public class LavaBase {
      * @param <Result>        The type of the result object
      * @return An enumerable instance that contains the results of the join
      */
-    protected <Outer, Inner, Key, Result extends Comparable<? super Result>> Enumerable<Result> join(Collection<Outer> outerCollection,
-                                                                                                     Collection<Inner> innerCollection,
-                                                                                                     Func<Outer, Key> outerKeyFunc,
-                                                                                                     Func<Inner, Key> innerKeyFunc,
-                                                                                                     Func2<Outer, Inner, Result> resultFunc) {
+    protected <Outer, Inner, Key extends Comparable<? super Key>, Result extends Comparable<? super Result>> Enumerable<Result> join(Collection<Outer> outerCollection,
+                                                                                                                                     Collection<Inner> innerCollection,
+                                                                                                                                     Func<Outer, Key> outerKeyFunc,
+                                                                                                                                     Func<Inner, Key> innerKeyFunc,
+                                                                                                                                     Func2<Outer, Inner, Result> resultFunc) {
         Preconditions.checkArgument(outerCollection != null);
         Preconditions.checkArgument(innerCollection != null);
         Preconditions.checkArgument(outerKeyFunc != null);
@@ -289,12 +693,12 @@ public class LavaBase {
      * @param <Result>        The type of the result object
      * @return An enumerable instance that contains the results of the join
      */
-    protected <Outer, Inner, Key, Result extends Comparable<? super Result>> Enumerable<Result> join(Collection<Outer> outerCollection,
-                                                                                                     Collection<Inner> innerCollection,
-                                                                                                     Func<Outer, Key> outerKeyFunc,
-                                                                                                     Func<Inner, Key> innerKeyFunc,
-                                                                                                     Func2<Outer, Inner, Result> resultFunc,
-                                                                                                     Comparator<Key> keyComparator) {
+    protected <Outer, Inner, Key extends Comparable<? super Key>, Result extends Comparable<? super Result>> Enumerable<Result> join(Collection<Outer> outerCollection,
+                                                                                                                                     Collection<Inner> innerCollection,
+                                                                                                                                     Func<Outer, Key> outerKeyFunc,
+                                                                                                                                     Func<Inner, Key> innerKeyFunc,
+                                                                                                                                     Func2<Outer, Inner, Result> resultFunc,
+                                                                                                                                     Comparator<Key> keyComparator) {
         Preconditions.checkArgument(outerCollection != null);
         Preconditions.checkArgument(innerCollection != null);
         Preconditions.checkArgument(outerKeyFunc != null);
@@ -313,7 +717,7 @@ public class LavaBase {
      * @param <Key>    The type of the common join key
      * @param <Result> The type of the resulting object
      */
-    class JoinEnumerable<Outer, Inner, Key, Result extends Comparable<? super Result>> extends LavaEnumerable<Result> {
+    class JoinEnumerable<Outer, Inner, Key extends Comparable<? super Key>, Result extends Comparable<? super Result>> extends LavaEnumerable<Result> {
         JoinEnumerable(Collection<Outer> outerCollection,
                        Collection<Inner> innerCollection,
                        Func<Outer, Key> outerKeyFunc,
@@ -322,7 +726,7 @@ public class LavaBase {
                        Comparator<Key> keyComparator) {
             collection = new ArrayList<Result>();
 
-            Lookup<Key, Inner> lookup = new Lookup<Key, Inner>(innerCollection, innerKeyFunc, keyComparator);
+            Lookup<Key, Inner> lookup = Lookup.createForJoin(innerCollection, innerKeyFunc, keyComparator);
 
             for (Outer outer : outerCollection) {
                 Key outerKey = outerKeyFunc.callback(outer);
@@ -334,105 +738,6 @@ public class LavaBase {
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * A helper class for the join operation. This provides a way to lookup groups of results based on a common key
-     *
-     * @param <K> The type of the key
-     * @param <V> The type of the value
-     */
-    private class Lookup<K, V> {
-        private ArrayList<Group<K, V>> groups;
-        private Comparator<K> comparator;
-
-        /**
-         * Constructor that takes in a collection and a callback function. It then populates the internal group structure with the results of the callback
-         *
-         * @param collection    The source collection
-         * @param func          The callback function used to generate the keys
-         * @param keyComparator A comparator that is used to compare the keys. If it is null, a default "==" is used
-         */
-        public Lookup(Collection<V> collection, Func<V, K> func, Comparator<K> keyComparator) {
-            Preconditions.checkNotNull(collection);
-            Preconditions.checkNotNull(func);
-
-            groups = new ArrayList<Group<K, V>>();
-            comparator = keyComparator;
-
-            for (V v : collection) {
-                K key = func.callback(v);
-
-                Group<K, V> group = getGroupForKey(key, true);
-                group.add(v);
-            }
-        }
-
-        /**
-         * Looks up a group based on the given key. If createNew is true, we create a new Group using the given key.
-         *
-         * @param key       The key used in the lookup
-         * @param createNew Should we create a new Group if it wasn't found?
-         * @return Either the existing Group, a new Group, or null.
-         */
-        public Group<K, V> getGroupForKey(K key, boolean createNew) {
-            for (Group<K, V> g : groups) {
-                if (comparator != null && comparator.compare(g.key, key) == 0)
-                    return g;
-
-                if (g.key == key) {
-                    return g;
-                }
-            }
-
-            if (createNew) {
-                Group<K, V> group = new Group<K, V>(key);
-                groups.add(group);
-                return group;
-            }
-
-            return null;
-        }
-    }
-
-    /**
-     * Represents a grouping of values for a single key
-     *
-     * @param <K> The type of the key
-     * @param <V> The type of the values being held
-     */
-    private class Group<K, V> implements Iterable<V> {
-        private K key;
-        private ArrayList<V> values;
-
-        /**
-         * Constructor that creates a new group using the given key
-         *
-         * @param k The key that represents this group
-         */
-        Group(K k) {
-            key = k;
-            values = new ArrayList<V>();
-        }
-
-        /**
-         * Adds a new value to the internal collection
-         *
-         * @param value The value to add
-         */
-        public void add(V value) {
-            values.add(value);
-        }
-
-        /**
-         * Provides a convenient method for iterating over the collection
-         *
-         * @return The iterator for the internal collection
-         */
-        @Override
-        public Iterator<V> iterator() {
-            return values.iterator();
         }
     }
 
@@ -636,6 +941,43 @@ public class LavaBase {
     }
 
     ///////////////
+    // Of Type
+    ///////////////
+
+    /**
+     * Filters the untyped collection and returns only the elements that conform to the given class
+     *
+     * @param collection The untyped collection to filter
+     * @param clazz      The class to filter with
+     * @param <T>        The type of the object that is returned
+     * @return The filtered collection that contains only the objects of type clazz
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> ofType(Collection collection, Class<T> clazz) {
+        Preconditions.checkNotNull(collection);
+        Preconditions.checkNotNull(clazz);
+
+        return new OfTypeEnumerator<T>(collection, clazz);
+    }
+
+    /**
+     * Enumerator instance that implements the logic for the ofType method
+     *
+     * @param <T> The type of object contained in this Enumerable
+     */
+    class OfTypeEnumerator<T extends Comparable<? super T>> extends LavaEnumerable<T> {
+        @SuppressWarnings("unchecked")
+        OfTypeEnumerator(Collection source, Class<T> clazz) {
+            collection = new ArrayList<T>();
+
+            for (Object obj : source) {
+                if (clazz.isAssignableFrom(obj.getClass())) {
+                    collection.add((T) obj);
+                }
+            }
+        }
+    }
+
+    ///////////////
     // Order By
     ///////////////
 
@@ -748,6 +1090,73 @@ public class LavaBase {
 
             collection = list;
         }
+    }
+
+    ///////////////
+    // Range
+    ///////////////
+
+    /**
+     * Generates a sequence of numbers that starts at {@code start} and ends at {@code start + count}
+     *
+     * @param start The integer to start the counting
+     * @param count The number of integers to count
+     * @return The sequence of numbers between {@code start} and {@code start + count}
+     */
+    protected Enumerable<Integer> range(int start, int count) {
+        Preconditions.checkArgument(start >= 0);
+
+        LavaList<Integer> ret = new LavaList<Integer>();
+
+        for (int i = start; i < count; i++) {
+            ret.add(i);
+        }
+
+        return ret;
+    }
+
+    ///////////////
+    // Repeat
+    ///////////////
+
+    /**
+     * Creates an enumerable that contains the {@code src} object {@code count} times
+     *
+     * @param src   The object that will be repeated in the enumerable
+     * @param count The number of times to repeat the object
+     * @param <T>   The type of the object in the enumerable
+     * @return An enumerable containing {@code count src} objects
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> repeat(T src, int count) {
+        Preconditions.checkNotNull(src);
+        Preconditions.checkArgument(count >= 0);
+
+        LavaList<T> ret = new LavaList<T>();
+
+        for (int i = 0; i < count; i++) {
+            ret.add(src);
+        }
+
+        return ret;
+    }
+
+    ///////////////
+    // Reverse
+    ///////////////
+
+    /**
+     * Reverses the collection and wraps the return value in an Enumerable instance
+     *
+     * @param collection The collection to reverse
+     * @param <T>        The type of object in the collection
+     * @return The reversed collection wrapped in an Enumerable
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> reverse(Collection<T> collection) {
+        Preconditions.checkNotNull(collection);
+
+        LavaList<T> ret = new LavaList<T>(collection);
+        Collections.reverse(ret);
+        return ret;
     }
 
     ///////////////
@@ -877,11 +1286,11 @@ public class LavaBase {
             collection = new ArrayList<Result>();
 
             for (Source source : sourceCollection) {
-                for (TCollection collection : collectionFunc.callback(source)) {
-                    Result result = resultFunc.callback(source, collection);
+                for (TCollection tCollection : collectionFunc.callback(source)) {
+                    Result result = resultFunc.callback(source, tCollection);
 
                     if (result != null)
-                        this.collection.add(result);
+                        collection.add(result);
                 }
             }
         }
@@ -1045,6 +1454,7 @@ public class LavaBase {
     }
 
     class SkipWhileEnumerable<T extends Comparable<? super T>> extends LavaEnumerable<T> {
+        @SuppressWarnings("StatementWithEmptyBody")
         SkipWhileEnumerable(Collection<T> col, Func<T, Boolean> func) {
             collection = new ArrayList<T>();
 
@@ -1071,14 +1481,7 @@ public class LavaBase {
      */
     protected Byte sum(Collection<Byte> collection) {
         Preconditions.checkNotNull(collection);
-
-        int ret = 0;
-
-        for (Byte b : collection) {
-            ret += b;
-        }
-
-        return (byte) ret;
+        return sumInternal(collection).byteValue();
     }
 
     /**
@@ -1089,14 +1492,7 @@ public class LavaBase {
      */
     protected Double sum(Collection<Double> collection) {
         Preconditions.checkNotNull(collection);
-
-        Double ret = (double) 0;
-
-        for (Double d : collection) {
-            ret += d;
-        }
-
-        return ret;
+        return sumInternal(collection).doubleValue();
     }
 
     /**
@@ -1107,14 +1503,7 @@ public class LavaBase {
      */
     protected Float sum(Collection<Float> collection) {
         Preconditions.checkNotNull(collection);
-
-        Float ret = (float) 0;
-
-        for (Float f : collection) {
-            ret += f;
-        }
-
-        return ret;
+        return sumInternal(collection).floatValue();
     }
 
     /**
@@ -1125,14 +1514,7 @@ public class LavaBase {
      */
     protected Integer sum(Collection<Integer> collection) {
         Preconditions.checkNotNull(collection);
-
-        Integer ret = 0;
-
-        for (Integer i : collection) {
-            ret += i;
-        }
-
-        return ret;
+        return sumInternal(collection).intValue();
     }
 
     /**
@@ -1144,14 +1526,7 @@ public class LavaBase {
 
     protected Long sum(Collection<Long> collection) {
         Preconditions.checkNotNull(collection);
-
-        Long ret = (long) 0;
-
-        for (Long l : collection) {
-            ret += l;
-        }
-
-        return ret;
+        return sumInternal(collection).longValue();
     }
 
     /**
@@ -1162,14 +1537,24 @@ public class LavaBase {
      */
     protected Short sum(Collection<Short> collection) {
         Preconditions.checkNotNull(collection);
+        return sumInternal(collection).shortValue();
+    }
 
-        int ret = 0;
+    /**
+     * Internal method for summing up the Numbers in a collection. This is done so the logic doesn't need to be copy pasted a bunch of times.
+     *
+     * @param collection The collection to sum
+     * @param <T>        The type of the Number
+     * @return The sum of the Numbers in the collection
+     */
+    private <T extends Number> Number sumInternal(Collection<T> collection) {
+        Double ret = (double) 0;
 
-        for (Short s : collection) {
-            ret = ret + s;
+        for (T d : collection) {
+            ret += d.doubleValue();
         }
 
-        return (short) ret;
+        return ret;
     }
 
     ///////////////
@@ -1422,7 +1807,4 @@ public class LavaBase {
             }
         }
     }
-
-    //TODO: Phase 2: Average, Cast, Concat, ElementAt?, ElementAtOrDefault?, Except, GroupBy, GroupJoin, Join, OfType, Range, Repeat, Reverse
-
 }

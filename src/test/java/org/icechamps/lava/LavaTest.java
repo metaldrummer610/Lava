@@ -4,6 +4,7 @@ import org.icechamps.lava.callback.Func;
 import org.icechamps.lava.callback.Func2;
 import org.icechamps.lava.exception.MultipleElementsFoundException;
 import org.icechamps.lava.interfaces.Enumerable;
+import org.icechamps.lava.util.Group;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,9 +18,9 @@ import static org.junit.Assert.*;
  * Time: 10:39 AM
  */
 public class LavaTest {
-    private static List<Person> people;
+    private List<Person> people;
 
-    private static int peopleCount;
+    private int peopleCount;
 
     @Before
     public void setUp() throws Exception {
@@ -38,7 +39,7 @@ public class LavaTest {
         peopleCount = people.size();
     }
 
-    private static Person createPerson(String name, int age) {
+    private Person createPerson(String name, int age) {
         Person p = new Person();
         p.name = name;
         p.age = age;
@@ -54,7 +55,7 @@ public class LavaTest {
         return p;
     }
 
-    private static <T> void printList(Enumerable<T> list) {
+    private <T> void printList(Enumerable<T> list) {
         System.out.println("Printing List!!");
 
         for (T o : list) {
@@ -109,6 +110,111 @@ public class LavaTest {
     }
 
     @Test
+    public void testAverageByte() throws Exception {
+        ArrayList<Byte> list = new ArrayList<Byte>();
+        list.add((byte) 0);
+        list.add((byte) 1);
+        list.add((byte) 2);
+        list.add((byte) 3);
+        list.add((byte) 4);
+
+        Byte average = Lava.average(list);
+
+        assertTrue((byte) 2 == average);
+    }
+
+    @Test
+    public void testAverageDouble() throws Exception {
+        ArrayList<Double> list = new ArrayList<Double>();
+        list.add((double) 0);
+        list.add((double) 1);
+        list.add((double) 2);
+        list.add((double) 3);
+        list.add((double) 4);
+
+        Double average = Lava.average(list);
+
+        assertTrue((double) 2 == average);
+    }
+
+    @Test
+    public void testAverageFloat() throws Exception {
+        ArrayList<Float> list = new ArrayList<Float>();
+        list.add((float) 0);
+        list.add((float) 1);
+        list.add((float) 2);
+        list.add((float) 3);
+        list.add((float) 4);
+
+        Float average = Lava.average(list);
+
+        assertTrue((float) 2 == average);
+    }
+
+    @Test
+    public void testAverageInteger() throws Exception {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(0);
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+
+        Integer average = Lava.average(list);
+
+        assertTrue(2 == average);
+    }
+
+    @Test
+    public void testAverageLong() throws Exception {
+        ArrayList<Long> list = new ArrayList<Long>();
+        list.add((long) 0);
+        list.add((long) 1);
+        list.add((long) 2);
+        list.add((long) 3);
+        list.add((long) 4);
+
+        Long average = Lava.average(list);
+
+        assertTrue((long) 2 == average);
+    }
+
+    @Test
+    public void testAverageShort() throws Exception {
+        ArrayList<Short> list = new ArrayList<Short>();
+        list.add((short) 0);
+        list.add((short) 1);
+        list.add((short) 2);
+        list.add((short) 3);
+        list.add((short) 4);
+
+        Short average = Lava.average(list);
+
+        assertTrue((short) 2 == average);
+    }
+
+    @SuppressWarnings("RedundantTypeArguments")
+    @Test
+    public void testCast() throws Exception {
+        List unTyped = people;
+        // Dev Note: The <Person> is required on the Lava call because of some weird Java generics thing
+        Enumerable<Person> list = Lava.<Person>cast(unTyped);
+
+        assertNotNull(list);
+        assertTrue(list.any());
+        assertTrue(list.count() == unTyped.size());
+    }
+
+    @Test
+    public void testConcat() throws Exception {
+        Enumerable<Person> list = Lava.concat(people, people);
+
+        assertNotNull(list);
+        assertTrue(list.any());
+        assertTrue(list.count() == (people.size() * 2));
+    }
+
+    @Test
     public void testCount() throws Exception {
         assertTrue(Lava.count(people) == people.size());
     }
@@ -120,6 +226,49 @@ public class LavaTest {
         printList(list);
 
         assertTrue(list.count() == peopleCount - 1);
+    }
+
+    @Test
+    public void testElementAt() throws Exception {
+        Person person = Lava.elementAt(people, 0);
+
+        assertNotNull(person);
+        assertTrue(person == people.get(0));
+    }
+
+    @Test
+    public void testElementAtOrDefault() throws Exception {
+        Person person = Lava.elementAtOrDefault(people, 0);
+
+        assertNotNull(person);
+        assertTrue(person == people.get(0));
+    }
+
+    @Test
+    public void testElementAtOrDefaultWithNull() throws Exception {
+        Person person = Lava.elementAtOrDefault(people, 100);
+
+        assertNull(person);
+    }
+
+    @Test
+    public void testExcept() throws Exception {
+        ArrayList<Double> numbers1 = new ArrayList<Double>();
+        numbers1.add(2.0);
+        numbers1.add(2.1);
+        numbers1.add(2.2);
+        numbers1.add(2.3);
+        numbers1.add(2.4);
+        numbers1.add(2.5);
+
+        ArrayList<Double> numbers2 = new ArrayList<Double>();
+        numbers2.add(2.2);
+
+        Enumerable<Double> list = Lava.except(numbers1, numbers2);
+
+        assertNotNull(list);
+        assertTrue(list.any());
+        assertTrue(list.count() == numbers1.size() - 1);
     }
 
     @Test
@@ -168,6 +317,141 @@ public class LavaTest {
         });
 
         assertNull(person);
+    }
+
+    @Test
+    public void testGroupBy1() throws Exception {
+        Enumerable<Group<Integer, Person>> list = Lava.groupBy(people, new Func<Person, Integer>() {
+            @Override
+            public Integer callback(Person person) {
+                return person.name.length();
+            }
+        });
+
+        assertNotNull(list);
+        assertTrue(list.count() == 5);
+
+        for (Group<Integer, Person> group : list) {
+            System.out.println(group.getKey());
+            assertFalse(group.getValues().isEmpty());
+
+            for (Person person : group.getValues())
+                System.out.println("\t" + person.toString());
+        }
+    }
+
+    @Test
+    public void testGroupBy2() throws Exception {
+        Enumerable<Group<Integer, String>> list = Lava.groupBy(people, new Func<Person, Integer>() {
+                    @Override
+                    public Integer callback(Person person) {
+                        return person.name.length();
+                    }
+                }, new Func<Person, String>() {
+                    @Override
+                    public String callback(Person person) {
+                        return person.name;
+                    }
+                }
+        );
+
+        assertNotNull(list);
+        assertTrue(list.count() == 5);
+
+        for (Group<Integer, String> group : list) {
+            System.out.println(group.getKey());
+            assertFalse(group.getValues().isEmpty());
+
+            for (String name : group.getValues())
+                System.out.println("\t" + name);
+        }
+    }
+
+    @Test
+    public void testGroupBy3() throws Exception {
+        Enumerable<Integer> list = Lava.groupBy(people, new Func<Person, Integer>() {
+                    @Override
+                    public Integer callback(Person person) {
+                        return person.name.length();
+                    }
+                }, new Func2<Integer, Collection<Person>, Integer>() {
+                    @Override
+                    public Integer callback(Integer integer, Collection<Person> persons) {
+                        return integer;
+                    }
+                }
+        );
+
+        assertNotNull(list);
+        assertTrue(list.count() == 5);
+
+        for (Integer integer : list) {
+            System.out.println(integer);
+        }
+    }
+
+    @Test
+    public void testGroupBy4() throws Exception {
+        Enumerable<Integer> list = Lava.groupBy(people, new Func<Person, Integer>() {
+                    @Override
+                    public Integer callback(Person person) {
+                        return person.name.length();
+                    }
+                }, new Func<Person, String>() {
+                    @Override
+                    public String callback(Person person) {
+                        return person.name;
+                    }
+                }, new Func2<Integer, Collection<String>, Integer>() {
+                    @Override
+                    public Integer callback(Integer integer, Collection<String> strings) {
+                        return integer + strings.size();
+                    }
+                }
+        );
+
+        assertNotNull(list);
+        assertTrue(list.count() == 5);
+
+        for (Integer integer : list) {
+            System.out.println(integer);
+        }
+    }
+
+    @Test
+    public void testGroupJoin() throws Exception {
+        // Grab all the pets from all the people
+        Enumerable<Pet> pets = Lava.selectMany(people, new Func<Person, Collection<Pet>>() {
+            @Override
+            public Collection<Pet> callback(Person person) {
+                return person.pets;
+            }
+        });
+
+        assertNotNull(pets);
+        assertTrue(pets.any());
+
+        Enumerable<PetOwner> petOwners = Lava.groupJoin(people, pets.toList(), new Func<Person, Person>() {
+                    @Override
+                    public Person callback(Person person) {
+                        return person;
+                    }
+                }, new Func<Pet, Person>() {
+                    @Override
+                    public Person callback(Pet pet) {
+                        return pet.owner;
+                    }
+                }, new Func2<Person, Collection<Pet>, PetOwner>() {
+                    @Override
+                    public PetOwner callback(Person person, Collection<Pet> petCollection) {
+                        Pet pet = Lava.first(petCollection);
+                        return new PetOwner(person, pet);
+                    }
+                }
+        );
+
+        assertNotNull(petOwners);
+        assertTrue(petOwners.any());
     }
 
     @Test
@@ -353,6 +637,26 @@ public class LavaTest {
         assertTrue(age == 1);
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testOfType() throws Exception {
+        ArrayList arrayList = new ArrayList();
+        arrayList.add("Test1");
+        arrayList.add("Test2");
+        arrayList.add("Test3");
+        arrayList.add("Test4");
+        arrayList.add(1);
+        arrayList.add(2);
+        arrayList.add(3);
+        arrayList.add(4);
+
+        Enumerable<String> list = Lava.ofType(arrayList, String.class);
+
+        assertNotNull(list);
+        assertTrue(list.any());
+        assertTrue(list.count() == 4);
+    }
+
     @Test
     public void testOrderBy() throws Exception {
         Enumerable<Person> list = Lava.orderBy(people);
@@ -395,6 +699,30 @@ public class LavaTest {
         });
 
         printList(list);
+    }
+
+    @Test
+    public void testRange() throws Exception {
+        Enumerable<Integer> range = Lava.range(0, 10);
+
+        assertNotNull(range);
+        assertTrue(range.count() == 10);
+    }
+
+    @Test
+    public void testRepeat() throws Exception {
+        Enumerable<Person> persons = Lava.repeat(createPerson("asdf", 10), 10);
+
+        assertNotNull(persons);
+        assertTrue(persons.count() == 10);
+    }
+
+    @Test
+    public void testReverse() throws Exception {
+        Enumerable<Person> reversed = Lava.reverse(people);
+
+        assertNotNull(reversed);
+        assertTrue(reversed.any());
     }
 
     @Test

@@ -55,6 +55,30 @@ public interface Enumerable<T> extends Iterable<T> {
     public Enumerable<T> distinct();
 
     /**
+     * Returns the element in the collection at the specified index. Useful for collections that do not allow positional access.
+     *
+     * @param index The index of the element
+     * @return The element in the collection at the specified index
+     */
+    public T elementAt(int index);
+
+    /**
+     * Returns the element in the collection at the specified index, or null if the index is out of bounds. Useful for collections that do not allow positional access.
+     *
+     * @param index The index of the element
+     * @return The element in the collection at the specified index or null if the index is out of bounds
+     */
+    public T elementAtOrDefault(int index);
+
+    /**
+     * Creates an enumerable containing the difference between the two collections
+     *
+     * @param second The second collection
+     * @return The enumerable containing the difference
+     */
+    public Enumerable<T> except(Collection<T> second);
+
+    /**
      * Returns the first object in the collection.
      *
      * @return The first object in the collection
@@ -83,6 +107,23 @@ public interface Enumerable<T> extends Iterable<T> {
      * @return The first item in the collection, or null.
      */
     public T firstOrDefault(Func<T, Boolean> func);
+
+    /**
+     * Joins the two collections based on a common key and groups the results together for the result function.
+     *
+     * @param innerCollection The second collection to join
+     * @param outerKeyFunc    The callback function that generates keys for the first collection
+     * @param innerKeyFunc    The callback function that generates keys for the second collection
+     * @param resultFunc      The callback function that generates the resulting object after the joins
+     * @param <Inner>         The type in the second collection
+     * @param <Key>           The type of the common key
+     * @param <Result>        The type of the resulting object
+     * @return An Enumerable instance containing the objects of the result callback
+     */
+    public <Inner, Key extends Comparable<? super Key>, Result extends Comparable<? super Result>> Enumerable<Result> groupJoin(Collection<Inner> innerCollection,
+                                                                                                                                Func<T, Key> outerKeyFunc,
+                                                                                                                                Func<Inner, Key> innerKeyFunc,
+                                                                                                                                Func2<T, Collection<Inner>, Result> resultFunc);
 
     /**
      * Creates an intersection between the two collections. The resulting Enumerable implementation will be of the same type as the first collection.
@@ -185,6 +226,13 @@ public interface Enumerable<T> extends Iterable<T> {
      * @return The sorted collection
      */
     public Enumerable<T> orderByDescending(Comparator<T> comparator);
+
+    /**
+     * Reverses the collection and wraps the return value in an Enumerable instance
+     *
+     * @return The reversed collection wrapped in an Enumerable
+     */
+    public Enumerable<T> reverse();
 
     /**
      * Transforms the contents of {@code list} using the {@code func} function into a {@link Enumerable}

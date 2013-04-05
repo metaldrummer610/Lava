@@ -60,7 +60,7 @@ public class LavaList<T extends Comparable<? super T>> extends LavaEnumerable<T>
     }
 
     @Override
-    public <T1 extends Object> T1[] toArray(T1[] a) {
+    public <T1> T1[] toArray(T1[] a) {
         return collection.toArray(a);
     }
 
