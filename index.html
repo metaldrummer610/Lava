@@ -28,9 +28,24 @@
 
     <div class="container">
       <section id="main_content">
-        <h1>Lava (Query-able Collections API for Java)</h1>
+        <h1>Lava <a href="https://travis-ci.org/metaldrummer610/Lava"><img src="https://travis-ci.org/metaldrummer610/Lava.png" alt="Build Status"></a>
+</h1>
 
-<p>This library is a more or less port of Microsoft's <a href="http://msdn.microsoft.com/en-us/library/vstudio/bb397926.aspx">LINQ</a> library to Java.</p>
+<h2>What is Lava?</h2>
+
+<p><strong>Lava</strong> is a Java library that is built to do one thing, make collections easier to work with. Lava is a more or less port of Microsoft's <a href="http://msdn.microsoft.com/en-us/library/vstudio/bb397926.aspx">LINQ</a> library.</p>
+
+<h2>Why would I want to use Lava?</h2>
+
+<p>Have you ever needed to search through an <code>ArrayList</code> of People to find everyone who's name begins with the letter 'R'? Lava has a convience method for that. Ever need to transform a <code>Collection</code> from one type to another? Lava has a method for that as well. Lava has a plethora of methods that allow you to modify collections to your hearts content.</p>
+
+<h2>So how do I get started?</h2>
+
+<p>Well, first you need to clone the master branch of Lava and build the project (sorry, no Maven artifact yet...). Once it's built and placed in your classpath, you'll want to turn your attention to the <code>Lava</code> class. This class exposes all of the methods of the library statically, so there's no need for any setup. </p>
+
+<p>(Almost) all of the <code>Lava</code> methods return an object of type <code>Enumerable</code>, which allow you to chain method calls. For example, you could filter a list using <code>where</code>, transform the result using <code>select</code>, then sort the results using <code>orderBy</code> all in a single method chain.</p>
+
+<p>For more information on the classes and methods available in <strong>Lava</strong>, take a look at the <a href="">JavaDocs</a>.</p>
 
 <h2>Building the project</h2>
 
