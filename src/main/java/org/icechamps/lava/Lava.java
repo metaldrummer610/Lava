@@ -535,18 +535,6 @@ public class Lava {
     }
 
     /**
-     * Creates an enumerable that contains the {@code src} object {@code count} times
-     *
-     * @param src   The object that will be repeated in the enumerable
-     * @param count The number of times to repeat the object
-     * @param <T>   The type of the object in the enumerable
-     * @return An enumerable containing {@code count src} objects
-     */
-    public static <T extends Comparable<? super T>> Enumerable<T> repeat(T src, int count) {
-        return lavaBase.repeat(src, count);
-    }
-
-    /**
      * Orders the given collection using the given comparator in reverse
      *
      * @param collection The collection to order
@@ -567,6 +555,29 @@ public class Lava {
      */
     public static Enumerable<Integer> range(int start, int count) {
         return lavaBase.range(start, count);
+    }
+
+    /**
+     * Creates an enumerable that contains the {@code src} object {@code count} times
+     *
+     * @param src   The object that will be repeated in the enumerable
+     * @param count The number of times to repeat the object
+     * @param <T>   The type of the object in the enumerable
+     * @return An enumerable containing {@code count src} objects
+     */
+    public static <T extends Comparable<? super T>> Enumerable<T> repeat(T src, int count) {
+        return lavaBase.repeat(src, count);
+    }
+
+    /**
+     * Reverses the collection and wraps the return value in an Enumerable instance
+     *
+     * @param collection The collection to reverse
+     * @param <T>        The type of object in the collection
+     * @return The reversed collection wrapped in an Enumerable
+     */
+    public static <T extends Comparable<? super T>> Enumerable<T> reverse(Collection<T> collection) {
+        return lavaBase.reverse(collection);
     }
 
     /**

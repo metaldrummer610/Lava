@@ -228,6 +228,13 @@ public interface Enumerable<T> extends Iterable<T> {
     public Enumerable<T> orderByDescending(Comparator<T> comparator);
 
     /**
+     * Reverses the collection and wraps the return value in an Enumerable instance
+     *
+     * @return The reversed collection wrapped in an Enumerable
+     */
+    public Enumerable<T> reverse();
+
+    /**
      * Transforms the contents of {@code list} using the {@code func} function into a {@link Enumerable}
      * instance containing objects of type {@code E}
      *

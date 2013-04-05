@@ -1141,6 +1141,25 @@ public class LavaBase {
     }
 
     ///////////////
+    // Reverse
+    ///////////////
+
+    /**
+     * Reverses the collection and wraps the return value in an Enumerable instance
+     *
+     * @param collection The collection to reverse
+     * @param <T>        The type of object in the collection
+     * @return The reversed collection wrapped in an Enumerable
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> reverse(Collection<T> collection) {
+        Preconditions.checkNotNull(collection);
+
+        LavaList<T> ret = new LavaList<T>(collection);
+        Collections.reverse(ret);
+        return ret;
+    }
+
+    ///////////////
     // Select
     ///////////////
 
@@ -1788,7 +1807,4 @@ public class LavaBase {
             }
         }
     }
-
-    //TODO: Phase 2: Repeat, Reverse
-
 }

@@ -718,6 +718,14 @@ public class LavaTest {
     }
 
     @Test
+    public void testReverse() throws Exception {
+        Enumerable<Person> reversed = Lava.reverse(people);
+
+        assertNotNull(reversed);
+        assertTrue(reversed.any());
+    }
+
+    @Test
     public void testSelect() throws Exception {
         Enumerable<String> names = Lava.select(people, new Func<Person, String>() {
             public String callback(Person person) {

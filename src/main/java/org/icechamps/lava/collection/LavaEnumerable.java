@@ -175,6 +175,11 @@ public abstract class LavaEnumerable<T extends Comparable<? super T>> extends La
     }
 
     @Override
+    public Enumerable<T> reverse() {
+        return reverse(collection);
+    }
+
+    @Override
     public <E extends Comparable<? super E>> Enumerable<E> select(Func<T, E> func) {
         return select(collection, func);
     }
