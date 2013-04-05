@@ -10,6 +10,7 @@ import org.icechamps.lava.interfaces.Enumerable;
 import org.icechamps.lava.util.Group;
 import org.icechamps.lava.util.IdentityFunction;
 import org.icechamps.lava.util.Lookup;
+import org.icechamps.lava.util.NumberEnum;
 
 import java.util.*;
 
@@ -97,83 +98,80 @@ public class LavaBase {
      * @param collection The collection to average
      * @return The average values of the collection
      */
-    protected Byte average(Collection<Byte> collection) {
+    protected <T extends Number> Number average(Collection<T> collection) {
         Preconditions.checkNotNull(collection);
-        return averageInternal(collection).byteValue();
-    }
+        Preconditions.checkArgument(!collection.isEmpty());
 
-    /**
-     * Averages the collection and returns the results
-     *
-     * @param collection The collection to average
-     * @return The average values of the collection
-     */
-    protected Double average(Collection<Double> collection) {
-        Preconditions.checkNotNull(collection);
-        return averageInternal(collection).doubleValue();
-    }
+        Number first = first(collection);
+        NumberEnum type = getType(first);
 
-    /**
-     * Averages the collection and returns the results
-     *
-     * @param collection The collection to average
-     * @return The average values of the collection
-     */
-    protected Float average(Collection<Float> collection) {
-        Preconditions.checkNotNull(collection);
-        return averageInternal(collection).floatValue();
-    }
+        Number container;
 
-    /**
-     * Averages the collection and returns the results
-     *
-     * @param collection The collection to average
-     * @return The average values of the collection
-     */
-    protected Integer average(Collection<Integer> collection) {
-        Preconditions.checkNotNull(collection);
-        return averageInternal(collection).intValue();
-    }
-
-    /**
-     * Averages the collection and returns the results
-     *
-     * @param collection The collection to average
-     * @return The average values of the collection
-     */
-    protected Long average(Collection<Long> collection) {
-        Preconditions.checkNotNull(collection);
-        return averageInternal(collection).longValue();
-    }
-
-    /**
-     * Averages the collection and returns the results
-     *
-     * @param collection The collection to average
-     * @return The average values of the collection
-     */
-    protected Short average(Collection<Short> collection) {
-        Preconditions.checkNotNull(collection);
-        return averageInternal(collection).shortValue();
-    }
-
-    /**
-     * Internal method that implements the actual logic for the other average methods. This is only done so we don't copy/paste the logic multiple times.
-     *
-     * @param collection The collection of Numbers to average
-     * @param <T>        The type of the number
-     * @return The average of the numbers
-     */
-    private <T extends Number> Number averageInternal(Collection<T> collection) {
-        Preconditions.checkNotNull(collection);
-
-        Double ret = (double) 0;
-
-        for (Number s : collection) {
-            ret += s.doubleValue();
+        // We do this switch because it is a tad more efficient than chained ifs
+        switch (type) {
+            case SHORT:
+                container = (short) 0;
+                break;
+            case BYTE:
+                container = (byte) 0;
+                break;
+            case DOUBLE:
+                container = (double) 0;
+                break;
+            case FLOAT:
+                container = (float) 0;
+                break;
+            case INTEGER:
+                container = 0;
+                break;
+            case LONG:
+                container = (long) 0;
+                break;
+            default:
+                throw new UnsupportedOperationException("Invalid NumberEnum type");
         }
 
-        return ret / collection.size();
+        for (Number num : collection) {
+            switch (type) {
+                case SHORT:
+                    container = container.shortValue() + num.shortValue();
+                    break;
+                case BYTE:
+                    container = container.byteValue() + num.byteValue();
+                    break;
+                case DOUBLE:
+                    container = container.doubleValue() + num.doubleValue();
+                    break;
+                case FLOAT:
+                    container = container.floatValue() + num.floatValue();
+                    break;
+                case INTEGER:
+                    container = container.intValue() + num.intValue();
+                    break;
+                case LONG:
+                    container = container.longValue() + num.longValue();
+                    break;
+                default:
+                    throw new UnsupportedOperationException("Invalid NumberEnum type");
+            }
+        }
+
+        switch (type) {
+            case SHORT:
+                return container.shortValue() / collection.size();
+            case BYTE:
+                return container.byteValue() / collection.size();
+            case DOUBLE:
+                return container.doubleValue() / collection.size();
+            case FLOAT:
+                return container.floatValue() / collection.size();
+            case INTEGER:
+                return container.intValue() / collection.size();
+            case LONG:
+                return container.longValue() / collection.size();
+            default:
+                throw new UnsupportedOperationException("Invalid NumberEnum type");
+        }
     }
 
     ///////////////
@@ -1479,82 +1477,80 @@ public class LavaBase {
      * @param collection The collection to sum
      * @return The added values of the collection
      */
-    protected Byte sum(Collection<Byte> collection) {
+    protected <T extends Number> Number sum(Collection<T> collection) {
         Preconditions.checkNotNull(collection);
-        return sumInternal(collection).byteValue();
-    }
+        Preconditions.checkArgument(!collection.isEmpty());
 
-    /**
-     * Sums up the collection and returns the results
-     *
-     * @param collection The collection to sum
-     * @return The added values of the collection
-     */
-    protected Double sum(Collection<Double> collection) {
-        Preconditions.checkNotNull(collection);
-        return sumInternal(collection).doubleValue();
-    }
+        Number first = first(collection);
+        NumberEnum type = getType(first);
 
-    /**
-     * Sums up the collection and returns the results
-     *
-     * @param collection The collection to sum
-     * @return The added values of the collection
-     */
-    protected Float sum(Collection<Float> collection) {
-        Preconditions.checkNotNull(collection);
-        return sumInternal(collection).floatValue();
-    }
+        Number container;
 
-    /**
-     * Sums up the collection and returns the results
-     *
-     * @param collection The collection to sum
-     * @return The added values of the collection
-     */
-    protected Integer sum(Collection<Integer> collection) {
-        Preconditions.checkNotNull(collection);
-        return sumInternal(collection).intValue();
-    }
-
-    /**
-     * Sums up the collection and returns the results
-     *
-     * @param collection The collection to sum
-     * @return The added values of the collection
-     */
-
-    protected Long sum(Collection<Long> collection) {
-        Preconditions.checkNotNull(collection);
-        return sumInternal(collection).longValue();
-    }
-
-    /**
-     * Sums up the collection and returns the results
-     *
-     * @param collection The collection to sum
-     * @return The added values of the collection
-     */
-    protected Short sum(Collection<Short> collection) {
-        Preconditions.checkNotNull(collection);
-        return sumInternal(collection).shortValue();
-    }
-
-    /**
-     * Internal method for summing up the Numbers in a collection. This is done so the logic doesn't need to be copy pasted a bunch of times.
-     *
-     * @param collection The collection to sum
-     * @param <T>        The type of the Number
-     * @return The sum of the Numbers in the collection
-     */
-    private <T extends Number> Number sumInternal(Collection<T> collection) {
-        Double ret = (double) 0;
-
-        for (T d : collection) {
-            ret += d.doubleValue();
+        // We do this switch because it is a tad more efficient than chained ifs
+        switch (type) {
+            case SHORT:
+                container = (short) 0;
+                break;
+            case BYTE:
+                container = (byte) 0;
+                break;
+            case DOUBLE:
+                container = (double) 0;
+                break;
+            case FLOAT:
+                container = (float) 0;
+                break;
+            case INTEGER:
+                container = 0;
+                break;
+            case LONG:
+                container = (long) 0;
+                break;
+            default:
+                throw new UnsupportedOperationException("Invalid NumberEnum type");
         }
 
-        return ret;
+        for (Number num : collection) {
+            switch (type) {
+                case SHORT:
+                    container = container.shortValue() + num.shortValue();
+                    break;
+                case BYTE:
+                    container = container.byteValue() + num.byteValue();
+                    break;
+                case DOUBLE:
+                    container = container.doubleValue() + num.doubleValue();
+                    break;
+                case FLOAT:
+                    container = container.floatValue() + num.floatValue();
+                    break;
+                case INTEGER:
+                    container = container.intValue() + num.intValue();
+                    break;
+                case LONG:
+                    container = container.longValue() + num.longValue();
+                    break;
+                default:
+                    throw new UnsupportedOperationException("Invalid NumberEnum type");
+            }
+        }
+
+        switch (type) {
+            case SHORT:
+                return container.shortValue();
+            case BYTE:
+                return container.byteValue();
+            case DOUBLE:
+                return container.doubleValue();
+            case FLOAT:
+                return container.floatValue();
+            case INTEGER:
+                return container.intValue();
+            case LONG:
+                return container.longValue();
+            default:
+                throw new UnsupportedOperationException("Invalid NumberEnum type");
+        }
     }
 
     ///////////////
@@ -1806,5 +1802,23 @@ public class LavaBase {
                     collection.add(result);
             }
         }
+    }
+
+    /**
+     * Determines the type of Number that is passed in.
+     *
+     * @param number The number to check
+     * @return The kind of number was passed in
+     * @throws UnsupportedOperationException If the Number instance is not a standard type
+     */
+    private NumberEnum getType(Number number) {
+        if (number.getClass() == Byte.class) return NumberEnum.BYTE;
+        if (number.getClass() == Double.class) return NumberEnum.DOUBLE;
+        if (number.getClass() == Float.class) return NumberEnum.FLOAT;
+        if (number.getClass() == Integer.class) return NumberEnum.INTEGER;
+        if (number.getClass() == Long.class) return NumberEnum.LONG;
+        if (number.getClass() == Short.class) return NumberEnum.SHORT;
+
+        throw new UnsupportedOperationException("Unsupported Number class");
     }
 }

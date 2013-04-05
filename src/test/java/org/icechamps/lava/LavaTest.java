@@ -118,7 +118,7 @@ public class LavaTest {
         list.add((byte) 3);
         list.add((byte) 4);
 
-        Byte average = Lava.average(list);
+        Byte average = Lava.average(list).byteValue();
 
         assertTrue((byte) 2 == average);
     }
@@ -132,7 +132,7 @@ public class LavaTest {
         list.add((double) 3);
         list.add((double) 4);
 
-        Double average = Lava.average(list);
+        Double average = Lava.average(list).doubleValue();
 
         assertTrue((double) 2 == average);
     }
@@ -146,7 +146,7 @@ public class LavaTest {
         list.add((float) 3);
         list.add((float) 4);
 
-        Float average = Lava.average(list);
+        Float average = Lava.average(list).floatValue();
 
         assertTrue((float) 2 == average);
     }
@@ -160,7 +160,7 @@ public class LavaTest {
         list.add(3);
         list.add(4);
 
-        Integer average = Lava.average(list);
+        Integer average = Lava.average(list).intValue();
 
         assertTrue(2 == average);
     }
@@ -174,7 +174,7 @@ public class LavaTest {
         list.add((long) 3);
         list.add((long) 4);
 
-        Long average = Lava.average(list);
+        Long average = Lava.average(list).longValue();
 
         assertTrue((long) 2 == average);
     }
@@ -188,7 +188,7 @@ public class LavaTest {
         list.add((short) 3);
         list.add((short) 4);
 
-        Short average = Lava.average(list);
+        Short average = Lava.average(list).shortValue();
 
         assertTrue((short) 2 == average);
     }
@@ -873,7 +873,7 @@ public class LavaTest {
         list.add((byte) 3);
         list.add((byte) 4);
 
-        Byte sum = Lava.sum(list);
+        Byte sum = Lava.sum(list).byteValue();
 
         assertTrue((byte) 10 == sum);
     }
@@ -887,7 +887,7 @@ public class LavaTest {
         list.add((double) 3);
         list.add((double) 4);
 
-        Double sum = Lava.sum(list);
+        Double sum = Lava.sum(list).doubleValue();
 
         assertTrue((double) 10 == sum);
     }
@@ -901,7 +901,7 @@ public class LavaTest {
         list.add((float) 3);
         list.add((float) 4);
 
-        Float sum = Lava.sum(list);
+        Float sum = Lava.sum(list).floatValue();
 
         assertTrue((float) 10 == sum);
     }
@@ -915,7 +915,7 @@ public class LavaTest {
         list.add(3);
         list.add(4);
 
-        Integer sum = Lava.sum(list);
+        Integer sum = Lava.sum(list).intValue();
 
         assertTrue(10 == sum);
     }
@@ -929,7 +929,7 @@ public class LavaTest {
         list.add((long) 3);
         list.add((long) 4);
 
-        Long sum = Lava.sum(list);
+        Long sum = Lava.sum(list).longValue();
 
         assertTrue((long) 10 == sum);
     }
@@ -943,7 +943,7 @@ public class LavaTest {
         list.add((short) 3);
         list.add((short) 4);
 
-        Short sum = Lava.sum(list);
+        Short sum = Lava.sum(list).shortValue();
 
         assertTrue((short) 10 == sum);
     }

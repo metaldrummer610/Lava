@@ -64,57 +64,7 @@ public class Lava {
      * @param collection The collection to average
      * @return The average values of the collection
      */
-    public static Byte average(Collection<Byte> collection) {
-        return lavaBase.average(collection);
-    }
-
-    /**
-     * Averages the collection and returns the results
-     *
-     * @param collection The collection to average
-     * @return The average values of the collection
-     */
-    public static Double average(Collection<Double> collection) {
-        return lavaBase.average(collection);
-    }
-
-    /**
-     * Averages the collection and returns the results
-     *
-     * @param collection The collection to average
-     * @return The average values of the collection
-     */
-    public static Float average(Collection<Float> collection) {
-        return lavaBase.average(collection);
-    }
-
-    /**
-     * Averages the collection and returns the results
-     *
-     * @param collection The collection to average
-     * @return The average values of the collection
-     */
-    public static Integer average(Collection<Integer> collection) {
-        return lavaBase.average(collection);
-    }
-
-    /**
-     * Averages the collection and returns the results
-     *
-     * @param collection The collection to average
-     * @return The average values of the collection
-     */
-    public static Long average(Collection<Long> collection) {
-        return lavaBase.average(collection);
-    }
-
-    /**
-     * Averages the collection and returns the results
-     *
-     * @param collection The collection to average
-     * @return The average values of the collection
-     */
-    public static Short average(Collection<Short> collection) {
+    public static <T extends Number> Number average(Collection<T> collection) {
         return lavaBase.average(collection);
     }
 
@@ -713,57 +663,7 @@ public class Lava {
      * @param collection The collection to sum
      * @return The added values of the collection
      */
-    public static Byte sum(Collection<Byte> collection) {
-        return lavaBase.sum(collection);
-    }
-
-    /**
-     * Sums up the collection and returns the results
-     *
-     * @param collection The collection to sum
-     * @return The added values of the collection
-     */
-    public static Double sum(Collection<Double> collection) {
-        return lavaBase.sum(collection);
-    }
-
-    /**
-     * Sums up the collection and returns the results
-     *
-     * @param collection The collection to sum
-     * @return The added values of the collection
-     */
-    public static Float sum(Collection<Float> collection) {
-        return lavaBase.sum(collection);
-    }
-
-    /**
-     * Sums up the collection and returns the results
-     *
-     * @param collection The collection to sum
-     * @return The added values of the collection
-     */
-    public static Integer sum(Collection<Integer> collection) {
-        return lavaBase.sum(collection);
-    }
-
-    /**
-     * Sums up the collection and returns the results
-     *
-     * @param collection The collection to sum
-     * @return The added values of the collection
-     */
-    public static Long sum(Collection<Long> collection) {
-        return lavaBase.sum(collection);
-    }
-
-    /**
-     * Sums up the collection and returns the results
-     *
-     * @param collection The collection to sum
-     * @return The added values of the collection
-     */
-    public static Short sum(Collection<Short> collection) {
+    public static <T extends Number> Number sum(Collection<T> collection) {
         return lavaBase.sum(collection);
     }
 
