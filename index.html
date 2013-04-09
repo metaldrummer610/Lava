@@ -39,13 +39,58 @@
 
 <p>Have you ever needed to search through an <code>ArrayList</code> of People to find everyone who's name begins with the letter 'R'? Lava has a convience method for that. Ever need to transform a <code>Collection</code> from one type to another? Lava has a method for that as well. Lava has a plethora of methods that allow you to modify collections to your hearts content.</p>
 
+<p>If that wasn't enough to wet your appetite, feast your eyes on this little code sample:</p>
+
+<div class="highlight"><pre><span class="c1">// Assumptions: 'people' is a java.util.Collection of Person objects and the Person object has a 'String name' member.</span>
+<span class="n">Enumerable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">names</span> <span class="o">=</span> <span class="n">Lava</span><span class="o">.</span><span class="na">select</span><span class="o">(</span><span class="n">people</span><span class="o">,</span> <span class="k">new</span> <span class="n">Func</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">callback</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">person</span><span class="o">.</span><span class="na">name</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+
+<p>What is the bit of code above doing? Well, it is transforming the collection of people into a Lava Enumerable that contains all of the people's names. Simple huh?</p>
+
+<p>How about this:</p>
+
+<div class="highlight"><pre><span class="c1">// Assumptions: 'people' is a collection of Person objects and the Person object has an 'int age' member.</span>
+<span class="n">Enumerable</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="n">lessPeople</span> <span class="o">=</span> <span class="n">Lava</span><span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="n">people</span><span class="o">,</span> <span class="k">new</span> <span class="n">Func</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">Boolean</span> <span class="nf">callback</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">person</span><span class="o">.</span><span class="na">age</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+
+<p>This bit of code is filtering the people collection down to only the people whose ages are above 10. This would be a good time to point out that all of the lava methods that return <code>Enumerable</code> types are returning copies of the original objects, and are not modifying the source collection.</p>
+
+<p>By now, you're probably thinking "Ok this is cool and all, but I want to filter and transform my collection in a single line, not call all of these methods one by one". Good news! You can chain the method calls all you want. As long as the Lava method returns an Enumerable instance, you can continue chaining your calls all day long.</p>
+
+<p>For example:</p>
+
+<div class="highlight"><pre><span class="n">Enumerable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">names</span> <span class="o">=</span> <span class="n">Lava</span><span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="n">people</span><span class="o">,</span> <span class="k">new</span> <span class="n">Func</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">Boolean</span> <span class="nf">callback</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">person</span><span class="o">.</span><span class="na">age</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}).</span><span class="na">select</span><span class="o">(</span><span class="n">people</span><span class="o">,</span> <span class="k">new</span> <span class="n">Func</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">callback</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">person</span><span class="o">.</span><span class="na">name</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+</pre></div>
+
+<p>This little snippet chains the <code>where</code> method with the <code>select</code> method in order to create a new Enumerable containing only the people's names who are also over the age of 10! How cool is that?</p>
+
+<h3>More examples</h3>
+
+<p>If you would like to see more examples, check out the unit tests. Each Lava function has a unit test that shows how to use it.</p>
+
 <h2>So how do I get started?</h2>
 
 <p>Well, first you need to clone the master branch of Lava and build the project (sorry, no Maven artifact yet...). Once it's built and placed in your classpath, you'll want to turn your attention to the <code>Lava</code> class. This class exposes all of the methods of the library statically, so there's no need for any setup. </p>
 
 <p>(Almost) all of the <code>Lava</code> methods return an object of type <code>Enumerable</code>, which allow you to chain method calls. For example, you could filter a list using <code>where</code>, transform the result using <code>select</code>, then sort the results using <code>orderBy</code> all in a single method chain.</p>
 
-<p>For more information on the classes and methods available in <strong>Lava</strong>, take a look at the <a href="">JavaDocs</a>.</p>
+<p>For more information on the classes and methods available in <strong>Lava</strong>, take a look at the <a href="http://metaldrummer610.github.com/Lava/javadoc/">JavaDocs</a>. More documentation can be found at the project's <a href="http://metaldrummer610.github.com/Lava">homepage</a></p>
 
 <h2>Building the project</h2>
 
