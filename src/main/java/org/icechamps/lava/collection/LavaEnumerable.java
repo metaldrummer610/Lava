@@ -175,6 +175,16 @@ public abstract class LavaEnumerable<T extends Comparable<? super T>> extends La
     }
 
     @Override
+    public Enumerable<T> randomize() {
+        return randomize(collection);
+    }
+
+    @Override
+    public Enumerable<T> randomize(Random random) {
+        return randomize(collection, random);
+    }
+
+    @Override
     public Enumerable<T> reverse() {
         return reverse(collection);
     }
@@ -201,6 +211,11 @@ public abstract class LavaEnumerable<T extends Comparable<? super T>> extends La
 
     @Override
     public boolean sequenceEqual(Collection<T> second) {
+        return sequenceEqual(collection, second);
+    }
+
+    @Override
+    public boolean sequenceEqual(Enumerable<T> second) {
         return sequenceEqual(collection, second);
     }
 

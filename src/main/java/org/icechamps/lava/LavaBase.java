@@ -1091,6 +1091,42 @@ public class LavaBase {
     }
 
     ///////////////
+    // Randomize
+    ///////////////
+
+    /**
+     * Randomizes the given collection
+     *
+     * @param collection The collection to randomize
+     * @param <T>        The type of object in the collection
+     * @return The randomized collection
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> randomize(Collection<T> collection) {
+        return randomize(collection, null);
+    }
+
+    /**
+     * Randomizes the given collection using the given {@link Random} instance to
+     *
+     * @param collection The collection to randomize
+     * @param random     The {@link Random} instance to use as a seed
+     * @param <T>        The type of object in the collection
+     * @return The randomized collection
+     */
+    protected <T extends Comparable<? super T>> Enumerable<T> randomize(Collection<T> collection, Random random) {
+        Preconditions.checkNotNull(collection);
+
+        LavaList<T> list = new LavaList<T>(collection);
+
+        if (random != null)
+            Collections.shuffle(list, random);
+        else
+            Collections.shuffle(list);
+
+        return list;
+    }
+
+    ///////////////
     // Range
     ///////////////
 

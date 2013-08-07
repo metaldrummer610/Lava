@@ -5,10 +5,7 @@ import org.icechamps.lava.callback.Func2;
 import org.icechamps.lava.interfaces.Enumerable;
 import org.icechamps.lava.util.Group;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: Robert.Diaz
@@ -494,6 +491,29 @@ public class Lava {
      */
     public static <T extends Comparable<? super T>> Enumerable<T> orderByDescending(Collection<T> collection, Comparator<T> comparator) {
         return lavaBase.orderByDescending(collection, comparator);
+    }
+
+    /**
+     * Randomizes the given collection
+     *
+     * @param collection The collection to randomize
+     * @param <T>        The type of object in the collection
+     * @return The randomized collection
+     */
+    public static <T extends Comparable<? super T>> Enumerable<T> randomize(Collection<T> collection) {
+        return lavaBase.randomize(collection);
+    }
+
+    /**
+     * Randomizes the given collection using the given {@link Random} instance to
+     *
+     * @param collection The collection to randomize
+     * @param random     The {@link Random} instance to use as a seed
+     * @param <T>        The type of object in the collection
+     * @return The randomized collection
+     */
+    public static <T extends Comparable<? super T>> Enumerable<T> randomize(Collection<T> collection, Random random) {
+        return lavaBase.randomize(collection, random);
     }
 
     /**
