@@ -26,6 +26,7 @@ dependencies {
 def pomName() {
     return "Lava Java Library"
 }
+
 def pomDescription() {
     return "A Java library that provides extension methods for collections which allow them to be queried and manipulated easily"
 }
@@ -38,12 +39,12 @@ configure(install.repositories.mavenInstaller) {
     }
 }
 
-task sourcesJar(type: Jar, dependsOn:classes) {
+task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn:javadoc) {
+task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
@@ -53,12 +54,13 @@ artifacts {
     archives javadocJar
 }
 
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: "http://10.20.33.41:8081/artifactory/ext-release-local") {
-                authentication(userName: mavenUser, password: mavenPassword)
+if (hasProperty('mavenUser') && hasProperty('mavenPassword')) {
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                repository(url: "http://10.20.33.41:8081/artifactory/ext-release-local") {
+                    authentication(userName: mavenUser, password: mavenPassword)
+                }
             }
         }
     }
