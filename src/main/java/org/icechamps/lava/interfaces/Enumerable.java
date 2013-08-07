@@ -68,6 +68,13 @@ public interface Enumerable<T> extends Iterable<T> {
     public T elementAtOrDefault(int index);
 
     /**
+     * Checks if the collection is empty
+     *
+     * @return True if empty, false if not
+     */
+    public boolean empty();
+
+    /**
      * Creates an enumerable containing the difference between the two collections
      *
      * @param second The second collection
