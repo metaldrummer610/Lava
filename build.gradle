@@ -7,7 +7,7 @@ defaultTasks 'clean', 'test', 'jar'
 group = 'org.icechamps'
 
 sourceCompatibility = 1.6
-version = '0.5'
+version = '0.6'
 jar {
     manifest {
         attributes 'Implementation-Title': 'Lava Java Library', 'Implementation-Version': version
