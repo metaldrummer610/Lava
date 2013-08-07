@@ -702,6 +702,22 @@ public class LavaTest {
     }
 
     @Test
+    public void testRandom() throws Exception {
+        Enumerable<Integer> range = Lava.range(0, 10);
+        Enumerable<Integer> randomize = range.randomize();
+
+        range.sequenceEqual(randomize.toList());
+    }
+
+    @Test
+    public void testRandomWithRandom() throws Exception {
+        Enumerable<Integer> range = Lava.range(0, 10);
+        Enumerable<Integer> randomize = range.randomize(new Random(System.currentTimeMillis()));
+
+        range.sequenceEqual(randomize.toList());
+    }
+
+    @Test
     public void testRange() throws Exception {
         Enumerable<Integer> range = Lava.range(0, 10);
 

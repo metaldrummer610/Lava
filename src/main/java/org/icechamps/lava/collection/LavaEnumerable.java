@@ -77,6 +77,11 @@ public abstract class LavaEnumerable<T extends Comparable<? super T>> extends La
     }
 
     @Override
+    public boolean empty() {
+        return collection.isEmpty();
+    }
+
+    @Override
     public Enumerable<T> except(Collection<T> second) {
         return except(collection, second);
     }
@@ -172,6 +177,16 @@ public abstract class LavaEnumerable<T extends Comparable<? super T>> extends La
     @Override
     public Enumerable<T> orderBy() {
         return orderBy(collection);
+    }
+
+    @Override
+    public Enumerable<T> randomize() {
+        return randomize(collection);
+    }
+
+    @Override
+    public Enumerable<T> randomize(Random random) {
+        return randomize(collection, random);
     }
 
     @Override

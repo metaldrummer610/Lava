@@ -3,10 +3,7 @@ package org.icechamps.lava.interfaces;
 import org.icechamps.lava.callback.Func;
 import org.icechamps.lava.callback.Func2;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: Robert.Diaz
@@ -69,6 +66,13 @@ public interface Enumerable<T> extends Iterable<T> {
      * @return The element in the collection at the specified index or null if the index is out of bounds
      */
     public T elementAtOrDefault(int index);
+
+    /**
+     * Checks if the collection is empty
+     *
+     * @return True if empty, false if not
+     */
+    public boolean empty();
 
     /**
      * Creates an enumerable containing the difference between the two collections
@@ -226,6 +230,21 @@ public interface Enumerable<T> extends Iterable<T> {
      * @return The sorted collection
      */
     public Enumerable<T> orderByDescending(Comparator<T> comparator);
+
+    /**
+     * Randomizes the collection
+     *
+     * @return The randomized collection
+     */
+    public Enumerable<T> randomize();
+
+    /**
+     * Randomizes the collection using the given {@link Random}
+     *
+     * @param random The random to use
+     * @return The randomized collection
+     */
+    public Enumerable<T> randomize(Random random);
 
     /**
      * Reverses the collection and wraps the return value in an Enumerable instance
