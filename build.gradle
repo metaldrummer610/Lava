@@ -1,10 +1,10 @@
 apply plugin: 'java'
 apply plugin: 'maven'
+//apply plugin: 'maven-publish'
 
 defaultTasks 'clean', 'test', 'jar'
 
 group = 'org.icechamps'
-description = 'A Java library that provides extension methods for collections which allow them to be queried and manipulated easily'
 
 sourceCompatibility = 1.6
 version = '0.5'
@@ -22,3 +22,114 @@ dependencies {
     testCompile 'junit:junit:4.8.2'
     compile 'com.google.guava:guava:r09'
 }
+
+def pomName() {
+    return "Lava Java Library"
+}
+def pomDescription() {
+    return "A Java library that provides extension methods for collections which allow them to be queried and manipulated easily"
+}
+
+configure(install.repositories.mavenInstaller) {
+    pom.project {
+        version version
+        artifactId 'lava'
+        groupId group
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn:classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn:javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "http://10.20.33.41:8081/artifactory/ext-release-local") {
+                authentication(userName: mavenUser, password: mavenPassword)
+            }
+        }
+    }
+}
+
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            from components.java
+//
+//            artifact sourcesJar {
+//                classifier "sources"
+//            }
+//
+//            pom.withXml {
+//                // append additional metadata
+//                asNode().children().last() + {
+//                    resolveStrategy = DELEGATE_FIRST
+//
+//                    name pomName()
+//                    description pomDescription()
+//                    url 'http://metaldrummer610.github.io/Lava/'
+//                    organization {
+//                        name 'Icechamps.org'
+//                        url 'http://github.com/metaldrummer610'
+//                    }
+//                    scm {
+//                        url 'http://github.com/metaldrummer610/Lava'
+//                        connection 'scm:git:http://github.com/metaldrummer610/Lava.git'
+//                        developerConnection 'scm:git:git@github.com:metaldrummer610/Lava.git'
+//                    }
+//                    licenses {
+//                        license {
+//                            name 'GNU Lesser General Public License'
+//                            url 'http://www.gnu.org/licenses/lgpl-2.1.html'
+//                            distribution 'repo'
+//                        }
+//                    }
+//                    developers {
+//                        developer {
+//                            id 'lava-team'
+//                            name 'Robbie Diaz'
+//                            organization 'Icechamps.org'
+//                            organizationUrl 'http://github.com/metaldrummer610'
+//                        }
+//                    }
+//                }
+//
+//                // TEMPORARY : currently Gradle Publishing feature is exporting dependencies as 'runtime' scope,
+//                //      rather than 'compile'; fix that.
+//                asNode().dependencies[0].dependency.each {
+//                    it.scope[0].value = 'compile'
+//                }
+//            }
+//        }
+//    }
+//
+//    repositories {
+//        maven {
+//            if ( subProject.version.endsWith( 'SNAPSHOT' ) ) {
+//                name 'jboss-snapshots-repository'
+//                url 'https://repository.jboss.org/nexus/content/repositories/snapshots'
+//            }
+//            else {
+//                name 'jboss-releases-repository'
+//                url 'https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/'
+//            }
+//        }
+//    }
+//
+//    generatePomFileForMavenJavaPublication {
+//        destination = file("$buildDir/generated-pom.xml")
+//    }
+//}
