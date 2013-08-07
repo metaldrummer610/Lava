@@ -6,6 +6,51 @@
 ## Why would I want to use Lava?
 Have you ever needed to search through an `ArrayList` of People to find everyone who's name begins with the letter 'R'? Lava has a convience method for that. Ever need to transform a `Collection` from one type to another? Lava has a method for that as well. Lava has a plethora of methods that allow you to modify collections to your hearts content.
 
+If that wasn't enough to wet your appetite, feast your eyes on this little code sample:
+
+```java
+// Assumptions: 'people' is a java.util.Collection of Person objects and the Person object has a 'String name' member.
+Enumerable<String> names = Lava.select(people, new Func<Person, String>() {
+    public String callback(Person person) {
+        return person.name;
+    }
+});
+```
+
+What is the bit of code above doing? Well, it is transforming the collection of people into a Lava Enumerable that contains all of the people's names. Simple huh?
+
+How about this:
+```java
+// Assumptions: 'people' is a collection of Person objects and the Person object has an 'int age' member.
+Enumerable<Person> lessPeople = Lava.where(people, new Func<Person, Boolean>() {
+    public Boolean callback(Person person) {
+        return person.age > 10;
+    }
+});
+```
+
+This bit of code is filtering the people collection down to only the people whose ages are above 10. This would be a good time to point out that all of the lava methods that return `Enumerable` types are returning copies of the original objects, and are not modifying the source collection.
+
+By now, you're probably thinking "Ok this is cool and all, but I want to filter and transform my collection in a single line, not call all of these methods one by one". Good news! You can chain the method calls all you want. As long as the Lava method returns an Enumerable instance, you can continue chaining your calls all day long.
+
+For example:
+```java
+Enumerable<String> names = Lava.where(people, new Func<Person, Boolean>() {
+    public Boolean callback(Person person) {
+        return person.age > 10;
+    }
+}).select(people, new Func<Person, String>() {
+    public String callback(Person person) {
+        return person.name;
+    }
+});
+```
+
+This little snippet chains the `where` method with the `select` method in order to create a new Enumerable containing only the people's names who are also over the age of 10! How cool is that?
+
+### More examples
+If you would like to see more examples, check out the unit tests. Each Lava function has a unit test that shows how to use it.
+
 ## So how do I get started?
 Well, first you need to clone the master branch of Lava and build the project (sorry, no Maven artifact yet...). Once it's built and placed in your classpath, you'll want to turn your attention to the `Lava` class. This class exposes all of the methods of the library statically, so there's no need for any setup. 
 
