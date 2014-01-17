@@ -1,6 +1,8 @@
+import org.gradle.api.artifacts.maven.MavenDeployment
+
 apply plugin: 'java'
 apply plugin: 'maven'
-//apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 defaultTasks 'clean', 'test', 'jar'
 
@@ -8,6 +10,26 @@ group = 'org.icechamps'
 
 sourceCompatibility = 1.6
 version = '0.6'
+ext.packaging = 'jar'
+
+def isDevBuild
+def isCiBuild
+def isReleaseBuild
+
+def sonatypeRepositoryUrl
+
+//set build variables based on build type (release, continuous integration, development)
+if (hasProperty("release")) {
+    isReleaseBuild = true
+    sonatypeRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+} else if (hasProperty("ci")) {
+    isCiBuild = true
+    version += "-SNAPSHOT"
+    sonatypeRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+} else {
+    isDevBuild = true
+}
+
 jar {
     manifest {
         attributes 'Implementation-Title': 'Lava Java Library', 'Implementation-Version': version
@@ -23,22 +45,6 @@ dependencies {
     compile 'com.google.guava:guava:r09'
 }
 
-def pomName() {
-    return "Lava Java Library"
-}
-
-def pomDescription() {
-    return "A Java library that provides extension methods for collections which allow them to be queried and manipulated easily"
-}
-
-configure(install.repositories.mavenInstaller) {
-    pom.project {
-        version version
-        artifactId 'lava'
-        groupId group
-    }
-}
-
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
@@ -50,88 +56,66 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 artifacts {
+    archives jar
     archives sourcesJar
     archives javadocJar
 }
 
-if (hasProperty('mavenUser') && hasProperty('mavenPassword')) {
-    uploadArchives {
-        repositories {
+//********* artifact signing *********
+if (isReleaseBuild) {
+    signing {
+        sign configurations.archives
+    }
+} else {
+    task signArchives {
+        // do nothing
+    }
+}
+
+uploadArchives {
+    repositories {
+        if (isDevBuild) {
+            mavenLocal()
+        } else {
             mavenDeployer {
-                repository(url: "http://10.20.33.41:8081/artifactory/ext-release-local") {
-                    authentication(userName: mavenUser, password: mavenPassword)
+                if (isReleaseBuild) {
+                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+                }
+
+                repository(url: sonatypeRepositoryUrl) {
+                    authentication(userName: sonatypeUsername, password: sonatypePassword)
+                }
+
+                pom.project {
+                    name "lava"
+                    description "A Java library that provides extension methods for collections which allow them to be queried and manipulated easily"
+                    packaging 'jar'
+                    url 'http://metaldrummer610.github.io/Lava/'
+
+                    scm {
+                        url 'http://github.com/metaldrummer610/Lava'
+                        connection 'scm:git:http://github.com/metaldrummer610/Lava.git'
+                        developerConnection 'scm:git:git@github.com:metaldrummer610/Lava.git'
+                    }
+
+                    licenses {
+                        license {
+                            name 'MIT'
+                            url 'http://opensource.org/licenses/MIT'
+                            distribution 'repo'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'metaldrummer610'
+                            name 'Robert Diaz'
+                            organization 'Icechamps.org'
+                            organizationUrl 'http://github.com/metaldrummer610'
+                        }
+                    }
                 }
             }
         }
     }
 }
-
-//publishing {
-//    publications {
-//        mavenJava(MavenPublication) {
-//            from components.java
-//
-//            artifact sourcesJar {
-//                classifier "sources"
-//            }
-//
-//            pom.withXml {
-//                // append additional metadata
-//                asNode().children().last() + {
-//                    resolveStrategy = DELEGATE_FIRST
-//
-//                    name pomName()
-//                    description pomDescription()
-//                    url 'http://metaldrummer610.github.io/Lava/'
-//                    organization {
-//                        name 'Icechamps.org'
-//                        url 'http://github.com/metaldrummer610'
-//                    }
-//                    scm {
-//                        url 'http://github.com/metaldrummer610/Lava'
-//                        connection 'scm:git:http://github.com/metaldrummer610/Lava.git'
-//                        developerConnection 'scm:git:git@github.com:metaldrummer610/Lava.git'
-//                    }
-//                    licenses {
-//                        license {
-//                            name 'GNU Lesser General Public License'
-//                            url 'http://www.gnu.org/licenses/lgpl-2.1.html'
-//                            distribution 'repo'
-//                        }
-//                    }
-//                    developers {
-//                        developer {
-//                            id 'lava-team'
-//                            name 'Robbie Diaz'
-//                            organization 'Icechamps.org'
-//                            organizationUrl 'http://github.com/metaldrummer610'
-//                        }
-//                    }
-//                }
-//
-//                // TEMPORARY : currently Gradle Publishing feature is exporting dependencies as 'runtime' scope,
-//                //      rather than 'compile'; fix that.
-//                asNode().dependencies[0].dependency.each {
-//                    it.scope[0].value = 'compile'
-//                }
-//            }
-//        }
-//    }
-//
-//    repositories {
-//        maven {
-//            if ( subProject.version.endsWith( 'SNAPSHOT' ) ) {
-//                name 'jboss-snapshots-repository'
-//                url 'https://repository.jboss.org/nexus/content/repositories/snapshots'
-//            }
-//            else {
-//                name 'jboss-releases-repository'
-//                url 'https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/'
-//            }
-//        }
-//    }
-//
-//    generatePomFileForMavenJavaPublication {
-//        destination = file("$buildDir/generated-pom.xml")
-//    }
-//}
